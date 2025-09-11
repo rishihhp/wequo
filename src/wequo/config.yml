@@ -1,0 +1,72 @@
+run:
+  output_root: "data/output"
+  lookback_days: 7
+
+connectors:
+  fred:
+    enabled: true
+    series_ids:
+      - CPIAUCSL   # US CPI (monthly)
+      - DFF        # Effective Federal Funds Rate (daily)
+      - DGS10      # 10-Year Treasury Constant Maturity Rate (daily)
+  
+  commodities:
+    enabled: true
+    symbols:
+      - WTI        # West Texas Intermediate crude oil
+      - BRENT      # Brent crude oil
+      - GOLD       # Gold
+      - SILVER     # Silver
+      - COPPER     # Copper
+      - NATURAL_GAS # Natural gas
+  
+  crypto:
+    enabled: true
+    symbols:
+      - bitcoin
+      - ethereum
+      - binancecoin
+      - cardano
+      - solana
+      - polkadot
+  
+  github:
+    enabled: false
+    repos:
+      - microsoft/vscode
+      - facebook/react
+      - tensorflow/tensorflow
+      - pytorch/pytorch
+      - openai/gpt-3
+      - langchain-ai/langchain
+  
+  weather:
+    enabled: false
+    cities:
+      - New York
+      - London
+      - Tokyo
+      - Sydney
+      - Dubai
+      - Singapore
+  
+  economic:
+    enabled: true
+    indicators:
+      - NY.GDP.MKTP.CD      # GDP (current US$)
+      - FP.CPI.TOTL.ZG      # Inflation, consumer prices (annual %)
+      - SL.UEM.TOTL.ZS      # Unemployment, total (% of total labor force)
+      - NE.TRD.GNFS.ZS      # Trade (% of GDP)
+    countries:
+      - US   # United States
+      - CN   # China
+      - DE   # Germany
+      - JP   # Japan
+      - GB   # United Kingdom
+      - IN   # India
+
+analytics:
+  enabled: true
+  anomaly_threshold: 2.0
+  delta_threshold: 0.05
+  min_data_points: 5

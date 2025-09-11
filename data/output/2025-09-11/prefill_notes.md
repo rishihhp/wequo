@@ -1,0 +1,16 @@
+- **FRED**: Latest values available for 2 series
+- **COMMODITIES**: Latest values available for 6 series
+- **CRYPTO**: Latest values available for 6 series
+- **ECONOMIC**: Latest values available for 24 series
+- **Key Changes**: 5 significant deltas detected
+-   - US_FP.CPI.TOTL.ZG: 2386.4% change (0.12 -> 2.95)
+-   - GB_FP.CPI.TOTL.ZG: 788.9% change (0.37 -> 3.27)
+-   - DE_FP.CPI.TOTL.ZG: 338.6% change (0.51 -> 2.26)
+- **Anomalies**: 12 anomalies detected
+-   - US_SL.UEM.TOTL.ZS: 8.05 (z-score: 2.63)
+-   - US_FP.CPI.TOTL.ZG: 8.00 (z-score: 2.39)
+- **Trends**: 9 significant trends
+-   - US_NY.GDP.MKTP.CD: 📈 strong trend
+-   - CN_NY.GDP.MKTP.CD: 📈 strong trend
+- **Data Package**: Generated at 2025-09-10T21:05:03.528520
+- **Sources**: fred, commodities, crypto, economic

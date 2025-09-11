@@ -1,0 +1,17 @@
+[project]
+name = "wequo"
+version = "0.1.0"
+description = "WeQuo Phase 0 MVP pipeline (FRED-only)"
+requires-python = ">=3.10"
+dependencies = [
+"requests",
+"pandas",
+"python-dotenv",
+"pydantic",
+"PyYAML",
+"tenacity",
+]
+
+
+[tool.ruff]
+line-length = 100
