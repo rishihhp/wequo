@@ -32,7 +32,7 @@ def list_packages(output_dir: str):
             summary_path = package_dir / "package_summary.json"
             if summary_path.exists():
                 try:
-                    summary = json.loads(summary_path.read_text())
+                    summary = json.loads(summary_path.read_text(encoding="utf-8"))
                     packages.append({
                         "date": package_dir.name,
                         "timestamp": summary.get("timestamp", ""),
@@ -192,7 +192,7 @@ def load_package_data(package_dir: Path) -> Dict[str, Any]:
     # Load summary
     summary_path = package_dir / "package_summary.json"
     if summary_path.exists():
-        data["summary"] = json.loads(summary_path.read_text())
+        data["summary"] = json.loads(summary_path.read_text(encoding="utf-8"))
     
     # Load CSV files
     for csv_file in package_dir.glob("*.csv"):
@@ -204,7 +204,7 @@ def load_package_data(package_dir: Path) -> Dict[str, Any]:
     
     # Load reports
     for md_file in package_dir.glob("*.md"):
-        data["reports"][md_file.stem] = md_file.read_text()
+        data["reports"][md_file.stem] = md_file.read_text(encoding="utf-8")
     
     return data
 
@@ -281,7 +281,7 @@ def display_package_tables(package_data: Dict[str, Any]):
 
 def generate_prefilled_template(package_data: Dict[str, Any], date: str, template_path: Path) -> str:
     """Generate a pre-filled template with package data."""
-    template_content = template_path.read_text()
+    template_content = template_path.read_text(encoding="utf-8")
     
     # Get summary data
     summary = package_data.get("summary", {})
