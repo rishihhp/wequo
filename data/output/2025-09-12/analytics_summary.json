@@ -1,0 +1,768 @@
+{
+  "top_deltas": [
+    {
+      "series_id": "US_FP.CPI.TOTL.ZG",
+      "old_value": 0.118627135552451,
+      "new_value": 2.94952520485207,
+      "delta_abs": 2.830898069299619,
+      "delta_pct": 23.86383230207845,
+      "date_old": "2015-12-31",
+      "date_new": "2024-12-31",
+      "source": "economic"
+    },
+    {
+      "series_id": "GB_FP.CPI.TOTL.ZG",
+      "old_value": 0.36804684232536,
+      "new_value": 3.2715729463592,
+      "delta_abs": 2.9035261040338396,
+      "delta_pct": 7.889012403119792,
+      "date_old": "2015-12-31",
+      "date_new": "2024-12-31",
+      "source": "economic"
+    },
+    {
+      "series_id": "DE_FP.CPI.TOTL.ZG",
+      "old_value": 0.514426137125456,
+      "new_value": 2.2564981433876,
+      "delta_abs": 1.742072006262144,
+      "delta_pct": 3.3864375865437313,
+      "date_old": "2015-12-31",
+      "date_new": "2024-12-31",
+      "source": "economic"
+    },
+    {
+      "series_id": "JP_FP.CPI.TOTL.ZG",
+      "old_value": 0.795279630579839,
+      "new_value": 2.73853681635241,
+      "delta_abs": 1.9432571857725711,
+      "delta_pct": 2.4434891968196655,
+      "date_old": "2015-12-31",
+      "date_new": "2024-12-31",
+      "source": "economic"
+    },
+    {
+      "series_id": "IN_NY.GDP.MKTP.CD",
+      "old_value": 2103588360044.94,
+      "new_value": 3912686168582.21,
+      "delta_abs": 1809097808537.27,
+      "delta_pct": 0.8600056184464823,
+      "date_old": "2015-12-31",
+      "date_new": "2024-12-31",
+      "source": "economic"
+    }
+  ],
+  "anomalies": [
+    {
+      "series_id": "US_SL.UEM.TOTL.ZS",
+      "date": "2020-12-31",
+      "value": 8.055,
+      "z_score": 2.626040462876879,
+      "is_anomaly": true,
+      "source": "economic"
+    },
+    {
+      "series_id": "US_FP.CPI.TOTL.ZG",
+      "date": "2022-12-31",
+      "value": 8.00279982052121,
+      "z_score": 2.3919622080213476,
+      "is_anomaly": true,
+      "source": "economic"
+    },
+    {
+      "series_id": "DE_NE.TRD.GNFS.ZS",
+      "date": "2022-12-31",
+      "value": 89.0641273695259,
+      "z_score": 2.3525602212597914,
+      "is_anomaly": true,
+      "source": "economic"
+    },
+    {
+      "series_id": "DE_SL.UEM.TOTL.ZS",
+      "date": "2015-12-31",
+      "value": 4.612,
+      "z_score": 2.1445795505716654,
+      "is_anomaly": true,
+      "source": "economic"
+    },
+    {
+      "series_id": "GB_NY.GDP.MKTP.CD",
+      "date": "2024-12-31",
+      "value": 3643834188782.91,
+      "z_score": 2.127175054127127,
+      "is_anomaly": true,
+      "source": "economic"
+    },
+    {
+      "series_id": "US_NE.TRD.GNFS.ZS",
+      "date": "2020-12-31",
+      "value": 23.0797778694073,
+      "z_score": 2.121876443731653,
+      "is_anomaly": true,
+      "source": "economic"
+    },
+    {
+      "series_id": "JP_SL.UEM.TOTL.ZS",
+      "date": "2015-12-31",
+      "value": 3.385,
+      "z_score": 2.1179644871785013,
+      "is_anomaly": true,
+      "source": "economic"
+    },
+    {
+      "series_id": "IN_NE.TRD.GNFS.ZS",
+      "date": "2022-12-31",
+      "value": 50.0752701498882,
+      "z_score": 2.1117901207195002,
+      "is_anomaly": true,
+      "source": "economic"
+    },
+    {
+      "series_id": "GB_FP.CPI.TOTL.ZG",
+      "date": "2022-12-31",
+      "value": 7.92204883147902,
+      "z_score": 2.1004677000930494,
+      "is_anomaly": true,
+      "source": "economic"
+    },
+    {
+      "series_id": "GB_SL.UEM.TOTL.ZS",
+      "date": "2015-12-31",
+      "value": 5.517,
+      "z_score": 2.078712924493269,
+      "is_anomaly": true,
+      "source": "economic"
+    },
+    {
+      "series_id": "CN_NE.TRD.GNFS.ZS",
+      "date": "2020-12-31",
+      "value": 34.0389507864018,
+      "z_score": 2.057843172429463,
+      "is_anomaly": true,
+      "source": "economic"
+    },
+    {
+      "series_id": "DE_FP.CPI.TOTL.ZG",
+      "date": "2022-12-31",
+      "value": 6.87257438551097,
+      "z_score": 2.053519591625101,
+      "is_anomaly": true,
+      "source": "economic"
+    }
+  ],
+  "trends": [
+    {
+      "series_id": "US_NY.GDP.MKTP.CD",
+      "slope": 3.8653919531090496e-05,
+      "r_squared": 0.939999219288577,
+      "trend_strength": "strong",
+      "direction": "upward",
+      "p_value": 3.632322900951323e-06,
+      "source": "economic"
+    },
+    {
+      "series_id": "CN_NY.GDP.MKTP.CD",
+      "slope": 3.0027488512470783e-05,
+      "r_squared": 0.9412541065306207,
+      "trend_strength": "strong",
+      "direction": "upward",
+      "p_value": 3.3360864075727315e-06,
+      "source": "economic"
+    },
+    {
+      "series_id": "IN_NY.GDP.MKTP.CD",
+      "slope": 5.836726753576202e-06,
+      "r_squared": 0.9372413481327113,
+      "trend_strength": "strong",
+      "direction": "upward",
+      "p_value": 4.352680460174298e-06,
+      "source": "economic"
+    },
+    {
+      "series_id": "DE_NY.GDP.MKTP.CD",
+      "slope": 4.0169348455176884e-06,
+      "r_squared": 0.9103749801088107,
+      "trend_strength": "strong",
+      "direction": "upward",
+      "p_value": 1.831348140792273e-05,
+      "source": "economic"
+    },
+    {
+      "series_id": "GB_NY.GDP.MKTP.CD",
+      "slope": 2.696025114267201e-06,
+      "r_squared": 0.6494455955322094,
+      "trend_strength": "moderate",
+      "direction": "upward",
+      "p_value": 0.004878883207743221,
+      "source": "economic"
+    },
+    {
+      "series_id": "JP_NY.GDP.MKTP.CD",
+      "slope": -2.4411769042747674e-06,
+      "r_squared": 0.30178206879898933,
+      "trend_strength": "weak",
+      "direction": "downward",
+      "p_value": 0.10000735969677091,
+      "source": "economic"
+    },
+    {
+      "series_id": "BITCOIN",
+      "slope": 9.8430801787836e-12,
+      "r_squared": 0.8598105067503814,
+      "trend_strength": "strong",
+      "direction": "upward",
+      "p_value": 0.0009104713501251126,
+      "source": "crypto"
+    },
+    {
+      "series_id": "ETHEREUM",
+      "slope": 3.6023618584209206e-13,
+      "r_squared": 0.6360769444241063,
+      "trend_strength": "moderate",
+      "direction": "upward",
+      "p_value": 0.017723259688152054,
+      "source": "crypto"
+    },
+    {
+      "series_id": "BINANCECOIN",
+      "slope": 9.386046387732979e-14,
+      "r_squared": 0.9250165507293635,
+      "trend_strength": "strong",
+      "direction": "upward",
+      "p_value": 0.00013562915984571448,
+      "source": "crypto"
+    },
+    {
+      "series_id": "SOLANA",
+      "slope": 6.403885684062104e-14,
+      "r_squared": 0.9085591356722119,
+      "trend_strength": "strong",
+      "direction": "upward",
+      "p_value": 0.00024760331961593885,
+      "source": "crypto"
+    },
+    {
+      "series_id": "GOLD",
+      "slope": -4.8470568783068974e-14,
+      "r_squared": 0.03015114287519488,
+      "trend_strength": "none",
+      "direction": "downward",
+      "p_value": 0.7096419802770388,
+      "source": "commodities"
+    },
+    {
+      "series_id": "BRENT",
+      "slope": 5.7746362433862385e-15,
+      "r_squared": 0.20987408043401004,
+      "trend_strength": "weak",
+      "direction": "upward",
+      "p_value": 0.3012458813750231,
+      "source": "commodities"
+    },
+    {
+      "series_id": "WTI",
+      "slope": 1.992394179894183e-15,
+      "r_squared": 0.03145992557645764,
+      "trend_strength": "none",
+      "direction": "upward",
+      "p_value": 0.7036022922669598,
+      "source": "commodities"
+    },
+    {
+      "series_id": "SILVER",
+      "slope": -9.217923280423282e-16,
+      "r_squared": 0.08470335345497154,
+      "trend_strength": "none",
+      "direction": "downward",
+      "p_value": 0.5265744498526561,
+      "source": "commodities"
+    },
+    {
+      "series_id": "POLKADOT",
+      "slope": 8.468691854715567e-16,
+      "r_squared": 0.954341540548097,
+      "trend_strength": "strong",
+      "direction": "upward",
+      "p_value": 3.026868854476307e-05,
+      "source": "crypto"
+    },
+    {
+      "series_id": "COPPER",
+      "slope": -2.3561507936508004e-16,
+      "r_squared": 0.3412815126050428,
+      "trend_strength": "weak",
+      "direction": "downward",
+      "p_value": 0.16842082597743516,
+      "source": "commodities"
+    },
+    {
+      "series_id": "NATURAL_GAS",
+      "slope": -2.1908068783068815e-16,
+      "r_squared": 0.23805084745762772,
+      "trend_strength": "weak",
+      "direction": "downward",
+      "p_value": 0.26666758296742643,
+      "source": "commodities"
+    },
+    {
+      "series_id": "CARDANO",
+      "slope": 1.4770958072280696e-16,
+      "r_squared": 0.9254167439376716,
+      "trend_strength": "strong",
+      "direction": "upward",
+      "p_value": 0.0001334477852214876,
+      "source": "crypto"
+    },
+    {
+      "series_id": "JP_NE.TRD.GNFS.ZS",
+      "slope": 4.4756677349859025e-17,
+      "r_squared": 0.4992872801269495,
+      "trend_strength": "weak",
+      "direction": "upward",
+      "p_value": 0.03332738137987522,
+      "source": "economic"
+    },
+    {
+      "series_id": "DE_NE.TRD.GNFS.ZS",
+      "slope": 2.3963771141665086e-17,
+      "r_squared": 0.2858573804893228,
+      "trend_strength": "weak",
+      "direction": "upward",
+      "p_value": 0.11132762806666109,
+      "source": "economic"
+    },
+    {
+      "series_id": "IN_NE.TRD.GNFS.ZS",
+      "slope": 2.0937316336703228e-17,
+      "r_squared": 0.3136644778070548,
+      "trend_strength": "weak",
+      "direction": "upward",
+      "p_value": 0.09223290760145449,
+      "source": "economic"
+    },
+    {
+      "series_id": "GB_FP.CPI.TOTL.ZG",
+      "slope": 1.793039174747473e-17,
+      "r_squared": 0.47069557098672393,
+      "trend_strength": "weak",
+      "direction": "upward",
+      "p_value": 0.028483826247861135,
+      "source": "economic"
+    },
+    {
+      "series_id": "GB_NE.TRD.GNFS.ZS",
+      "slope": 1.7124946171960756e-17,
+      "r_squared": 0.1991454051493436,
+      "trend_strength": "none",
+      "direction": "upward",
+      "p_value": 0.19608851411841396,
+      "source": "economic"
+    },
+    {
+      "series_id": "DE_FP.CPI.TOTL.ZG",
+      "slope": 1.6009529694909988e-17,
+      "r_squared": 0.44355676564996327,
+      "trend_strength": "weak",
+      "direction": "upward",
+      "p_value": 0.03551564456866855,
+      "source": "economic"
+    },
+    {
+      "series_id": "US_FP.CPI.TOTL.ZG",
+      "slope": 1.5556660769852668e-17,
+      "r_squared": 0.43293655621432303,
+      "trend_strength": "weak",
+      "direction": "upward",
+      "p_value": 0.03862664787074934,
+      "source": "economic"
+    },
+    {
+      "series_id": "IN_SL.UEM.TOTL.ZS",
+      "slope": -1.3693678748611106e-17,
+      "r_squared": 0.7546966983872914,
+      "trend_strength": "moderate",
+      "direction": "downward",
+      "p_value": 0.0011053462226580802,
+      "source": "economic"
+    },
+    {
+      "series_id": "JP_FP.CPI.TOTL.ZG",
+      "slope": 9.055977295300736e-18,
+      "r_squared": 0.4562377431001278,
+      "trend_strength": "weak",
+      "direction": "upward",
+      "p_value": 0.03207254717036554,
+      "source": "economic"
+    },
+    {
+      "series_id": "US_NE.TRD.GNFS.ZS",
+      "slope": -9.0501968578337e-18,
+      "r_squared": 0.35671757475257415,
+      "trend_strength": "weak",
+      "direction": "downward",
+      "p_value": 0.06827229903543719,
+      "source": "economic"
+    },
+    {
+      "series_id": "IN_FP.CPI.TOTL.ZG",
+      "slope": 5.5019095483932076e-18,
+      "r_squared": 0.21611344870161248,
+      "trend_strength": "weak",
+      "direction": "upward",
+      "p_value": 0.17581514562921657,
+      "source": "economic"
+    },
+    {
+      "series_id": "CN_FP.CPI.TOTL.ZG",
+      "slope": -4.836669410306939e-18,
+      "r_squared": 0.2720778808773215,
+      "trend_strength": "weak",
+      "direction": "downward",
+      "p_value": 0.12202711400549206,
+      "source": "economic"
+    },
+    {
+      "series_id": "DE_SL.UEM.TOTL.ZS",
+      "slope": -3.852524776448238e-18,
+      "r_squared": 0.5600857741542878,
+      "trend_strength": "moderate",
+      "direction": "downward",
+      "p_value": 0.012775472779825962,
+      "source": "economic"
+    },
+    {
+      "series_id": "GB_SL.UEM.TOTL.ZS",
+      "slope": -3.738272640552866e-18,
+      "r_squared": 0.3766046482361331,
+      "trend_strength": "weak",
+      "direction": "downward",
+      "p_value": 0.05914159189532742,
+      "source": "economic"
+    },
+    {
+      "series_id": "US_SL.UEM.TOTL.ZS",
+      "slope": -2.6793888251772246e-18,
+      "r_squared": 0.03585419033811835,
+      "trend_strength": "none",
+      "direction": "downward",
+      "p_value": 0.6003267597793727,
+      "source": "economic"
+    },
+    {
+      "series_id": "CN_NE.TRD.GNFS.ZS",
+      "slope": -2.6560461183053654e-18,
+      "r_squared": 0.03980226347140876,
+      "trend_strength": "none",
+      "direction": "downward",
+      "p_value": 0.5805422098505639,
+      "source": "economic"
+    },
+    {
+      "series_id": "JP_SL.UEM.TOTL.ZS",
+      "slope": -2.052933760313876e-18,
+      "r_squared": 0.3922463375791916,
+      "trend_strength": "weak",
+      "direction": "downward",
+      "p_value": 0.05270306960984203,
+      "source": "economic"
+    },
+    {
+      "series_id": "CN_SL.UEM.TOTL.ZS",
+      "slope": 7.238541379343346e-19,
+      "r_squared": 0.10525113168305772,
+      "trend_strength": "none",
+      "direction": "upward",
+      "p_value": 0.36041746009533077,
+      "source": "economic"
+    },
+    {
+      "series_id": "DFF",
+      "slope": 0.0,
+      "r_squared": 0.0,
+      "trend_strength": "none",
+      "direction": "flat",
+      "p_value": 1.0,
+      "source": "fred"
+    }
+  ],
+  "percentiles": {
+    "DFF": {
+      "p25": 4.33,
+      "p50": 4.33,
+      "p75": 4.33,
+      "p90": 4.33,
+      "p95": 4.33
+    },
+    "WTI": {
+      "p25": 74.29,
+      "p50": 75.48,
+      "p75": 76.685,
+      "p90": 77.61,
+      "p95": 78.10499999999999
+    },
+    "BRENT": {
+      "p25": 78.795,
+      "p50": 79.46,
+      "p75": 80.9,
+      "p90": 81.58,
+      "p95": 81.625
+    },
+    "GOLD": {
+      "p25": 1947.05,
+      "p50": 1981.57,
+      "p75": 2003.7800000000002,
+      "p90": 2036.9440000000002,
+      "p95": 2059.2670000000003
+    },
+    "SILVER": {
+      "p25": 24.6,
+      "p50": 24.89,
+      "p75": 25.2,
+      "p90": 25.526,
+      "p95": 25.688
+    },
+    "COPPER": {
+      "p25": 4.03,
+      "p50": 4.06,
+      "p75": 4.135,
+      "p90": 4.166,
+      "p95": 4.178
+    },
+    "NATURAL_GAS": {
+      "p25": 3.475,
+      "p50": 3.48,
+      "p75": 3.52,
+      "p90": 3.592,
+      "p95": 3.616
+    },
+    "BITCOIN": {
+      "p25": 111014.53957170181,
+      "p50": 111786.2841727678,
+      "p75": 114284.7645106984,
+      "p90": 115300.10834069055,
+      "p95": 115401.63748631046
+    },
+    "ETHEREUM": {
+      "p25": 4305.968240094268,
+      "p50": 4309.5142244460085,
+      "p75": 4375.437356752697,
+      "p90": 4478.154199651403,
+      "p95": 4500.128580579419
+    },
+    "BINANCECOIN": {
+      "p25": 874.091427420669,
+      "p50": 880.6091767679859,
+      "p75": 895.9033066997774,
+      "p90": 903.37490255616,
+      "p95": 903.9559674014616
+    },
+    "CARDANO": {
+      "p25": 0.8349423844081483,
+      "p50": 0.8648049343455907,
+      "p75": 0.8874794721307138,
+      "p90": 0.8948363640944882,
+      "p95": 0.8958678146872333
+    },
+    "SOLANA": {
+      "p25": 205.75865054637757,
+      "p50": 215.73737647716462,
+      "p75": 225.1746127338543,
+      "p90": 231.48682856187892,
+      "p95": 234.7387348559142
+    },
+    "POLKADOT": {
+      "p25": 3.955391135899135,
+      "p50": 4.093201320553741,
+      "p75": 4.213547029006303,
+      "p90": 4.2258589703867235,
+      "p95": 4.234295294799547
+    },
+    "US_NY.GDP.MKTP.CD": {
+      "p25": 19873205500000.0,
+      "p50": 21447043500000.0,
+      "p75": 25425462500000.0,
+      "p90": 27867127100000.0,
+      "p95": 28526008550000.0
+    },
+    "CN_NY.GDP.MKTP.CD": {
+      "p25": 12940110739953.125,
+      "p50": 14778290633999.25,
+      "p75": 18253192170790.9,
+      "p90": 18359468836603.9,
+      "p95": 18551636003715.547
+    },
+    "DE_NY.GDP.MKTP.CD": {
+      "p25": 3807354833153.238,
+      "p50": 4004608251219.605,
+      "p75": 4302122169760.495,
+      "p90": 4539126446953.839,
+      "p95": 4599527891922.2295
+    },
+    "JP_NY.GDP.MKTP.CD": {
+      "p25": 4308080151338.4424,
+      "p50": 4967257498347.83,
+      "p75": 5040447746708.95,
+      "p90": 5060460590140.303,
+      "p95": 5089227221578.406
+    },
+    "GB_NY.GDP.MKTP.CD": {
+      "p25": 2735435581182.69,
+      "p50": 2899625744249.26,
+      "p75": 3136002905816.5425,
+      "p90": 3397259118953.883,
+      "p95": 3520546653868.3965
+    },
+    "IN_NY.GDP.MKTP.CD": {
+      "p25": 2657318591713.4053,
+      "p50": 2769267949103.465,
+      "p75": 3301398121613.3154,
+      "p90": 3665908803288.695,
+      "p95": 3789297485935.452
+    },
+    "US_FP.CPI.TOTL.ZG": {
+      "p25": 1.3992399230940724,
+      "p50": 2.28634665029389,
+      "p75": 3.824635089021678,
+      "p90": 5.028352959325798,
+      "p95": 6.515576389923501
+    },
+    "CN_FP.CPI.TOTL.ZG": {
+      "p25": 1.0950173039977988,
+      "p50": 1.783355779052435,
+      "p75": 2.0560932552216777,
+      "p90": 2.467403121478265,
+      "p95": 2.683318642530267
+    },
+    "DE_FP.CPI.TOTL.ZG": {
+      "p25": 0.7472345450647245,
+      "p50": 1.62083182438285,
+      "p75": 2.8641245358469476,
+      "p90": 6.039050448083504,
+      "p95": 6.455812416797236
+    },
+    "JP_FP.CPI.TOTL.ZG": {
+      "p25": 0.09844716432518924,
+      "p50": 0.639739713353112,
+      "p75": 2.1205507357973747,
+      "p90": 2.791496500650332,
+      "p95": 3.02981507999098
+    },
+    "GB_FP.CPI.TOTL.ZG": {
+      "p25": 1.1908391763018575,
+      "p50": 2.405605499800755,
+      "p75": 3.093118653663767,
+      "p90": 6.906775244293569,
+      "p95": 7.414412037886294
+    },
+    "IN_FP.CPI.TOTL.ZG": {
+      "p25": 4.180863210505365,
+      "p50": 4.950625925178985,
+      "p75": 5.51970925975036,
+      "p90": 6.630996512736667,
+      "p95": 6.665015326767593
+    },
+    "US_SL.UEM.TOTL.ZS": {
+      "p25": 3.72575,
+      "p50": 4.2305,
+      "p75": 5.17725,
+      "p90": 5.619599999999999,
+      "p95": 6.837299999999997
+    },
+    "CN_SL.UEM.TOTL.ZS": {
+      "p25": 4.5525,
+      "p50": 4.5655,
+      "p75": 4.665,
+      "p90": 4.982,
+      "p95": 4.9910000000000005
+    },
+    "DE_SL.UEM.TOTL.ZS": {
+      "p25": 3.21825,
+      "p50": 3.5,
+      "p75": 3.856,
+      "p90": 4.1548,
+      "p95": 4.3834
+    },
+    "JP_SL.UEM.TOTL.ZS": {
+      "p25": 2.5722500000000004,
+      "p50": 2.7045000000000003,
+      "p75": 2.8265,
+      "p90": 3.1573,
+      "p95": 3.2711499999999996
+    },
+    "GB_SL.UEM.TOTL.ZS": {
+      "p25": 4.01575,
+      "p50": 4.286,
+      "p75": 4.7375,
+      "p90": 4.9319999999999995,
+      "p95": 5.224499999999999
+    },
+    "IN_SL.UEM.TOTL.ZS": {
+      "p25": 5.2115,
+      "p50": 7.0555,
+      "p75": 7.627750000000001,
+      "p90": 7.6727,
+      "p95": 7.7658499999999995
+    },
+    "US_NE.TRD.GNFS.ZS": {
+      "p25": 24.977936365690073,
+      "p50": 26.355539205544652,
+      "p75": 27.0669261242348,
+      "p90": 27.4696446106433,
+      "p95": 27.57892927236005
+    },
+    "CN_NE.TRD.GNFS.ZS": {
+      "p25": 36.12318695001977,
+      "p50": 36.707537783835605,
+      "p75": 37.13652825812861,
+      "p90": 37.56636637234498,
+      "p95": 38.13177560428414
+    },
+    "DE_NE.TRD.GNFS.ZS": {
+      "p25": 77.62281690122688,
+      "p50": 79.1807034033793,
+      "p75": 80.29765806423462,
+      "p90": 83.42560854156604,
+      "p95": 86.24486795554597
+    },
+    "JP_NE.TRD.GNFS.ZS": {
+      "p25": 34.4232135721686,
+      "p50": 35.4274083544798,
+      "p75": 36.7384462280698,
+      "p90": 45.4833010186786,
+      "p95": 46.1481439277862
+    },
+    "GB_NE.TRD.GNFS.ZS": {
+      "p25": 59.01095280157113,
+      "p50": 62.7645757139762,
+      "p75": 64.63451229052588,
+      "p90": 65.4171574461734,
+      "p95": 67.14884379297985
+    },
+    "IN_NE.TRD.GNFS.ZS": {
+      "p25": 40.24748852358763,
+      "p50": 42.769941599126795,
+      "p75": 44.912404874627626,
+      "p90": 45.888306920628956,
+      "p95": 47.98178853525857
+    }
+  },
+  "summary_stats": {
+    "total_series": 38,
+    "total_data_points": 339,
+    "date_range": {
+      "start": "2015-12-31",
+      "end": "2025-09-12"
+    },
+    "sources": [
+      "fred",
+      "commodities",
+      "crypto",
+      "economic"
+    ],
+    "value_stats": {
+      "mean": 1552176790034.7153,
+      "std": 4689464966075.677,
+      "min": -0.233352779398264,
+      "max": 29184890000000.0
+    }
+  }
+}

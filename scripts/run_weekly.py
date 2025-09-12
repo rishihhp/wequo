@@ -67,6 +67,7 @@ def main() -> int:
         crypto = CryptoConnector(
             symbols=cfg["connectors"]["crypto"]["symbols"],
             lookback_days=lookback_days,
+            api_key=os.environ.get("COINGECKO_API_KEY", ""),
         )
         crdf = crypto.normalize(crypto.fetch())
         frames["crypto"] = crdf
