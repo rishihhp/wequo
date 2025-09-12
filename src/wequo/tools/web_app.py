@@ -24,7 +24,7 @@ def create_app() -> Flask:
     
     # Initialize search engine and exporter
     search_engine = SearchEngine()
-    brief_exporter = BriefExporter()
+    brief_exporter = BriefExporter(output_root=app.config["OUTPUT_ROOT"])
     
     @app.route("/")
     def index():

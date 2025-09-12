@@ -29,11 +29,12 @@ class ExportFormat(Enum):
 class BriefExporter:
     """Exports WeQuo briefs to various formats."""
     
-    def __init__(self, template_dir: str = "templates/export"):
+    def __init__(self, template_dir: str = "templates/export", output_root: Optional[Path] = None):
         """Initialize exporter with template directory."""
         self.template_dir = Path(template_dir)
         self.template_dir.mkdir(parents=True, exist_ok=True)
         self.renderer = TemplateRenderer(str(self.template_dir))
+        self.output_root = output_root or Path("data/output")
         
         # Ensure default templates exist
         self._create_default_templates()
@@ -70,7 +71,7 @@ class BriefExporter:
         
         # Determine output path
         if output_path is None:
-            output_path = Path(f"data/output/{package_date}/wequo_brief_{package_date}.html")
+            output_path = self.output_root / package_date / f"wequo_brief_{package_date}.html"
         
         output_path.parent.mkdir(parents=True, exist_ok=True)
         
@@ -101,7 +102,7 @@ class BriefExporter:
             
             # Determine output path
             if output_path is None:
-                output_path = Path(f"data/output/{package_date}/wequo_brief_{package_date}.pdf")
+                output_path = self.output_root / package_date / f"wequo_brief_{package_date}.pdf"
             
             output_path.parent.mkdir(parents=True, exist_ok=True)
             
@@ -129,7 +130,7 @@ class BriefExporter:
         
         # Determine output path
         if output_path is None:
-            output_path = Path(f"data/output/{package_date}/wequo_brief_{package_date}.md")
+            output_path = self.output_root / package_date / f"wequo_brief_{package_date}.md"
         
         output_path.parent.mkdir(parents=True, exist_ok=True)
         
