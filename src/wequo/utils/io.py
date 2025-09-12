@@ -10,7 +10,23 @@ def ensure_dir(p: Path) -> None:
 
 
 def write_json(path: Path, obj: Any) -> None:
-    path.write_text(json.dumps(obj, indent=2, ensure_ascii=False), encoding='utf-8')
+    """Write JSON with support for pandas objects."""
+    def json_serializer(obj):
+        """Custom JSON serializer for pandas objects."""
+        if isinstance(obj, pd.Timestamp):
+            return obj.isoformat()
+        elif isinstance(obj, pd.DataFrame):
+            return obj.to_dict(orient='records')
+        elif isinstance(obj, pd.Series):
+            return obj.to_dict()
+        elif hasattr(obj, 'isoformat'):  # datetime objects
+            return obj.isoformat()
+        elif hasattr(obj, '__dict__'):  # custom objects
+            return obj.__dict__
+        else:
+            return str(obj)
+    
+    path.write_text(json.dumps(obj, indent=2, ensure_ascii=False, default=json_serializer), encoding='utf-8')
 
 
 def write_md(path: Path, content: str) -> None:

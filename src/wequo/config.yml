@@ -1,72 +1,97 @@
-run:
-  output_root: "data/output"
-  lookback_days: 7
-
+analytics:
+  anomaly_threshold: 2.0
+  delta_threshold: 0.05
+  enabled: true
+  min_data_points: 5
 connectors:
-  fred:
-    enabled: true
-    series_ids:
-      - CPIAUCSL   # US CPI (monthly)
-      - DFF        # Effective Federal Funds Rate (daily)
-      - DGS10      # 10-Year Treasury Constant Maturity Rate (daily)
-  
   commodities:
     enabled: true
     symbols:
-      - WTI        # West Texas Intermediate crude oil
-      - BRENT      # Brent crude oil
-      - GOLD       # Gold
-      - SILVER     # Silver
-      - COPPER     # Copper
-      - NATURAL_GAS # Natural gas
-  
+    - WTI
+    - BRENT
+    - GOLD
+    - SILVER
+    - COPPER
+    - NATURAL_GAS
   crypto:
     enabled: true
     symbols:
-      - bitcoin
-      - ethereum
-      - binancecoin
-      - cardano
-      - solana
-      - polkadot
-  
+    - bitcoin
+    - ethereum
+    - binancecoin
+    - cardano
+    - solana
+    - polkadot
+  economic:
+    countries:
+    - US
+    - CN
+    - DE
+    - JP
+    - GB
+    - IN
+    enabled: true
+    indicators:
+    - NY.GDP.MKTP.CD
+    - FP.CPI.TOTL.ZG
+    - SL.UEM.TOTL.ZS
+    - NE.TRD.GNFS.ZS
+  fred:
+    enabled: true
+    series_ids:
+    - CPIAUCSL
+    - DFF
+    - DGS10
   github:
     enabled: false
     repos:
-      - microsoft/vscode
-      - facebook/react
-      - tensorflow/tensorflow
-      - pytorch/pytorch
-      - openai/gpt-3
-      - langchain-ai/langchain
-  
+    - microsoft/vscode
+    - facebook/react
+    - tensorflow/tensorflow
+    - pytorch/pytorch
+    - openai/gpt-3
+    - langchain-ai/langchain
   weather:
-    enabled: false
     cities:
-      - New York
-      - London
-      - Tokyo
-      - Sydney
-      - Dubai
-      - Singapore
-  
-  economic:
-    enabled: true
-    indicators:
-      - NY.GDP.MKTP.CD      # GDP (current US$)
-      - FP.CPI.TOTL.ZG      # Inflation, consumer prices (annual %)
-      - SL.UEM.TOTL.ZS      # Unemployment, total (% of total labor force)
-      - NE.TRD.GNFS.ZS      # Trade (% of GDP)
-    countries:
-      - US   # United States
-      - CN   # China
-      - DE   # Germany
-      - JP   # Japan
-      - GB   # United Kingdom
-      - IN   # India
-
-analytics:
+    - New York
+    - London
+    - Tokyo
+    - Sydney
+    - Dubai
+    - Singapore
+    enabled: false
+monitoring:
+  alert_cooldown_minutes: 60
+  alerts:
+    email:
+      enabled: false
+      from_address: ''
+      password: ''
+      smtp_port: 587
+      smtp_server: smtp.gmail.com
+      to_addresses: []
+      username: ''
+    slack:
+      enabled: false
+      webhook_url: ''
+    webhook:
+      enabled: false
+      headers: {}
+      url: ''
+  check_interval_minutes: 15
   enabled: true
-  anomaly_threshold: 2.0
-  delta_threshold: 0.05
-  min_data_points: 5
+  health_checks:
+    enabled: true
+    retry_attempts: 3
+    retry_delay_seconds: 5
+    timeout_seconds: 10
+  metrics_retention_days: 30
+optimization:
+  chunk_size: 10000
+  enabled: true
+  max_workers: null
+  memory_efficient: true
+  parallel_connectors: false
+run:
+  lookback_days: 7
+  output_root: data/output
