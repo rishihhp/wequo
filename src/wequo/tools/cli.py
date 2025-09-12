@@ -364,5 +364,66 @@ def get_week_number(date_str: str) -> int:
         return 1
 
 
+@cli.command()
+@click.argument("date")
+@click.option("--format", "export_format", type=click.Choice(["pdf", "html"]), default="pdf", help="Export format")
+@click.option("--output-dir", default="data/output", help="Output directory for data packages")
+@click.option("--include-charts/--no-charts", default=True, help="Include charts in export")
+@click.option("--include-data/--no-data", default=True, help="Include data tables in export")
+def export_package(date: str, export_format: str, output_dir: str, include_charts: bool, include_data: bool):
+    """Export a data package to PDF or HTML format."""
+    try:
+        from .export import WeQuoExporter
+        
+        output_path = Path(output_dir)
+        exporter = WeQuoExporter(output_path)
+        
+        click.echo(f"Exporting package {date} to {export_format.upper()}...")
+        output_file = exporter.export_package(date, export_format, include_charts, include_data)
+        
+        click.echo(f"✅ Export successful: {output_file}")
+        click.echo(f"📁 File size: {output_file.stat().st_size / 1024:.1f} KB")
+        
+    except FileNotFoundError:
+        click.echo(f"❌ Error: Package for {date} not found in {output_dir}")
+        sys.exit(1)
+    except Exception as e:
+        click.echo(f"❌ Export failed: {e}")
+        sys.exit(1)
+
+
+@cli.command()
+@click.argument("date")
+@click.option("--output-dir", default="data/output", help="Output directory for data packages")
+def export_all(date: str, output_dir: str):
+    """Export a data package to both PDF and HTML formats."""
+    try:
+        from .export import WeQuoExporter
+        
+        output_path = Path(output_dir)
+        exporter = WeQuoExporter(output_path)
+        
+        click.echo(f"Exporting package {date} to all formats...")
+        
+        # Export PDF
+        click.echo("📄 Generating PDF...")
+        pdf_file = exporter.export_package(date, "pdf", True, True)
+        click.echo(f"✅ PDF: {pdf_file}")
+        
+        # Export HTML
+        click.echo("🌐 Generating HTML...")
+        html_file = exporter.export_package(date, "html", True, True)
+        click.echo(f"✅ HTML: {html_file}")
+        
+        click.echo(f"🎉 All exports completed successfully!")
+        
+    except FileNotFoundError:
+        click.echo(f"❌ Error: Package for {date} not found in {output_dir}")
+        sys.exit(1)
+    except Exception as e:
+        click.echo(f"❌ Export failed: {e}")
+        sys.exit(1)
+
+
 if __name__ == "__main__":
     cli()

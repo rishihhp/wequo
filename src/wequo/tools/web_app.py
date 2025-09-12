@@ -135,6 +135,55 @@ def create_app() -> Flask:
         suggestions = get_search_suggestions(query)
         return jsonify({"suggestions": suggestions})
     
+    @app.route("/export/<date>")
+    def export_package(date: str):
+        """Export a data package to PDF or HTML."""
+        format_type = request.args.get("format", "pdf").lower()
+        include_charts = request.args.get("charts", "true").lower() == "true"
+        include_data = request.args.get("data", "true").lower() == "true"
+        
+        try:
+            from .export import WeQuoExporter
+            exporter = WeQuoExporter(app.config["OUTPUT_ROOT"])
+            output_file = exporter.export_package(date, format_type, include_charts, include_data)
+            
+            return send_file(output_file, as_attachment=True, 
+                           download_name=f"wequo_brief_{date}.{format_type}")
+        except FileNotFoundError:
+            return f"Package for {date} not found", 404
+        except Exception as e:
+            return f"Export failed: {str(e)}", 500
+    
+    @app.route("/export/<date>/html")
+    def export_package_html(date: str):
+        """Export a data package to HTML format."""
+        try:
+            from .export import WeQuoExporter
+            exporter = WeQuoExporter(app.config["OUTPUT_ROOT"])
+            output_file = exporter.export_package(date, "html", True, True)
+            
+            return send_file(output_file, as_attachment=True, 
+                           download_name=f"wequo_brief_{date}.html")
+        except FileNotFoundError:
+            return f"Package for {date} not found", 404
+        except Exception as e:
+            return f"Export failed: {str(e)}", 500
+    
+    @app.route("/export/<date>/pdf")
+    def export_package_pdf(date: str):
+        """Export a data package to PDF format."""
+        try:
+            from .export import WeQuoExporter
+            exporter = WeQuoExporter(app.config["OUTPUT_ROOT"])
+            output_file = exporter.export_package(date, "pdf", True, True)
+            
+            return send_file(output_file, as_attachment=True, 
+                           download_name=f"wequo_brief_{date}.pdf")
+        except FileNotFoundError:
+            return f"Package for {date} not found", 404
+        except Exception as e:
+            return f"Export failed: {str(e)}", 500
+    
     return app
 
 

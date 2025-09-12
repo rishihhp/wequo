@@ -82,6 +82,20 @@
         .btn-secondary:hover {
             background-color: #5a6268;
         }
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+        .btn-success:hover {
+            background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+        }
+        .btn-info {
+            background: linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%);
+            color: white;
+        }
+        .btn-info:hover {
+            background: linear-gradient(135deg, #138496 0%, #5a32a3 100%);
+        }
         .analytics-badge {
             display: inline-block;
             background-color: #28a745;
@@ -317,6 +331,8 @@
                 <div class="package-actions">
                     <a href="/package/{{ package.date }}" class="btn btn-primary">View Package</a>
                     <a href="/template/{{ package.date }}" class="btn btn-secondary">Generate Template</a>
+                    <a href="/export/{{ package.date }}/pdf" class="btn btn-success">📄 Export PDF</a>
+                    <a href="/export/{{ package.date }}/html" class="btn btn-info">🌐 Export HTML</a>
                 </div>
             </div>
             {% endfor %}
