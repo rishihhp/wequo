@@ -6,6 +6,7 @@ from typing import Dict, Any, List
 from datetime import datetime
 
 from flask import Flask, render_template, request, jsonify, send_file, redirect, url_for
+from flask_cors import CORS
 import pandas as pd
 
 
@@ -18,6 +19,8 @@ def create_app() -> Flask:
 
     # Create Flask app and point Jinja to the repo templates directory
     app = Flask(__name__, template_folder=str(templates_dir))
+    # Enable CORS for API endpoints during development
+    CORS(app, resources={r"/api/*": {"origins": "*"}})
     app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key")
     
     # Configuration (store absolute paths)
@@ -83,6 +86,14 @@ def create_app() -> Flask:
             return jsonify(json.loads(summary_path.read_text(encoding="utf-8")))
         else:
             return jsonify({"error": "Summary not found"}), 404
+
+    # Add permissive CORS headers for local development and Vite dev server
+    @app.after_request
+    def add_cors_headers(response):
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Methods'] = 'GET,POST,OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
+        return response
     
     return app
 
