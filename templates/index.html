@@ -115,6 +115,134 @@
         .status-success { background-color: #28a745; }
         .status-warning { background-color: #ffc107; }
         .status-error { background-color: #dc3545; }
+        
+        /* Search Interface Styles */
+        .search-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .search-input-container {
+            flex: 1;
+            position: relative;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #667eea;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .search-suggestion-item {
+            padding: 10px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s;
+        }
+        .search-suggestion-item:hover {
+            background-color: #f8f9fa;
+        }
+        .search-suggestion-item:last-child {
+            border-bottom: none;
+        }
+        .search-suggestion-highlight {
+            background-color: #fff3cd;
+            font-weight: 600;
+        }
+        .search-box button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .search-box button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        .search-filters {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .search-filters select,
+        .search-filters input {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .search-results {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+        .search-result-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+        .search-result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .search-result-type {
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .search-result-date {
+            color: #666;
+            font-size: 14px;
+        }
+        .search-result-content {
+            color: #333;
+            line-height: 1.5;
+        }
+        .search-result-source {
+            color: #667eea;
+            font-weight: 600;
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
@@ -130,6 +258,35 @@
             <a href="/api/packages" class="btn btn-secondary">View API</a>
             <a href="https://github.com/HarjobandeepSingh/wequo" class="btn btn-secondary" target="_blank">Documentation</a>
         </p>
+    </div>
+
+    <!-- Search Interface -->
+    <div class="search-section">
+        <h2>🔍 Search Data</h2>
+        <div class="search-container">
+            <div class="search-box">
+                <div class="search-input-container">
+                    <input type="text" id="searchInput" placeholder="Search across all data packages..." autocomplete="off" />
+                    <div id="searchSuggestions" class="search-suggestions" style="display: none;"></div>
+                </div>
+                <button id="searchBtn">Search</button>
+            </div>
+            <div class="search-filters">
+                <select id="sourceFilter">
+                    <option value="">All Sources</option>
+                    <option value="fred">FRED</option>
+                    <option value="crypto">Crypto</option>
+                    <option value="commodities">Commodities</option>
+                    <option value="economic">Economic</option>
+                </select>
+                <input type="date" id="dateFrom" placeholder="From Date" />
+                <input type="date" id="dateTo" placeholder="To Date" />
+            </div>
+        </div>
+        <div id="searchResults" class="search-results" style="display: none;">
+            <h3>Search Results</h3>
+            <div id="searchResultsList"></div>
+        </div>
     </div>
 
     <h2>Available Data Packages</h2>
@@ -189,5 +346,166 @@ python -m wequo.tools.cli generate-template 2025-01-15
 python -m wequo.tools.cli quick-start 2025-01-15 --open-editor
         </pre>
     </div>
+
+    <script>
+        // Search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            const sourceFilter = document.getElementById('sourceFilter');
+            const dateFrom = document.getElementById('dateFrom');
+            const dateTo = document.getElementById('dateTo');
+            const searchResults = document.getElementById('searchResults');
+            const searchResultsList = document.getElementById('searchResultsList');
+
+            // Search function
+            async function performSearch() {
+                const query = searchInput.value.trim();
+                if (!query) {
+                    alert('Please enter a search query');
+                    return;
+                }
+
+                // Build search URL
+                const params = new URLSearchParams({
+                    q: query,
+                    limit: 20
+                });
+
+                if (sourceFilter.value) {
+                    params.append('source', sourceFilter.value);
+                }
+                if (dateFrom.value) {
+                    params.append('date_from', dateFrom.value);
+                }
+                if (dateTo.value) {
+                    params.append('date_to', dateTo.value);
+                }
+
+                try {
+                    searchBtn.textContent = 'Searching...';
+                    searchBtn.disabled = true;
+
+                    const response = await fetch(`/api/search?${params}`);
+                    const data = await response.json();
+
+                    if (data.error) {
+                        alert('Search error: ' + data.error);
+                        return;
+                    }
+
+                    displaySearchResults(data.results, data.query);
+                } catch (error) {
+                    alert('Search failed: ' + error.message);
+                } finally {
+                    searchBtn.textContent = 'Search';
+                    searchBtn.disabled = false;
+                }
+            }
+
+            // Display search results
+            function displaySearchResults(results, query) {
+                if (results.length === 0) {
+                    searchResultsList.innerHTML = '<p>No results found for "' + query + '"</p>';
+                } else {
+                    searchResultsList.innerHTML = results.map(result => `
+                        <div class="search-result-item">
+                            <div class="search-result-header">
+                                <div>
+                                    <span class="search-result-type">${result.type}</span>
+                                    <span class="search-result-source">${result.source}</span>
+                                </div>
+                                <div class="search-result-date">${result.date}</div>
+                            </div>
+                            <div class="search-result-content">
+                                ${highlightQuery(result.content, query)}
+                            </div>
+                        </div>
+                    `).join('');
+                }
+                searchResults.style.display = 'block';
+            }
+
+            // Highlight search query in results
+            function highlightQuery(text, query) {
+                const regex = new RegExp(`(${query})`, 'gi');
+                return text.replace(regex, '<mark>$1</mark>');
+            }
+
+            // Event listeners
+            searchBtn.addEventListener('click', performSearch);
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+
+            // Auto-suggestions with fuzzy matching
+            let suggestionTimeout;
+            const searchSuggestions = document.getElementById('searchSuggestions');
+            
+            searchInput.addEventListener('input', function() {
+                clearTimeout(suggestionTimeout);
+                const query = this.value.trim();
+                
+                if (query.length >= 2) {
+                    suggestionTimeout = setTimeout(async () => {
+                        try {
+                            const response = await fetch(`/api/search/suggestions?q=${encodeURIComponent(query)}`);
+                            const data = await response.json();
+                            displaySuggestions(data.suggestions, query);
+                        } catch (error) {
+                            hideSuggestions();
+                        }
+                    }, 200);
+                } else {
+                    hideSuggestions();
+                }
+            });
+
+            // Hide suggestions when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!searchInput.contains(e.target) && !searchSuggestions.contains(e.target)) {
+                    hideSuggestions();
+                }
+            });
+
+            // Display search suggestions
+            function displaySuggestions(suggestions, query) {
+                if (suggestions.length === 0) {
+                    hideSuggestions();
+                    return;
+                }
+
+                searchSuggestions.innerHTML = suggestions.map(suggestion => {
+                    const highlighted = highlightSuggestion(suggestion, query);
+                    return `<div class="search-suggestion-item" data-suggestion="${suggestion}">${highlighted}</div>`;
+                }).join('');
+
+                // Add click handlers to suggestions
+                searchSuggestions.querySelectorAll('.search-suggestion-item').forEach(item => {
+                    item.addEventListener('click', function() {
+                        const suggestion = this.dataset.suggestion;
+                        searchInput.value = suggestion;
+                        hideSuggestions();
+                        performSearch();
+                    });
+                });
+
+                searchSuggestions.style.display = 'block';
+            }
+
+            // Hide suggestions
+            function hideSuggestions() {
+                searchSuggestions.style.display = 'none';
+            }
+
+            // Highlight suggestion text
+            function highlightSuggestion(suggestion, query) {
+                const regex = new RegExp(`(${query})`, 'gi');
+                return suggestion.replace(regex, '<span class="search-suggestion-highlight">$1</span>');
+            }
+        });
+    </script>
 </body>
 </html>

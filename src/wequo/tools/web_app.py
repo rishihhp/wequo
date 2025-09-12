@@ -101,6 +101,40 @@ def create_app() -> Flask:
         else:
             return jsonify({"error": "Summary not found"}), 404
     
+    @app.route("/api/search")
+    def api_search():
+        """Search across all data packages."""
+        query = request.args.get("q", "").strip()
+        source_filter = request.args.get("source", "").strip()
+        date_from = request.args.get("date_from", "").strip()
+        date_to = request.args.get("date_to", "").strip()
+        limit = int(request.args.get("limit", 50))
+        
+        if not query:
+            return jsonify({"error": "Query parameter 'q' is required"}), 400
+        
+        results = search_data(query, source_filter, date_from, date_to, limit)
+        return jsonify({
+            "query": query,
+            "filters": {
+                "source": source_filter,
+                "date_from": date_from,
+                "date_to": date_to
+            },
+            "results": results,
+            "total": len(results)
+        })
+    
+    @app.route("/api/search/suggestions")
+    def api_search_suggestions():
+        """Get search suggestions based on available data."""
+        query = request.args.get("q", "").strip()
+        if len(query) < 2:
+            return jsonify({"suggestions": []})
+        
+        suggestions = get_search_suggestions(query)
+        return jsonify({"suggestions": suggestions})
+    
     return app
 
 
@@ -265,6 +299,277 @@ def get_week_number(date_str: str) -> int:
         return date_obj.isocalendar()[1]
     except:
         return 1
+
+
+def search_data(query: str, source_filter: str = "", date_from: str = "", date_to: str = "", limit: int = 50) -> List[Dict[str, Any]]:
+    """Search across all data packages."""
+    results = []
+    output_root = Path("data/output")
+    
+    if not output_root.exists():
+        return results
+    
+    query_lower = query.lower()
+    
+    # Get all package directories
+    package_dirs = [d for d in output_root.iterdir() if d.is_dir()]
+    
+    # Apply date filtering
+    if date_from or date_to:
+        filtered_dirs = []
+        for package_dir in package_dirs:
+            package_date = package_dir.name
+            if date_from and package_date < date_from:
+                continue
+            if date_to and package_date > date_to:
+                continue
+            filtered_dirs.append(package_dir)
+        package_dirs = filtered_dirs
+    
+    # Search through each package
+    for package_dir in sorted(package_dirs, reverse=True):
+        if len(results) >= limit:
+            break
+            
+        package_data = load_package_data(package_dir)
+        package_date = package_dir.name
+        
+        # Search in summary data
+        summary = package_data.get("summary", {})
+        if _matches_query(query_lower, str(summary)):
+            results.append({
+                "type": "summary",
+                "date": package_date,
+                "source": "package_summary",
+                "content": str(summary)[:200] + "..." if len(str(summary)) > 200 else str(summary),
+                "relevance": _calculate_relevance(query_lower, str(summary))
+            })
+        
+        # Search in analytics data
+        analytics = package_data.get("analytics", {})
+        if _matches_query(query_lower, str(analytics)):
+            results.append({
+                "type": "analytics",
+                "date": package_date,
+                "source": "analytics",
+                "content": str(analytics)[:200] + "..." if len(str(analytics)) > 200 else str(analytics),
+                "relevance": _calculate_relevance(query_lower, str(analytics))
+            })
+        
+        # Search in CSV data
+        csv_files = package_data.get("csv_files", {})
+        for source, data in csv_files.items():
+            if source_filter and source != source_filter:
+                continue
+                
+            if _matches_query(query_lower, str(data)):
+                results.append({
+                    "type": "data",
+                    "date": package_date,
+                    "source": source,
+                    "content": str(data)[:200] + "..." if len(str(data)) > 200 else str(data),
+                    "relevance": _calculate_relevance(query_lower, str(data))
+                })
+        
+        # Search in reports
+        reports = package_data.get("reports", {})
+        for report_name, content in reports.items():
+            if _matches_query(query_lower, content):
+                results.append({
+                    "type": "report",
+                    "date": package_date,
+                    "source": report_name,
+                    "content": content[:200] + "..." if len(content) > 200 else content,
+                    "relevance": _calculate_relevance(query_lower, content)
+                })
+    
+    # Sort by relevance and return top results
+    results.sort(key=lambda x: x["relevance"], reverse=True)
+    return results[:limit]
+
+
+def get_search_suggestions(query: str) -> List[str]:
+    """Get search suggestions based on available data with fuzzy matching."""
+    suggestions = set()
+    output_root = Path("data/output")
+    
+    if not output_root.exists():
+        return []
+    
+    query_lower = query.lower()
+    
+    # Common misspellings and alternatives
+    fuzzy_alternatives = {
+        'bitcoin': ['bitcoin', 'btc', 'bit coin'],
+        'ethereum': ['ethereum', 'eth', 'ether'],
+        'dollar': ['dollar', 'usd', 'doller', 'dolar'],
+        'inr': ['inr', 'rupee', 'indian rupee'],
+        'gold': ['gold', 'au', 'precious metal'],
+        'oil': ['oil', 'crude', 'brent', 'wti'],
+        'inflation': ['inflation', 'cpi', 'price index'],
+        'unemployment': ['unemployment', 'jobless', 'unemployed'],
+        'gdp': ['gdp', 'gross domestic product', 'economic growth'],
+        'crypto': ['crypto', 'cryptocurrency', 'digital currency']
+    }
+    
+    # Get suggestions from all packages
+    for package_dir in output_root.iterdir():
+        if not package_dir.is_dir():
+            continue
+            
+        package_data = load_package_data(package_dir)
+        
+        # Extract series IDs from analytics
+        analytics = package_data.get("analytics", {})
+        for trend in analytics.get("trends", []):
+            series_id = trend.get("series_id", "")
+            if _fuzzy_match(query_lower, series_id.lower()):
+                suggestions.add(series_id)
+        
+        for delta in analytics.get("top_deltas", []):
+            series_id = delta.get("series_id", "")
+            if _fuzzy_match(query_lower, series_id.lower()):
+                suggestions.add(series_id)
+        
+        for anomaly in analytics.get("anomalies", []):
+            series_id = anomaly.get("series_id", "")
+            if _fuzzy_match(query_lower, series_id.lower()):
+                suggestions.add(series_id)
+        
+        # Extract source names
+        csv_files = package_data.get("csv_files", {})
+        for source in csv_files.keys():
+            if _fuzzy_match(query_lower, source.lower()):
+                suggestions.add(source)
+    
+    # Add fuzzy alternatives
+    for key, alternatives in fuzzy_alternatives.items():
+        if _fuzzy_match(query_lower, key):
+            suggestions.update(alternatives)
+    
+    # Sort by relevance (exact matches first, then fuzzy matches)
+    suggestions_list = list(suggestions)
+    suggestions_list.sort(key=lambda x: _calculate_suggestion_relevance(query_lower, x), reverse=True)
+    
+    return suggestions_list[:15]
+
+
+def _matches_query(query: str, text: str) -> bool:
+    """Check if query matches text (case-insensitive)."""
+    return query in text.lower()
+
+
+def _calculate_relevance(query: str, text: str) -> float:
+    """Calculate relevance score for search results."""
+    text_lower = text.lower()
+    query_words = query.split()
+    
+    score = 0.0
+    
+    # Exact phrase match gets highest score
+    if query in text_lower:
+        score += 10.0
+    
+    # Word matches
+    for word in query_words:
+        if word in text_lower:
+            score += 1.0
+    
+    # Bonus for matches at the beginning
+    if text_lower.startswith(query):
+        score += 5.0
+    
+    return score
+
+
+def _fuzzy_match(query: str, text: str) -> bool:
+    """Check if query fuzzy matches text (handles typos and partial matches)."""
+    if not query or not text:
+        return False
+    
+    # Exact match
+    if query in text:
+        return True
+    
+    # Check if query is a substring of text
+    if len(query) >= 3 and query in text:
+        return True
+    
+    # Check if text is a substring of query (for abbreviations)
+    if len(text) >= 3 and text in query:
+        return True
+    
+    # Fuzzy matching for common typos (Levenshtein distance approximation)
+    if _levenshtein_similarity(query, text) > 0.7:
+        return True
+    
+    # Check individual words
+    query_words = query.split()
+    text_words = text.split()
+    
+    for q_word in query_words:
+        for t_word in text_words:
+            if len(q_word) >= 3 and len(t_word) >= 3:
+                if _levenshtein_similarity(q_word, t_word) > 0.8:
+                    return True
+    
+    return False
+
+
+def _levenshtein_similarity(s1: str, s2: str) -> float:
+    """Calculate similarity between two strings using Levenshtein distance."""
+    if len(s1) < len(s2):
+        return _levenshtein_similarity(s2, s1)
+    
+    if len(s2) == 0:
+        return 0.0
+    
+    previous_row = list(range(len(s2) + 1))
+    for i, c1 in enumerate(s1):
+        current_row = [i + 1]
+        for j, c2 in enumerate(s2):
+            insertions = previous_row[j + 1] + 1
+            deletions = current_row[j] + 1
+            substitutions = previous_row[j] + (c1 != c2)
+            current_row.append(min(insertions, deletions, substitutions))
+        previous_row = current_row
+    
+    max_len = max(len(s1), len(s2))
+    if max_len == 0:
+        return 1.0
+    
+    return 1.0 - (previous_row[-1] / max_len)
+
+
+def _calculate_suggestion_relevance(query: str, suggestion: str) -> float:
+    """Calculate relevance score for search suggestions."""
+    suggestion_lower = suggestion.lower()
+    query_lower = query.lower()
+    
+    score = 0.0
+    
+    # Exact match gets highest score
+    if query_lower == suggestion_lower:
+        score += 100.0
+    
+    # Starts with query
+    elif suggestion_lower.startswith(query_lower):
+        score += 50.0
+    
+    # Contains query
+    elif query_lower in suggestion_lower:
+        score += 25.0
+    
+    # Fuzzy match
+    else:
+        similarity = _levenshtein_similarity(query_lower, suggestion_lower)
+        score += similarity * 20.0
+    
+    # Bonus for shorter suggestions (more specific)
+    if len(suggestion) < 20:
+        score += 5.0
+    
+    return score
 
 
 if __name__ == "__main__":
