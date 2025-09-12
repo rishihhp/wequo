@@ -1,192 +1,812 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WeQuo Author Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .header {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px;
+        margin-bottom: 30px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .header h1 {
+        color: #2d3748;
+        font-size: 3em;
+        font-weight: 700;
+        margin-bottom: 10px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .header p {
+        color: #718096;
+        font-size: 1.2em;
+        margin-bottom: 20px;
+      }
+
+      .header-stats {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        margin-top: 20px;
+      }
+
+      .stat-item {
+        text-align: center;
+      }
+
+      .stat-number {
+        font-size: 2em;
+        font-weight: bold;
+        color: #667eea;
+      }
+
+      .stat-label {
+        color: #718096;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 30px;
+        margin-bottom: 30px;
+      }
+
+      .main-content {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+
+      .sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: between;
+        margin-bottom: 20px;
+      }
+
+      .card-title {
+        font-size: 1.5em;
+        font-weight: 600;
+        color: #2d3748;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .packages-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 20px;
+      }
+
+      .package-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .package-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+      }
+
+      .package-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+      }
+
+      .package-header {
+        display: flex;
+        justify-content: between;
+        align-items: flex-start;
+        margin-bottom: 16px;
+      }
+
+      .package-date {
+        font-size: 1.3em;
+        font-weight: 700;
+        color: #2d3748;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .package-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8em;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .badge-success {
+        background: #c6f6d5;
+        color: #22543d;
+      }
+
+      .badge-warning {
+        background: #fed7aa;
+        color: #c05621;
+      }
+
+      .package-info {
+        margin-bottom: 20px;
+      }
+
+      .info-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        color: #718096;
+        font-size: 0.9em;
+      }
+
+      .package-sources {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 16px;
+      }
+
+      .source-tag {
+        background: #e2e8f0;
+        color: #4a5568;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.8em;
+        font-weight: 500;
+        text-transform: uppercase;
+      }
+
+      .package-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        text-align: center;
+        justify-content: center;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.6);
+      }
+
+      .btn-secondary {
+        background: #f7fafc;
+        color: #4a5568;
+        border: 2px solid #e2e8f0;
+      }
+
+      .btn-secondary:hover {
+        background: #edf2f7;
+        border-color: #cbd5e0;
+        transform: translateY(-2px);
+      }
+
+      .quick-actions {
+        margin-bottom: 20px;
+      }
+
+      .action-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .search-box {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        margin-bottom: 20px;
+      }
+
+      .search-box:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .health-indicator {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 16px;
+        border-radius: 10px;
+        margin-bottom: 16px;
+      }
+
+      .health-good {
+        background: #c6f6d5;
+        color: #22543d;
+      }
+
+      .health-warning {
+        background: #fed7aa;
+        color: #c05621;
+      }
+
+      .chart-container {
+        position: relative;
+        height: 300px;
+        margin-top: 20px;
+      }
+
+      .export-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+        min-width: 120px;
+        margin-top: 4px;
+      }
+
+      .export-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        text-decoration: none;
+        color: #4a5568;
+        border-bottom: 1px solid #f7fafc;
+        transition: background-color 0.2s ease;
+      }
+
+      .export-item:last-child {
+        border-bottom: none;
+      }
+
+      .export-item:hover {
+        background: #f7fafc;
+        color: #2d3748;
+      }
+
+      .loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 200px;
+        color: #718096;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #718096;
+      }
+
+      .empty-state h3 {
+        color: #4a5568;
+        margin-bottom: 12px;
+      }
+
+      @media (max-width: 1024px) {
+        .dashboard-grid {
+          grid-template-columns: 1fr;
         }
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            text-align: center;
+
+        .header-stats {
+          flex-wrap: wrap;
+          gap: 20px;
         }
-        .header h1 {
-            margin: 0;
-            font-size: 2.5em;
-        }
-        .header p {
-            margin: 10px 0 0 0;
-            opacity: 0.9;
-        }
+
         .packages-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+          grid-template-columns: 1fr;
         }
-        .package-card {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
+      }
+
+      @media (max-width: 640px) {
+        body {
+          padding: 10px;
         }
-        .package-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+
+        .header {
+          padding: 20px;
         }
-        .package-date {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 10px;
+
+        .header h1 {
+          font-size: 2em;
         }
-        .package-sources {
-            color: #666;
-            margin-bottom: 15px;
+
+        .action-grid {
+          grid-template-columns: 1fr;
         }
-        .package-actions {
-            display: flex;
-            gap: 10px;
-        }
-        .btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 14px;
-            transition: background-color 0.2s;
-        }
-        .btn-primary {
-            background-color: #667eea;
-            color: white;
-        }
-        .btn-primary:hover {
-            background-color: #5a6fd8;
-        }
-        .btn-secondary {
-            background-color: #6c757d;
-            color: white;
-        }
-        .btn-secondary:hover {
-            background-color: #5a6268;
-        }
-        .analytics-badge {
-            display: inline-block;
-            background-color: #28a745;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            margin-left: 10px;
-        }
-        .no-analytics {
-            background-color: #dc3545;
-        }
-        .quick-actions {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-        .quick-actions h3 {
-            margin-top: 0;
-            color: #333;
-        }
-        .status-indicator {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin-right: 5px;
-        }
-        .status-success { background-color: #28a745; }
-        .status-warning { background-color: #ffc107; }
-        .status-error { background-color: #dc3545; }
+      }
     </style>
-</head>
-<body>
-    <div class="header">
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
         <h1>WeQuo Author Dashboard</h1>
         <p>Weekly Global Risk & Opportunity Brief - Data Pipeline</p>
-    </div>
-
-    <div class="quick-actions">
-        <h3>Quick Actions</h3>
-        <p>
-            <a href="/api/packages" class="btn btn-secondary">View API</a>
-            <a href="https://github.com/your-org/wequo" class="btn btn-secondary" target="_blank">Documentation</a>
-        </p>
-    </div>
-
-    <h2>Available Data Packages</h2>
-    {% if packages %}
-        <div class="packages-grid">
-            {% for package in packages %}
-            <div class="package-card">
-                <div class="package-date">
-                    📅 {{ package.date }}
-                    {% if package.has_analytics %}
-                        <span class="analytics-badge">Analytics</span>
-                    {% else %}
-                        <span class="analytics-badge no-analytics">No Analytics</span>
-                    {% endif %}
-                </div>
-                
-                <div class="package-sources">
-                    <strong>Sources:</strong> {{ package.sources | join(', ') }}
-                </div>
-                
-                {% if package.timestamp %}
-                <div class="package-sources">
-                    <span class="status-indicator status-success"></span>
-                    Generated: {{ package.timestamp[:19] }}
-                </div>
-                {% endif %}
-                
-                <div class="package-actions">
-                    <a href="/package/{{ package.date }}" class="btn btn-primary">View Package</a>
-                    <a href="/template/{{ package.date }}" class="btn btn-secondary">Generate Template</a>
-                </div>
+        <div class="header-stats">
+          <div class="stat-item">
+            <div class="stat-number">{{ packages|length }}</div>
+            <div class="stat-label">Packages</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">
+              {{ packages|selectattr('has_analytics')|list|length }}
             </div>
-            {% endfor %}
+            <div class="stat-label">With Analytics</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">
+              {{ packages[0].sources|length if packages else 0 }}
+            </div>
+            <div class="stat-label">Data Sources</div>
+          </div>
         </div>
-    {% else %}
-        <div class="package-card">
-            <h3>No packages available</h3>
-            <p>Run the pipeline to generate data packages:</p>
-            <code>python scripts/run_weekly.py</code>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="main-content">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">
+                <i data-lucide="database"></i>
+                Data Packages
+              </h2>
+              <button onclick="refreshData()" class="btn btn-secondary">
+                <i data-lucide="refresh-cw"></i>
+                Refresh
+              </button>
+            </div>
+
+            <input
+              type="text"
+              class="search-box"
+              placeholder="Search packages by date or source..."
+              onkeyup="filterPackages(this.value)"
+            />
+
+            {% if packages %}
+            <div class="packages-grid" id="packages-container">
+              {% for package in packages %}
+              <div
+                class="package-card"
+                data-date="{{ package.date }}"
+                data-sources="{{ package.sources | join(' ') }}"
+              >
+                <div class="package-header">
+                  <div class="package-date">
+                    <i data-lucide="calendar"></i>
+                    {{ package.date }}
+                  </div>
+                  {% if package.has_analytics %}
+                  <span class="package-badge badge-success">Analytics</span>
+                  {% else %}
+                  <span class="package-badge badge-warning">No Analytics</span>
+                  {% endif %}
+                </div>
+
+                <div class="package-info">
+                  {% if package.timestamp %}
+                  <div class="info-row">
+                    <i data-lucide="clock"></i>
+                    Generated: {{ package.timestamp[:19] }}
+                  </div>
+                  {% endif %}
+                </div>
+
+                <div class="package-sources">
+                  {% for source in package.sources %}
+                  <span class="source-tag">{{ source }}</span>
+                  {% endfor %}
+                </div>
+
+                <div class="package-actions">
+                  <a href="/package/{{ package.date }}" class="btn btn-primary">
+                    <i data-lucide="eye"></i>
+                    View Package
+                  </a>
+                  <a
+                    href="/template/{{ package.date }}"
+                    class="btn btn-secondary"
+                  >
+                    <i data-lucide="file-text"></i>
+                    Generate Template
+                  </a>
+                  <div style="position: relative; display: inline-block">
+                    <button
+                      onclick="toggleExportMenu('{{ package.date }}')"
+                      class="btn btn-secondary"
+                    >
+                      <i data-lucide="download"></i>
+                      Export
+                    </button>
+                    <div
+                      id="export-menu-{{ package.date }}"
+                      class="export-menu"
+                      style="display: none"
+                    >
+                      <a
+                        href="/export/{{ package.date }}/html"
+                        class="export-item"
+                      >
+                        <i data-lucide="globe"></i> HTML
+                      </a>
+                      <a
+                        href="/export/{{ package.date }}/pdf"
+                        class="export-item"
+                      >
+                        <i data-lucide="file-text"></i> PDF
+                      </a>
+                      <a
+                        href="/export/{{ package.date }}/markdown"
+                        class="export-item"
+                      >
+                        <i data-lucide="file-minus"></i> Markdown
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+              <i
+                data-lucide="inbox"
+                style="width: 48px; height: 48px; margin-bottom: 16px"
+              ></i>
+              <h3>No packages available</h3>
+              <p>Run the pipeline to generate data packages:</p>
+              <code
+                style="
+                  background: #f7fafc;
+                  padding: 8px 12px;
+                  border-radius: 6px;
+                  margin-top: 12px;
+                  display: inline-block;
+                "
+                >python scripts/run_weekly.py</code
+              >
+            </div>
+            {% endif %}
+          </div>
+
+          <!-- Analytics Overview Chart -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i data-lucide="trending-up"></i>
+                Analytics Overview
+              </h3>
+            </div>
+            <div class="chart-container">
+              <canvas id="analyticsChart"></canvas>
+            </div>
+          </div>
         </div>
-    {% endif %}
 
-    <div class="quick-actions">
-        <h3>CLI Usage</h3>
-        <p>You can also use the command-line interface:</p>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 5px; overflow-x: auto;">
-# List available packages
-python -m wequo.tools.cli list-packages
+        <div class="sidebar">
+          <!-- System Health -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i data-lucide="activity"></i>
+                System Health
+              </h3>
+            </div>
 
-# View a specific package
-python -m wequo.tools.cli view-package 2025-01-15
+            <div class="health-indicator health-good">
+              <i data-lucide="check-circle"></i>
+              Data Pipeline Running
+            </div>
 
-# Generate pre-filled template
-python -m wequo.tools.cli generate-template 2025-01-15
+            <div class="health-indicator health-good">
+              <i data-lucide="database"></i>
+              Storage Available
+            </div>
 
-# Quick start workflow
-python -m wequo.tools.cli quick-start 2025-01-15 --open-editor
-        </pre>
+            <div class="health-indicator health-warning">
+              <i data-lucide="clock"></i>
+              Last Run: {{ packages[0].timestamp[:10] if packages else 'Never'
+              }}
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="card quick-actions">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i data-lucide="zap"></i>
+                Quick Actions
+              </h3>
+            </div>
+
+            <div class="action-grid">
+              <button onclick="runPipeline()" class="btn btn-primary">
+                <i data-lucide="play"></i>
+                Run Pipeline
+              </button>
+              <a href="/api/packages" class="btn btn-secondary">
+                <i data-lucide="code"></i>
+                View API
+              </a>
+              <button onclick="exportData()" class="btn btn-secondary">
+                <i data-lucide="download"></i>
+                Export Data
+              </button>
+              <a href="/search" class="btn btn-secondary">
+                <i data-lucide="search"></i>
+                Search
+              </a>
+            </div>
+          </div>
+
+          <!-- Recent Activity -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i data-lucide="clock"></i>
+                Recent Activity
+              </h3>
+            </div>
+
+            <div id="recent-activity">
+              {% for package in packages[:3] %}
+              <div class="info-row">
+                <i data-lucide="package"></i>
+                Package {{ package.date }} created
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- CLI Reference -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i data-lucide="terminal"></i>
+                CLI Reference
+              </h3>
+            </div>
+
+            <div
+              style="
+                font-family: monospace;
+                font-size: 0.85em;
+                line-height: 1.6;
+                background: #f7fafc;
+                padding: 16px;
+                border-radius: 8px;
+                margin-top: 12px;
+              "
+            >
+              <div># List packages</div>
+              <div style="color: #667eea">
+                python -m wequo.tools.cli list-packages
+              </div>
+              <br />
+              <div># Generate template</div>
+              <div style="color: #667eea">
+                python -m wequo.tools.cli generate-template 2025-01-15
+              </div>
+              <br />
+              <div># Quick start</div>
+              <div style="color: #667eea">
+                python -m wequo.tools.cli quick-start
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</body>
+
+    <script>
+      // Initialize Lucide icons
+      lucide.createIcons();
+
+      // Filter packages
+      function filterPackages(searchTerm) {
+          const packages = document.querySelectorAll('.package-card');
+          const term = searchTerm.toLowerCase();
+
+          packages.forEach(package => {
+              const date = package.getAttribute('data-date').toLowerCase();
+              const sources = package.getAttribute('data-sources').toLowerCase();
+              const visible = date.includes(term) || sources.includes(term);
+              package.style.display = visible ? 'block' : 'none';
+          });
+      }
+
+      // Refresh data
+      async function refreshData() {
+          try {
+              const response = await fetch('/api/packages');
+              if (response.ok) {
+                  location.reload();
+              }
+          } catch (error) {
+              console.error('Failed to refresh data:', error);
+          }
+      }
+
+      // Run pipeline
+      function runPipeline() {
+          alert('Pipeline execution would be triggered here. In production, this would call the GitHub Actions workflow.');
+      }
+
+      // Export data
+      function exportData() {
+          alert('Data export functionality would be implemented here.');
+      }
+
+      // Toggle export menu
+      function toggleExportMenu(packageDate) {
+          const menu = document.getElementById(`export-menu-${packageDate}`);
+          const isVisible = menu.style.display !== 'none';
+
+          // Hide all other export menus
+          document.querySelectorAll('.export-menu').forEach(m => m.style.display = 'none');
+
+          // Toggle this menu
+          menu.style.display = isVisible ? 'none' : 'block';
+      }
+
+      // Close export menus when clicking outside
+      document.addEventListener('click', function(event) {
+          if (!event.target.closest('.export-menu') && !event.target.closest('button[onclick^="toggleExportMenu"]')) {
+              document.querySelectorAll('.export-menu').forEach(m => m.style.display = 'none');
+          }
+      });
+
+      // Initialize analytics chart
+      function initChart() {
+          const ctx = document.getElementById('analyticsChart');
+          if (!ctx) return;
+
+          // Mock data for demonstration
+          const chartData = {
+              labels: {{ packages[:7]|map(attribute='date')|list|reverse|list|tojson if packages else '[]'|safe }},
+              datasets: [
+                  {
+                      label: 'Data Points',
+                      data: [45, 52, 48, 61, 55, 67, 43],
+                      borderColor: '#667eea',
+                      backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                      tension: 0.4,
+                      fill: true
+                  },
+                  {
+                      label: 'Anomalies',
+                      data: [2, 1, 3, 0, 2, 1, 2],
+                      borderColor: '#f56565',
+                      backgroundColor: 'rgba(245, 101, 101, 0.1)',
+                      tension: 0.4,
+                      fill: true
+                  }
+              ]
+          };
+
+          new Chart(ctx, {
+              type: 'line',
+              data: chartData,
+              options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                      legend: {
+                          position: 'top',
+                      }
+                  },
+                  scales: {
+                      y: {
+                          beginAtZero: true,
+                          grid: {
+                              color: 'rgba(0, 0, 0, 0.05)'
+                          }
+                      },
+                      x: {
+                          grid: {
+                              color: 'rgba(0, 0, 0, 0.05)'
+                          }
+                      }
+                  }
+              }
+          });
+      }
+
+      // Initialize on page load
+      document.addEventListener('DOMContentLoaded', function() {
+          initChart();
+      });
+    </script>
+  </body>
 </html>

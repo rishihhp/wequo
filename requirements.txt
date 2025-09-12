@@ -8,3 +8,7 @@ flask>=2.0.0
 click>=8.0.0
 numpy>=1.21.0
 scipy>=1.9.0
+jinja2>=3.1.0
+# weasyprint>=60.0  # For PDF export (optional - install separately if needed)
+markupsafe>=2.1.0
+scikit-learn>=1.1.0

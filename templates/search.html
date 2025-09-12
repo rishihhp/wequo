@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WeQuo Search</title>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .header {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      .header h1 {
+        color: #2d3748;
+        font-size: 2.5em;
+        font-weight: 700;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      .search-container {
+        display: flex;
+        gap: 10px;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .search-input {
+        flex: 1;
+        padding: 15px 20px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 16px;
+        transition: all 0.2s ease;
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .search-btn {
+        padding: 15px 25px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .search-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+      }
+
+      .back-link {
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: opacity 0.2s ease;
+      }
+
+      .back-link:hover {
+        opacity: 0.8;
+      }
+
+      .main-content {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 30px;
+      }
+
+      .sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .card h3 {
+        color: #2d3748;
+        font-size: 1.2em;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .facet-group {
+        margin-bottom: 15px;
+      }
+
+      .facet-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        margin-bottom: 4px;
+      }
+
+      .facet-item:hover {
+        background: #f7fafc;
+      }
+
+      .facet-count {
+        background: #e2e8f0;
+        color: #4a5568;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.8em;
+        font-weight: 600;
+      }
+
+      .results-section {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      }
+
+      .results-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f7fafc;
+      }
+
+      .results-title {
+        color: #2d3748;
+        font-size: 1.5em;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .results-count {
+        color: #718096;
+        font-size: 0.9em;
+      }
+
+      .result-item {
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        transition: all 0.2s ease;
+      }
+
+      .result-item:hover {
+        border-color: #667eea;
+        box-shadow: 0 4px 16px rgba(102, 126, 234, 0.1);
+      }
+
+      .result-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 12px;
+      }
+
+      .result-title {
+        color: #2d3748;
+        font-size: 1.2em;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .result-meta {
+        display: flex;
+        gap: 15px;
+        color: #718096;
+        font-size: 0.9em;
+      }
+
+      .result-meta-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .result-content {
+        color: #4a5568;
+        line-height: 1.6;
+        margin-bottom: 15px;
+      }
+
+      .result-highlights {
+        background: #f7fafc;
+        border-left: 4px solid #667eea;
+        padding: 12px;
+        border-radius: 0 8px 8px 0;
+        margin-bottom: 15px;
+      }
+
+      .highlight {
+        font-size: 0.9em;
+        color: #4a5568;
+        margin-bottom: 8px;
+      }
+
+      .result-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .tag {
+        background: #e2e8f0;
+        color: #4a5568;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.8em;
+        font-weight: 500;
+      }
+
+      .type-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8em;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .type-package {
+        background: #c6f6d5;
+        color: #22543d;
+      }
+      .type-data_point {
+        background: #bee3f8;
+        color: #1a365d;
+      }
+      .type-analytics {
+        background: #fed7aa;
+        color: #c05621;
+      }
+      .type-report {
+        background: #e9d8fd;
+        color: #553c9a;
+      }
+      .type-anomaly {
+        background: #fbb6ce;
+        color: #97266d;
+      }
+      .type-trend {
+        background: #c6f6d5;
+        color: #22543d;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #718096;
+      }
+
+      .empty-state h3 {
+        color: #4a5568;
+        margin-bottom: 12px;
+        font-size: 1.3em;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .stat-card {
+        text-align: center;
+        padding: 15px;
+        background: #f7fafc;
+        border-radius: 10px;
+      }
+
+      .stat-number {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #667eea;
+        margin-bottom: 5px;
+      }
+
+      .stat-label {
+        color: #718096;
+        font-size: 0.85em;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      @media (max-width: 768px) {
+        .main-content {
+          grid-template-columns: 1fr;
+        }
+
+        .search-container {
+          flex-direction: column;
+        }
+
+        .header h1 {
+          font-size: 2em;
+        }
+
+        body {
+          padding: 10px;
+        }
+      }
+
+      mark {
+        background: #fed7aa;
+        padding: 2px 4px;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/" class="back-link">
+      <i data-lucide="arrow-left"></i>
+      Back to Dashboard
+    </a>
+
+    <div class="container">
+      <div class="header">
+        <h1>
+          <i data-lucide="search"></i>
+          WeQuo Search
+        </h1>
+
+        <form class="search-container" method="GET">
+          <input
+            type="text"
+            name="q"
+            class="search-input"
+            placeholder="Search packages, data, analytics, and reports..."
+            value="{{ query }}"
+            autofocus
+          />
+          <button type="submit" class="search-btn">
+            <i data-lucide="search"></i>
+            Search
+          </button>
+        </form>
+      </div>
+
+      <div class="main-content">
+        <div class="sidebar">
+          <!-- Search Statistics -->
+          <div class="card">
+            <h3>
+              <i data-lucide="bar-chart-3"></i>
+              Index Statistics
+            </h3>
+
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-number">{{ stats.total_documents }}</div>
+                <div class="stat-label">Documents</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number">{{ stats.total_sources }}</div>
+                <div class="stat-label">Sources</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number">
+                  {{ "%.1f"|format(stats.index_size_mb) }}
+                </div>
+                <div class="stat-label">MB</div>
+              </div>
+            </div>
+
+            <button
+              onclick="rebuildIndex()"
+              class="search-btn"
+              style="width: 100%; justify-content: center; margin-top: 10px"
+            >
+              <i data-lucide="refresh-cw"></i>
+              Rebuild Index
+            </button>
+          </div>
+
+          <!-- Document Types Filter -->
+          {% if facets.types %}
+          <div class="card">
+            <h3>
+              <i data-lucide="file-type"></i>
+              Document Types
+            </h3>
+
+            <div class="facet-group">
+              {% for type, count in facets.types.items() %}
+              <div class="facet-item" onclick="filterByType('{{ type }}')">
+                <span>{{ type.replace('_', ' ').title() }}</span>
+                <span class="facet-count">{{ count }}</span>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Sources Filter -->
+          {% if facets.sources %}
+          <div class="card">
+            <h3>
+              <i data-lucide="database"></i>
+              Data Sources
+            </h3>
+
+            <div class="facet-group">
+              {% for source, count in facets.sources.items() %}
+              <div class="facet-item" onclick="filterBySource('{{ source }}')">
+                <span>{{ source.upper() }}</span>
+                <span class="facet-count">{{ count }}</span>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Tags Filter -->
+          {% if facets.tags %}
+          <div class="card">
+            <h3>
+              <i data-lucide="tag"></i>
+              Popular Tags
+            </h3>
+
+            <div class="facet-group">
+              {% for tag, count in (facets.tags.items() | list |
+              sort(attribute=1, reverse=True))[:10] %}
+              <div class="facet-item" onclick="filterByTag('{{ tag }}')">
+                <span>{{ tag }}</span>
+                <span class="facet-count">{{ count }}</span>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="results-section">
+          <div class="results-header">
+            <h2 class="results-title">
+              <i data-lucide="list"></i>
+              Search Results
+            </h2>
+            {% if results %}
+            <div class="results-count">
+              {{ results|length }} results{% if query %} for "{{ query }}"{%
+              endif %}
+            </div>
+            {% endif %}
+          </div>
+
+          {% if results %} {% for result in results %}
+          <div class="result-item">
+            <div class="result-header">
+              <div>
+                <div class="result-title">{{ result.title }}</div>
+                <div class="result-meta">
+                  <div class="result-meta-item">
+                    <i data-lucide="calendar"></i>
+                    {{ result.timestamp[:10] }}
+                  </div>
+                  {% if result.source %}
+                  <div class="result-meta-item">
+                    <i data-lucide="database"></i>
+                    {{ result.source.upper() }}
+                  </div>
+                  {% endif %}
+                  <div class="result-meta-item">
+                    <i data-lucide="star"></i>
+                    Score: {{ "%.2f"|format(result.score) }}
+                  </div>
+                </div>
+              </div>
+              <span class="type-badge type-{{ result.type }}"
+                >{{ result.type.replace('_', ' ') }}</span
+              >
+            </div>
+
+            {% if result.highlights %}
+            <div class="result-highlights">
+              {% for highlight in result.highlights %}
+              <div class="highlight">{{ highlight | safe }}</div>
+              {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="result-content">{{ result.content }}</div>
+
+            {% if result.tags %}
+            <div class="result-tags">
+              {% for tag in result.tags[:5] %}
+              <span class="tag">{{ tag }}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+          {% endfor %} {% elif query %}
+          <div class="empty-state">
+            <i
+              data-lucide="search-x"
+              style="width: 48px; height: 48px; margin-bottom: 16px"
+            ></i>
+            <h3>No results found</h3>
+            <p>Try different keywords or check the filters.</p>
+          </div>
+          {% else %}
+          <div class="empty-state">
+            <i
+              data-lucide="search"
+              style="width: 48px; height: 48px; margin-bottom: 16px"
+            ></i>
+            <h3>Enter a search query</h3>
+            <p>
+              Search for data packages, analytics, reports, and specific data
+              points.
+            </p>
+            <div
+              style="
+                margin-top: 20px;
+                text-align: left;
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+              "
+            >
+              <strong>Examples:</strong>
+              <ul style="margin-top: 8px">
+                <li>"inflation" - Find inflation-related data</li>
+                <li>"anomaly" - Find detected anomalies</li>
+                <li>"2025-09-12" - Find data from specific date</li>
+                <li>"FRED" - Find Federal Reserve data</li>
+              </ul>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Initialize Lucide icons
+      lucide.createIcons();
+
+      function filterByType(type) {
+        const currentUrl = new URL(window.location);
+        currentUrl.searchParams.set("types", type);
+        window.location = currentUrl;
+      }
+
+      function filterBySource(source) {
+        const currentUrl = new URL(window.location);
+        currentUrl.searchParams.set("sources", source);
+        window.location = currentUrl;
+      }
+
+      function filterByTag(tag) {
+        const currentUrl = new URL(window.location);
+        currentUrl.searchParams.set("q", tag);
+        window.location = currentUrl;
+      }
+
+      async function rebuildIndex() {
+        const button = event.target;
+        const originalText = button.innerHTML;
+        button.disabled = true;
+        button.innerHTML = '<i data-lucide="loader-2"></i> Rebuilding...';
+        lucide.createIcons();
+
+        try {
+          const response = await fetch("/api/search/rebuild", {
+            method: "POST",
+          });
+          const result = await response.json();
+
+          if (result.success) {
+            alert("Search index rebuilt successfully!");
+            location.reload();
+          } else {
+            alert("Error rebuilding index: " + result.error);
+          }
+        } catch (error) {
+          alert("Error rebuilding index: " + error.message);
+        } finally {
+          button.disabled = false;
+          button.innerHTML = originalText;
+          lucide.createIcons();
+        }
+      }
+
+      // Auto-suggestions (simple implementation)
+      const searchInput = document.querySelector(".search-input");
+      if (searchInput) {
+        let suggestionTimeout;
+        searchInput.addEventListener("input", function () {
+          clearTimeout(suggestionTimeout);
+          suggestionTimeout = setTimeout(() => {
+            // Implementation would go here for real-time suggestions
+          }, 300);
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -111,7 +111,7 @@ Acceptance criteria
 - Dashboard shows freshness, top signals, and connector health
 
 Deliverables
-- Scheduler workflows and documentation
+- Scheduler workflows and documentation 
 - Dashboard prototype with instructions
 - Credentials for editors
 - Search index with sample queries and docs (`search/`)
