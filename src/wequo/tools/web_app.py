@@ -11,12 +11,15 @@ import pandas as pd
 
 def create_app() -> Flask:
     """Create the WeQuo author web application."""
-    app = Flask(__name__)
+    # Set template folder to project root templates directory
+    template_dir = Path(__file__).parent.parent.parent.parent / "templates"
+    app = Flask(__name__, template_folder=str(template_dir))
     app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key")
     
-    # Configuration
-    app.config["OUTPUT_ROOT"] = Path("data/output")
-    app.config["TEMPLATE_PATH"] = Path("docs/template.md")
+    # Configuration - use absolute paths from project root
+    project_root = Path(__file__).parent.parent.parent.parent
+    app.config["OUTPUT_ROOT"] = project_root / "data" / "output"
+    app.config["TEMPLATE_PATH"] = project_root / "docs" / "template.md"
     
     @app.route("/")
     def index():
@@ -24,6 +27,26 @@ def create_app() -> Flask:
         # Get available packages
         packages = get_available_packages()
         return render_template("index.html", packages=packages)
+    
+    @app.route("/dashboard")
+    def dashboard():
+        """Enhanced data exploration dashboard."""
+        # Get available packages
+        packages = get_available_packages()
+        
+        # Get latest package for overview
+        latest_package = packages[0] if packages else None
+        latest_data = None
+        
+        if latest_package:
+            package_dir = app.config["OUTPUT_ROOT"] / latest_package["date"]
+            latest_data = load_package_data(package_dir)
+        
+        return render_template("index.html", 
+                             packages=packages, 
+                             latest_package=latest_package,
+                             latest_data=latest_data,
+                             dashboard_mode=True)
     
     @app.route("/package/<date>")
     def view_package(date: str):
@@ -53,7 +76,7 @@ def create_app() -> Flask:
         
         # Save to temporary file
         temp_path = package_dir / "template_prefilled.md"
-        temp_path.write_text(template_content)
+        temp_path.write_text(template_content, encoding='utf-8')
         
         return send_file(temp_path, as_attachment=True, 
                         download_name=f"wequo_brief_{date}.md")
@@ -120,6 +143,7 @@ def load_package_data(package_dir: Path) -> Dict[str, Any]:
     """Load all data from a package directory."""
     data = {
         "summary": {},
+        "analytics": {},
         "csv_files": {},
         "reports": {}
     }
@@ -128,6 +152,11 @@ def load_package_data(package_dir: Path) -> Dict[str, Any]:
     summary_path = package_dir / "package_summary.json"
     if summary_path.exists():
         data["summary"] = json.loads(summary_path.read_text())
+    
+    # Load analytics data
+    analytics_path = package_dir / "analytics_summary.json"
+    if analytics_path.exists():
+        data["analytics"] = json.loads(analytics_path.read_text())
     
     # Load CSV files
     for csv_file in package_dir.glob("*.csv"):
@@ -139,7 +168,11 @@ def load_package_data(package_dir: Path) -> Dict[str, Any]:
     
     # Load reports
     for md_file in package_dir.glob("*.md"):
-        data["reports"][md_file.stem] = md_file.read_text()
+        try:
+            data["reports"][md_file.stem] = md_file.read_text(encoding='utf-8')
+        except UnicodeDecodeError:
+            # Fallback to latin-1 if utf-8 fails
+            data["reports"][md_file.stem] = md_file.read_text(encoding='latin-1')
     
     return data
 
@@ -153,9 +186,9 @@ def generate_prefilled_template(package_data: Dict[str, Any], date: str) -> str:
     
     template_content = template_path.read_text()
     
-    # Get summary data
+    # Get summary and analytics data
     summary = package_data.get("summary", {})
-    analytics = summary.get("analytics", {})
+    analytics = package_data.get("analytics", {})
     
     # Replace placeholders
     template_content = template_content.replace("YYYY-W##", f"2025-W{get_week_number(date)}")
@@ -188,7 +221,7 @@ def generate_prefill_content(summary: Dict[str, Any], analytics: Dict[str, Any])
     if top_deltas:
         content.append("**Key Market Changes:**")
         for delta in top_deltas[:3]:
-            direction = "📈" if delta["delta_pct"] > 0 else "📉"
+            direction = "UP" if delta["delta_pct"] > 0 else "DOWN"
             content.append(f"- {direction} **{delta['series_id']}**: {delta['delta_pct']:.1%} change ({delta['old_value']:.2f} → {delta['new_value']:.2f})")
         content.append("")
     
@@ -206,7 +239,7 @@ def generate_prefill_content(summary: Dict[str, Any], analytics: Dict[str, Any])
     if strong_trends:
         content.append("**Significant Trends:**")
         for trend in strong_trends[:3]:
-            direction = "📈" if trend['slope'] > 0 else "📉"
+            direction = "UP" if trend['slope'] > 0 else "DOWN"
             content.append(f"- {direction} **{trend['series_id']}**: {trend['trend_strength']} {trend['direction']} trend")
         content.append("")
     

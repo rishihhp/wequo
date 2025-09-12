@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-12T14:01:41.924796",
+  "timestamp": "2025-09-12T15:30:13.200653",
   "sources": [
     "fred",
     "commodities",
@@ -24,37 +24,37 @@
     "commodities": [
       {
         "date": "2025-09-11",
-        "value": 81.52,
+        "value": 77.95,
         "series_id": "BRENT",
         "source": "COMMODITIES"
       },
       {
         "date": "2025-09-11",
-        "value": 3.98,
+        "value": 4.16,
         "series_id": "COPPER",
         "source": "COMMODITIES"
       },
       {
         "date": "2025-09-11",
-        "value": 1936.0,
+        "value": 1919.1,
         "series_id": "GOLD",
         "source": "COMMODITIES"
       },
       {
         "date": "2025-09-11",
-        "value": 3.48,
+        "value": 3.65,
         "series_id": "NATURAL_GAS",
         "source": "COMMODITIES"
       },
       {
         "date": "2025-09-11",
-        "value": 24.61,
+        "value": 25.9,
         "series_id": "SILVER",
         "source": "COMMODITIES"
       },
       {
         "date": "2025-09-11",
-        "value": 75.48,
+        "value": 77.53,
         "series_id": "WTI",
         "source": "COMMODITIES"
       }
@@ -62,37 +62,37 @@
     "crypto": [
       {
         "date": "2025-09-12",
-        "value": 904.5370322467633,
+        "value": 907.1810633342601,
         "series_id": "BINANCECOIN",
         "source": "CRYPTO"
       },
       {
         "date": "2025-09-12",
-        "value": 115213.08335873064,
+        "value": 115009.78086599031,
         "series_id": "BITCOIN",
         "source": "CRYPTO"
       },
       {
         "date": "2025-09-12",
-        "value": 0.8968992652799785,
+        "value": 0.892421611222573,
         "series_id": "CARDANO",
         "source": "CRYPTO"
       },
       {
         "date": "2025-09-12",
-        "value": 4522.102961507433,
+        "value": 4515.267739619855,
         "series_id": "ETHEREUM",
         "source": "CRYPTO"
       },
       {
         "date": "2025-09-12",
-        "value": 4.218627835175733,
+        "value": 4.191777811122984,
         "series_id": "POLKADOT",
         "source": "CRYPTO"
       },
       {
         "date": "2025-09-12",
-        "value": 237.99064114994948,
+        "value": 238.3763811566612,
         "series_id": "SOLANA",
         "source": "CRYPTO"
       }
@@ -500,111 +500,111 @@
       },
       {
         "series_id": "BITCOIN",
-        "slope": 9.8430801787836e-12,
-        "r_squared": 0.8598105067503814,
+        "slope": 9.67090665850893e-12,
+        "r_squared": 0.8600146937434101,
         "trend_strength": "strong",
         "direction": "upward",
-        "p_value": 0.0009104713501251126,
+        "p_value": 0.0009064202737402707,
         "source": "crypto"
       },
       {
         "series_id": "ETHEREUM",
-        "slope": 3.6023618584209206e-13,
-        "r_squared": 0.6360769444241063,
+        "slope": 3.544475494196852e-13,
+        "r_squared": 0.6423418608888958,
         "trend_strength": "moderate",
         "direction": "upward",
-        "p_value": 0.017723259688152054,
-        "source": "crypto"
-      },
-      {
-        "series_id": "BINANCECOIN",
-        "slope": 9.386046387732979e-14,
-        "r_squared": 0.9250165507293635,
-        "trend_strength": "strong",
-        "direction": "upward",
-        "p_value": 0.00013562915984571448,
-        "source": "crypto"
-      },
-      {
-        "series_id": "SOLANA",
-        "slope": 6.403885684062104e-14,
-        "r_squared": 0.9085591356722119,
-        "trend_strength": "strong",
-        "direction": "upward",
-        "p_value": 0.00024760331961593885,
+        "p_value": 0.016766960514759278,
         "source": "crypto"
       },
       {
         "series_id": "GOLD",
-        "slope": -4.8470568783068974e-14,
-        "r_squared": 0.03015114287519488,
-        "trend_strength": "none",
+        "slope": -1.4087714947090013e-13,
+        "r_squared": 0.2065781135441081,
+        "trend_strength": "weak",
         "direction": "downward",
-        "p_value": 0.7096419802770388,
+        "p_value": 0.3055654593645101,
         "source": "commodities"
       },
       {
-        "series_id": "BRENT",
-        "slope": 5.7746362433862385e-15,
-        "r_squared": 0.20987408043401004,
-        "trend_strength": "weak",
+        "series_id": "BINANCECOIN",
+        "slope": 9.609965009641586e-14,
+        "r_squared": 0.923322418339182,
+        "trend_strength": "strong",
         "direction": "upward",
-        "p_value": 0.3012458813750231,
+        "p_value": 0.0001451297463706604,
+        "source": "crypto"
+      },
+      {
+        "series_id": "SOLANA",
+        "slope": 6.436553367557337e-14,
+        "r_squared": 0.9053622391391258,
+        "trend_strength": "strong",
+        "direction": "upward",
+        "p_value": 0.00027484826179517046,
+        "source": "crypto"
+      },
+      {
+        "series_id": "BRENT",
+        "slope": 5.6216931216931135e-15,
+        "r_squared": 0.16465078650661133,
+        "trend_strength": "none",
+        "direction": "upward",
+        "p_value": 0.36642148522513435,
         "source": "commodities"
       },
       {
         "series_id": "WTI",
-        "slope": 1.992394179894183e-15,
-        "r_squared": 0.03145992557645764,
+        "slope": 1.7319775132275126e-15,
+        "r_squared": 0.042779188905739944,
         "trend_strength": "none",
         "direction": "upward",
-        "p_value": 0.7036022922669598,
+        "p_value": 0.6563343077950188,
         "source": "commodities"
       },
       {
         "series_id": "SILVER",
-        "slope": -9.217923280423282e-16,
-        "r_squared": 0.08470335345497154,
+        "slope": 1.1450066137566091e-15,
+        "r_squared": 0.04704252950235885,
         "trend_strength": "none",
-        "direction": "downward",
-        "p_value": 0.5265744498526561,
+        "direction": "upward",
+        "p_value": 0.6403904558876474,
         "source": "commodities"
       },
       {
         "series_id": "POLKADOT",
-        "slope": 8.468691854715567e-16,
-        "r_squared": 0.954341540548097,
+        "slope": 8.241303439634703e-16,
+        "r_squared": 0.9396697148732671,
         "trend_strength": "strong",
         "direction": "upward",
-        "p_value": 3.026868854476307e-05,
+        "p_value": 7.023199107769791e-05,
         "source": "crypto"
       },
       {
-        "series_id": "COPPER",
-        "slope": -2.3561507936508004e-16,
-        "r_squared": 0.3412815126050428,
-        "trend_strength": "weak",
-        "direction": "downward",
-        "p_value": 0.16842082597743516,
-        "source": "commodities"
-      },
-      {
         "series_id": "NATURAL_GAS",
-        "slope": -2.1908068783068815e-16,
-        "r_squared": 0.23805084745762772,
+        "slope": 2.9348544973544957e-16,
+        "r_squared": 0.35520011273957147,
         "trend_strength": "weak",
-        "direction": "downward",
-        "p_value": 0.26666758296742643,
+        "direction": "upward",
+        "p_value": 0.15788529643521168,
         "source": "commodities"
       },
       {
         "series_id": "CARDANO",
-        "slope": 1.4770958072280696e-16,
-        "r_squared": 0.9254167439376716,
+        "slope": 1.4391752952242963e-16,
+        "r_squared": 0.9223401892360562,
         "trend_strength": "strong",
         "direction": "upward",
-        "p_value": 0.0001334477852214876,
+        "p_value": 0.00015083810973126212,
         "source": "crypto"
+      },
+      {
+        "series_id": "COPPER",
+        "slope": 9.09391534391548e-17,
+        "r_squared": 0.020207080828323926,
+        "trend_strength": "none",
+        "direction": "upward",
+        "p_value": 0.7611067473444154,
+        "source": "commodities"
       },
       {
         "series_id": "JP_NE.TRD.GNFS.ZS",
@@ -792,8 +792,8 @@
         "economic"
       ],
       "value_stats": {
-        "mean": 1552176790034.7153,
-        "std": 4689464966075.677,
+        "mean": 1552176790035.2043,
+        "std": 4689464966075.514,
         "min": -0.233352779398264,
         "max": 29184890000000.0
       }
