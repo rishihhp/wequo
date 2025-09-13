@@ -8,7 +8,7 @@ import pandas as pd
 
 @dataclass
 class DataPointMetadata:
-    """Metadata for a single data point."""
+    """Metadata for a single data point with comprehensive provenance tracking."""
     
     # Core identification
     id: str
@@ -19,18 +19,32 @@ class DataPointMetadata:
     date: str
     timestamp: str  # When the data was fetched
     
-    # Data provenance
+    # Data provenance (Phase 1 requirement)
     api_endpoint: Optional[str] = None
+    source_url: Optional[str] = None  # Direct link to source data
     raw_response_hash: Optional[str] = None
     fetch_duration_ms: Optional[int] = None
     
-    # Data quality
+    # Enhanced provenance tracking
+    api_version: Optional[str] = None
+    request_parameters: Optional[Dict[str, Any]] = None
+    response_headers: Optional[Dict[str, str]] = None
+    data_transformation_log: Optional[List[str]] = None
+    
+    # Data quality and validation
     confidence_score: Optional[float] = None
     validation_status: str = "unknown"
+    quality_checks_passed: Optional[List[str]] = None
+    quality_checks_failed: Optional[List[str]] = None
     
     # Processing information
     processing_version: str = "1.0"
     connector_version: str = "1.0"
+    pipeline_run_id: Optional[str] = None
+    
+    # Licensing and terms
+    data_license: Optional[str] = None
+    terms_of_service_url: Optional[str] = None
     
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for serialization."""
@@ -40,13 +54,27 @@ class DataPointMetadata:
             "source": self.source,
             "date": self.date,
             "timestamp": self.timestamp,
+            # Provenance information
             "api_endpoint": self.api_endpoint,
+            "source_url": self.source_url,
             "raw_response_hash": self.raw_response_hash,
             "fetch_duration_ms": self.fetch_duration_ms,
+            "api_version": self.api_version,
+            "request_parameters": self.request_parameters,
+            "response_headers": self.response_headers,
+            "data_transformation_log": self.data_transformation_log,
+            # Quality information
             "confidence_score": self.confidence_score,
             "validation_status": self.validation_status,
+            "quality_checks_passed": self.quality_checks_passed,
+            "quality_checks_failed": self.quality_checks_failed,
+            # Processing information
             "processing_version": self.processing_version,
             "connector_version": self.connector_version,
+            "pipeline_run_id": self.pipeline_run_id,
+            # Licensing
+            "data_license": self.data_license,
+            "terms_of_service_url": self.terms_of_service_url,
         }
 
 
@@ -61,8 +89,16 @@ class MetadataTracker:
                        source: str,
                        date: str,
                        api_endpoint: Optional[str] = None,
+                       source_url: Optional[str] = None,
                        fetch_duration_ms: Optional[int] = None,
-                       confidence_score: Optional[float] = None) -> DataPointMetadata:
+                       confidence_score: Optional[float] = None,
+                       api_version: Optional[str] = None,
+                       request_parameters: Optional[Dict[str, Any]] = None,
+                       response_headers: Optional[Dict[str, str]] = None,
+                       data_transformation_log: Optional[List[str]] = None,
+                       pipeline_run_id: Optional[str] = None,
+                       data_license: Optional[str] = None,
+                       terms_of_service_url: Optional[str] = None) -> DataPointMetadata:
         """Create metadata for a data point."""
         
         metadata = DataPointMetadata(
@@ -72,8 +108,16 @@ class MetadataTracker:
             date=date,
             timestamp=datetime.now().isoformat(),
             api_endpoint=api_endpoint,
+            source_url=source_url,
             fetch_duration_ms=fetch_duration_ms,
             confidence_score=confidence_score,
+            api_version=api_version,
+            request_parameters=request_parameters,
+            response_headers=response_headers,
+            data_transformation_log=data_transformation_log or [],
+            pipeline_run_id=pipeline_run_id,
+            data_license=data_license,
+            terms_of_service_url=terms_of_service_url,
             validation_status="pending"
         )
         
@@ -118,6 +162,51 @@ class MetadataTracker:
             status = metadata.validation_status
             counts[status] = counts.get(status, 0) + 1
         return counts
+    
+    def create_metadata_from_api_response(self,
+                                        series_id: str,
+                                        source: str,
+                                        date: str,
+                                        api_response,
+                                        request_url: str,
+                                        request_params: Dict[str, Any],
+                                        fetch_start_time: datetime,
+                                        pipeline_run_id: Optional[str] = None) -> DataPointMetadata:
+        """Create metadata from API response with full provenance tracking."""
+        import hashlib
+        
+        fetch_duration = int((datetime.now() - fetch_start_time).total_seconds() * 1000)
+        
+        # Generate response hash for integrity checking
+        response_text = str(api_response) if hasattr(api_response, '__str__') else ""
+        response_hash = hashlib.md5(response_text.encode()).hexdigest()
+        
+        # Extract response headers if available
+        response_headers = None
+        if hasattr(api_response, 'headers'):
+            response_headers = dict(api_response.headers)
+        
+        # Create transformation log
+        transformation_log = [
+            f"Raw API response received at {datetime.now().isoformat()}",
+            f"Response size: {len(response_text)} characters",
+            "Data normalization applied"
+        ]
+        
+        return self.create_metadata(
+            series_id=series_id,
+            source=source,
+            date=date,
+            api_endpoint=request_url,
+            source_url=request_url,
+            fetch_duration_ms=fetch_duration,
+            confidence_score=1.0,  # Default high confidence for successful API calls
+            request_parameters=request_params,
+            response_headers=response_headers,
+            data_transformation_log=transformation_log,
+            pipeline_run_id=pipeline_run_id,
+            raw_response_hash=response_hash
+        )
 
 
 def add_metadata_to_dataframe(df, metadata_tracker: MetadataTracker, source: str) -> pd.DataFrame:

@@ -9,8 +9,8 @@
 - **Anomalies**: 12 anomalies detected
 -   - US_SL.UEM.TOTL.ZS: 8.05 (z-score: 2.63)
 -   - US_FP.CPI.TOTL.ZG: 8.00 (z-score: 2.39)
-- **Trends**: 8 significant trends
+- **Trends**: 9 significant trends
 -   - US_NY.GDP.MKTP.CD: 📈 strong trend
 -   - CN_NY.GDP.MKTP.CD: 📈 strong trend
-- **Data Package**: Generated at 2025-09-12T13:40:36.352684
+- **Data Package**: Generated at 2025-09-12T19:06:04.259298
 - **Sources**: fred, commodities, crypto, economic

@@ -45,6 +45,39 @@ def create_app() -> Flask:
         package_data = load_package_data(package_dir)
         return render_template("package.html", date=date, data=package_data)
     
+    @app.route("/package/<date>/provenance")
+    def view_provenance(date: str):
+        """View provenance information for a data package."""
+        package_dir = app.config["OUTPUT_ROOT"] / date
+        
+        if not package_dir.exists():
+            return f"Package for {date} not found", 404
+        
+        # Load package summary with provenance
+        summary_file = package_dir / "package_summary.json"
+        if not summary_file.exists():
+            return f"Package summary not found for {date}", 404
+        
+        with open(summary_file) as f:
+            package_data = json.load(f)
+        
+        provenance_data = package_data.get("provenance", {})
+        return render_template("provenance.html", date=date, provenance=provenance_data)
+    
+    @app.route("/api/package/<date>/provenance")
+    def api_provenance(date: str):
+        """API endpoint for provenance data."""
+        package_dir = app.config["OUTPUT_ROOT"] / date
+        summary_file = package_dir / "package_summary.json"
+        
+        if not summary_file.exists():
+            return jsonify({"error": "Package not found"}), 404
+        
+        with open(summary_file) as f:
+            package_data = json.load(f)
+        
+        return jsonify(package_data.get("provenance", {}))
+    
     @app.route("/template/<date>")
     def generate_template(date: str):
         """Generate a pre-filled template for a specific date."""

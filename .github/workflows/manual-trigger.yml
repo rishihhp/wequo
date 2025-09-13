@@ -4,16 +4,16 @@ on:
   workflow_dispatch:
     inputs:
       date_override:
-        description: 'Override date (YYYY-MM-DD format)'
+        description: "Override date (YYYY-MM-DD format)"
         required: false
         type: string
       sources:
-        description: 'Comma-separated list of sources (fred,commodities,crypto,economic)'
+        description: "Comma-separated list of sources (fred,commodities,crypto,economic,acled,fao,noaa,uncomtrade,shipping_ais)"
         required: false
-        default: 'fred,commodities,crypto,economic'
+        default: "fred,commodities,crypto,economic"
         type: string
       skip_analytics:
-        description: 'Skip analytics processing'
+        description: "Skip analytics processing"
         required: false
         default: false
         type: boolean
@@ -22,56 +22,64 @@ jobs:
   manual-run:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-        cache: 'pip'
-        
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        
-    - name: Set up environment variables
-      run: |
-        echo "FRED_API_KEY=${{ secrets.FRED_API_KEY }}" >> $GITHUB_ENV
-        echo "ALPHA_VANTAGE_API_KEY=${{ secrets.ALPHA_VANTAGE_API_KEY }}" >> $GITHUB_ENV
-        echo "WORLD_BANK_API_KEY=${{ secrets.WORLD_BANK_API_KEY }}" >> $GITHUB_ENV
-        echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
-        
-    - name: Run custom pipeline
-      run: |
-        cd wequo
-        python -c "
-        import os
-        import sys
-        from scripts.run_weekly import main
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-        # Set custom parameters if provided
-        date_override = '${{ github.event.inputs.date_override }}'
-        sources = '${{ github.event.inputs.sources }}'.split(',') if '${{ github.event.inputs.sources }}' else None
-        skip_analytics = '${{ github.event.inputs.skip_analytics }}' == 'true'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: "pip"
 
-        print(f'Running with date_override={date_override}, sources={sources}, skip_analytics={skip_analytics}')
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-        try:
-            main()
-            print('✅ Manual pipeline run completed successfully')
-        except Exception as e:
-            print(f'❌ Pipeline failed: {e}')
-            sys.exit(1)
-        "
-        
-    - name: Upload results
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: manual-run-${{ github.run_number }}
-        path: wequo/data/output/
-        retention-days: 30
+      - name: Set up environment variables
+        run: |
+          # Core connectors
+          echo "FRED_API_KEY=${{ secrets.FRED_API_KEY }}" >> $GITHUB_ENV
+          echo "ALPHA_VANTAGE_API_KEY=${{ secrets.ALPHA_VANTAGE_API_KEY }}" >> $GITHUB_ENV
+          echo "WORLD_BANK_API_KEY=${{ secrets.WORLD_BANK_API_KEY }}" >> $GITHUB_ENV
+          echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+
+          # New connectors (optional - connectors will use mock data if keys not provided)
+          echo "ACLED_API_KEY=${{ secrets.ACLED_API_KEY }}" >> $GITHUB_ENV
+          echo "ACLED_EMAIL=${{ secrets.ACLED_EMAIL }}" >> $GITHUB_ENV
+          echo "NOAA_API_KEY=${{ secrets.NOAA_API_KEY }}" >> $GITHUB_ENV
+          echo "UNCOMTRADE_API_KEY=${{ secrets.UNCOMTRADE_API_KEY }}" >> $GITHUB_ENV
+          echo "MARINETRAFFIC_API_KEY=${{ secrets.MARINETRAFFIC_API_KEY }}" >> $GITHUB_ENV
+
+      - name: Run custom pipeline
+        run: |
+          cd wequo
+          python -c "
+          import os
+          import sys
+          from scripts.run_weekly import main
+
+          # Set custom parameters if provided
+          date_override = '${{ github.event.inputs.date_override }}'
+          sources = '${{ github.event.inputs.sources }}'.split(',') if '${{ github.event.inputs.sources }}' else None
+          skip_analytics = '${{ github.event.inputs.skip_analytics }}' == 'true'
+
+          print(f'Running with date_override={date_override}, sources={sources}, skip_analytics={skip_analytics}')
+
+          try:
+              main()
+              print('✅ Manual pipeline run completed successfully')
+          except Exception as e:
+              print(f'❌ Pipeline failed: {e}')
+              sys.exit(1)
+          "
+
+      - name: Upload results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: manual-run-${{ github.run_number }}
+          path: wequo/data/output/
+          retention-days: 30

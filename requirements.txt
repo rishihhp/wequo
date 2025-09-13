@@ -12,3 +12,5 @@ jinja2>=3.1.0
 # weasyprint>=60.0  # For PDF export (optional - install separately if needed)
 markupsafe>=2.1.0
 scikit-learn>=1.1.0
+ruptures>=1.1.0  # Change point detection
+statsmodels>=0.13.0  # Advanced statistical analysis
