@@ -1,8 +1,8 @@
 {
-  "report_date": "2025-09-13 19:42:22.570969",
+  "report_date": "2025-09-13 19:36:37.434036",
   "measurement_period_days": 7,
   "overall_compliance": false,
-  "compliance_score": 0.9937317784256561,
+  "compliance_score": 0.9927468284611143,
   "metrics": [
     {
       "name": "pipeline_success_rate",
@@ -10,7 +10,7 @@
       "target_threshold": 0.99,
       "is_compliant": true,
       "measurement_period_days": 7,
-      "last_updated": "2025-09-13 19:42:22.575268"
+      "last_updated": "2025-09-13 19:36:37.436041"
     },
     {
       "name": "data_freshness_compliance",
@@ -18,23 +18,23 @@
       "target_threshold": 0.95,
       "is_compliant": true,
       "measurement_period_days": 7,
-      "last_updated": "2025-09-13 19:42:22.575268"
+      "last_updated": "2025-09-13 19:36:37.436041"
     },
     {
       "name": "average_runtime_minutes",
-      "current_value": 1.1702737499999998,
+      "current_value": 1.1663459166666665,
       "target_threshold": 15,
       "is_compliant": true,
       "measurement_period_days": 7,
-      "last_updated": "2025-09-13 19:42:22.575268"
+      "last_updated": "2025-09-13 19:36:37.436041"
     },
     {
       "name": "max_runtime_minutes",
-      "current_value": 1.1702737499999998,
+      "current_value": 1.1663459166666665,
       "target_threshold": 30,
       "is_compliant": true,
       "measurement_period_days": 7,
-      "last_updated": "2025-09-13 19:42:22.575268"
+      "last_updated": "2025-09-13 19:36:37.436041"
     },
     {
       "name": "anomaly_rate_threshold",
@@ -42,25 +42,25 @@
       "target_threshold": 0.1,
       "is_compliant": true,
       "measurement_period_days": 7,
-      "last_updated": "2025-09-13 19:42:22.575268"
+      "last_updated": "2025-09-13 19:36:37.436041"
     },
     {
       "name": "connector_availability",
-      "current_value": 0.8571428571428571,
+      "current_value": 0.8378378378378378,
       "target_threshold": 0.98,
       "is_compliant": false,
       "measurement_period_days": 7,
-      "last_updated": "2025-09-13 19:42:22.576264"
+      "last_updated": "2025-09-13 19:36:37.436041"
     }
   ],
   "violations": [
     {
       "metric": "connector_availability",
       "severity": "minor",
-      "current_value": 0.8571428571428571,
+      "current_value": 0.8378378378378378,
       "target_threshold": 0.98,
-      "deviation_ratio": 1.1433333333333333,
-      "description": "Connector availability is 85.7%, below target of 98.0%"
+      "deviation_ratio": 1.1696774193548387,
+      "description": "Connector availability is 83.8%, below target of 98.0%"
     }
   ],
   "recommendations": [

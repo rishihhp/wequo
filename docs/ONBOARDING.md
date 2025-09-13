@@ -125,11 +125,11 @@ Features:
 ### 3. Monitoring Dashboard
 
 ```bash
-# Start the monitoring dashboard
-python scripts/run_monitoring_dashboard.py
+# The monitoring dashboard is included in the main app
+# Use python app.py to start the unified application
 ```
 
-Access at: `http://localhost:5001`
+Access at: `http://localhost:5000/monitoring`
 
 Features:
 
@@ -180,7 +180,7 @@ Features:
 
 #### 1. Dashboard Overview
 
-Access the monitoring dashboard at `http://localhost:5001` to view:
+Access the monitoring dashboard at `http://localhost:5000/monitoring` to view:
 
 - **Pipeline Status**: Success/failure rates
 - **Data Freshness**: Last update timestamps
@@ -287,7 +287,7 @@ pip install -r requirements.txt
 
 #### 3. Port Conflicts
 
-- Change ports in script files if 5000/5001 are in use
+- Change port in app.py if 5000 is in use
 - Update environment variables accordingly
 
 #### 4. Permission Errors
@@ -321,14 +321,14 @@ python scripts/run_weekly.py
 # Start author dashboard
 python scripts/run_web_app.py
 
-# Start monitoring dashboard
-python scripts/run_monitoring_dashboard.py
+# Start the unified application (includes monitoring)
+python app.py
 ```
 
 ### Key URLs
 
 - Author Dashboard: `http://localhost:5000`
-- Monitoring Dashboard: `http://localhost:5001`
+- Monitoring Dashboard: `http://localhost:5000/monitoring`
 
 ### Important Files
 

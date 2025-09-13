@@ -584,9 +584,9 @@
           </div>
           <div class="package-stat">
             <div class="package-stat-number">
-              {% set total_rows = 0 %} {% for name, rows in
-              data.csv_files.items() %} {% set total_rows = total_rows + (rows |
-              length) %} {% endfor %} {{ total_rows }}
+              {% set total_rows = 0 %} {% for name, csv_info in
+              data.csv_files.items() %} {% set total_rows = total_rows +
+              (csv_info.data | length) %} {% endfor %} {{ total_rows }}
             </div>
             <div class="package-stat-label">Total Records</div>
           </div>
@@ -749,7 +749,7 @@
                   {{ name }}.csv
                 </div>
                 <div style="font-size: 0.9em; color: #718096">
-                  {{ data.csv_files[name] | length }} rows
+                  {{ data.csv_files[name].data | length }} rows
                 </div>
               </div>
             </li>
@@ -825,7 +825,8 @@
           <i data-lucide="table"></i>
           Data Preview
         </h3>
-        {% for name, rows in data.csv_files.items() %} {% if rows %}
+        {% for name, csv_info in data.csv_files.items() %} {% if csv_info.data
+        %}
         <div class="data-table-container" style="margin-bottom: 24px">
           <div
             class="data-table-header"
@@ -833,7 +834,7 @@
           >
             <div class="data-table-title">
               <i data-lucide="database" style="width: 20px; height: 20px"></i>
-              {{ name.upper() }} ({{ rows | length }} rows)
+              {{ name.upper() }} ({{ csv_info.data | length }} rows)
             </div>
             <i
               data-lucide="chevron-down"
@@ -845,19 +846,20 @@
             <table class="data-table">
               <thead>
                 <tr>
-                  {% for key in rows[0].keys() %}
+                  {% if csv_info.data and csv_info.data|length > 0 %} {% for key
+                  in csv_info.data[0].keys() %}
                   <th>{{ key }}</th>
-                  {% endfor %}
+                  {% endfor %} {% endif %}
                 </tr>
               </thead>
               <tbody id="table-body-{{ loop.index }}">
-                {% for row in rows[:10] %}
+                {% for row in csv_info.data[:10] %}
                 <tr class="table-row" data-row-index="{{ loop.index0 }}">
                   {% for value in row.values() %}
                   <td>{{ value }}</td>
                   {% endfor %}
                 </tr>
-                {% endfor %} {% for row in rows[10:] %}
+                {% endfor %} {% for row in csv_info.data[10:] %}
                 <tr
                   class="table-row hidden-row"
                   data-row-index="{{ loop.index0 + 10 }}"
@@ -870,10 +872,10 @@
                 {% endfor %}
               </tbody>
             </table>
-            {% if rows | length > 10 %}
+            {% if csv_info.data | length > 10 %}
             <div class="table-controls">
               <span style="color: #718096; font-size: 0.9em">
-                Showing 10 of {{ rows | length }} rows
+                Showing 10 of {{ csv_info.data | length }} rows
               </span>
               <button
                 class="show-all-btn"

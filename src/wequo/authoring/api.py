@@ -182,7 +182,6 @@ def create_authoring_api(version_controller: VersionController) -> Blueprint:
                 'created_at': document.created_at.isoformat(),
                 'updated_at': document.updated_at.isoformat(),
                 'current_version': document.current_version,
-                'git_repo_path': document.git_repo_path,
                 'file_path': document.file_path,
                 'versions': {k: v.to_dict() for k, v in document.versions.items()},
                 'approval_status': document.get_approvals_status()
@@ -406,60 +405,6 @@ def add_authoring_routes(app, data_root: str = "data"):
     api = create_authoring_api(vc)
     app.register_blueprint(api)
     
-    # Add dashboard route
-    @app.route('/authoring')
-    def authoring_dashboard():
-        """Authoring dashboard page."""
-        from flask import render_template
-        
-        # Get available packages for Document Authoring Center
-        packages = []
-        try:
-            output_dir = Path("wequo/data/output")
-            for date_dir in sorted(output_dir.glob("????-??-??"), reverse=True):
-                date_str = date_dir.name
-                template_file = date_dir / "template_prefilled.md"
-                package_summary = date_dir / "package_summary.json"
-                
-                if template_file.exists():
-                    try:
-                        package_info = {}
-                        if package_summary.exists():
-                            with open(package_summary, 'r', encoding='utf-8') as f:
-                                package_info = json.load(f)
-                        
-                        packages.append({
-                            'date': date_str,
-                            'title': f"Weekly Brief - {date_str}",
-                            'sources': package_info.get('sources', []),
-                            'edit_url': f'/template/{date_str}'
-                        })
-                    except Exception:
-                        continue
-        except Exception as e:
-            print(f"Error loading packages: {e}")
-        
-        # Get user-edited documents from version control
-        my_documents = []
-        try:
-            docs = vc.list_documents()
-            for doc in docs:
-                current_version = doc.get_current_version()
-                my_documents.append({
-                    'id': doc.id,
-                    'title': doc.title,
-                    'package_date': doc.package_date,
-                    'author': doc.author,
-                    'updated_at': doc.updated_at.strftime('%Y-%m-%d %H:%M'),
-                    'version_number': current_version.version_number if current_version else 'No version',
-                    'version_count': len(doc.versions),
-                    'edit_url': f'/template/{doc.package_date}'
-                })
-        except Exception as e:
-            print(f"Error loading documents: {e}")
-        
-        return render_template('authoring_dashboard.html', 
-                             packages=packages, 
-                             my_documents=my_documents)
+    # Dashboard route is now handled in main app.py
     
     return vc, None  # No workflow in simplified authoring

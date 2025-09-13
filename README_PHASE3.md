@@ -189,7 +189,7 @@ impacts = event_tagger.detect_event_impacts(df)
 
 ### ✅ Monitoring Dashboards and Alert Rules
 
-1. **Web Dashboard** (`scripts/run_monitoring_dashboard.py`)
+1. **Web Dashboard** (integrated in `app.py` at `/monitoring`)
 
    - Real-time monitoring interface
    - SLA compliance visualization

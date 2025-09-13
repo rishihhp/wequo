@@ -2,7 +2,7 @@
 
 ## Summary Statistics
 - Total series: 44
-- Total data points: 379
+- Total data points: 380
 - Date range: 2015-12-31 to 2025-09-13
 - Sources: fred, commodities, crypto, economic, noaa
 
@@ -36,30 +36,30 @@
 - **JP_NY.GDP.MKTP.CD**: 📉 weak trend (slope: -0.0000)
 - **BITCOIN**: 📈 strong trend (slope: 0.0000)
 - **ETHEREUM**: 📈 moderate trend (slope: 0.0000)
-- **GOLD**: 📈 weak trend (slope: 0.0000)
 - **BINANCECOIN**: 📈 strong trend (slope: 0.0000)
 - **SOLANA**: 📈 strong trend (slope: 0.0000)
-- **GHCND:USW00014732_TMAX**: 📉 weak trend (slope: -0.0000)
-- **WTI**: 📈 weak trend (slope: 0.0000)
-- **GHCND:USW00012960_TMAX**: 📉 moderate trend (slope: -0.0000)
-- **BRENT**: 📉 none trend (slope: -0.0000)
-- **SILVER**: 📉 weak trend (slope: -0.0000)
-- **GHCND:USW00023174_TMAX**: 📉 none trend (slope: -0.0000)
-- **POLKADOT**: 📈 strong trend (slope: 0.0000)
-- **GHCND:USW00023174_TMIN**: 📉 none trend (slope: -0.0000)
-- **GHCND:USW00014732_TMIN**: 📈 none trend (slope: 0.0000)
+- **GOLD**: 📈 none trend (slope: 0.0000)
+- **BRENT**: 📈 weak trend (slope: 0.0000)
+- **GHCND:USW00023174_TMIN**: 📈 moderate trend (slope: 0.0000)
+- **GHCND:USW00014732_TMAX**: 📉 none trend (slope: -0.0000)
+- **GHCND:USW00012960_TMAX**: 📈 none trend (slope: 0.0000)
+- **GHCND:USW00014732_TMIN**: 📉 none trend (slope: -0.0000)
+- **POLKADOT**: 📈 none trend (slope: 0.0000)
+- **GHCND:USW00012960_TMIN**: 📉 none trend (slope: -0.0000)
+- **GHCND:USW00023174_TMAX**: 📈 none trend (slope: 0.0000)
+- **SILVER**: 📈 none trend (slope: 0.0000)
 - **CARDANO**: 📈 strong trend (slope: 0.0000)
-- **COPPER**: 📈 none trend (slope: 0.0000)
+- **NATURAL_GAS**: 📉 none trend (slope: -0.0000)
+- **COPPER**: 📉 none trend (slope: -0.0000)
+- **WTI**: 📉 none trend (slope: -0.0000)
 - **JP_NE.TRD.GNFS.ZS**: 📈 weak trend (slope: 0.0000)
 - **DE_NE.TRD.GNFS.ZS**: 📈 weak trend (slope: 0.0000)
 - **IN_NE.TRD.GNFS.ZS**: 📈 weak trend (slope: 0.0000)
 - **GB_FP.CPI.TOTL.ZG**: 📈 weak trend (slope: 0.0000)
 - **GB_NE.TRD.GNFS.ZS**: 📈 none trend (slope: 0.0000)
-- **NATURAL_GAS**: 📈 none trend (slope: 0.0000)
 - **DE_FP.CPI.TOTL.ZG**: 📈 weak trend (slope: 0.0000)
 - **US_FP.CPI.TOTL.ZG**: 📈 weak trend (slope: 0.0000)
 - **IN_SL.UEM.TOTL.ZS**: 📉 moderate trend (slope: -0.0000)
-- **GHCND:USW00012960_TMIN**: 📈 none trend (slope: 0.0000)
 - **JP_FP.CPI.TOTL.ZG**: 📈 weak trend (slope: 0.0000)
 - **US_NE.TRD.GNFS.ZS**: 📉 weak trend (slope: -0.0000)
 - **IN_FP.CPI.TOTL.ZG**: 📈 weak trend (slope: 0.0000)
@@ -75,6 +75,11 @@
 ## Cross-Correlation Analysis
 - **US_NY.GDP.MKTP.CD ↔ IN_NY.GDP.MKTP.CD**: Strong spearman correlation (0.988)
   - Statistically significant (p-value: 0.000)
+- **CARDANO ↔ SOLANA**: Strong pearson correlation (0.984)
+  - Statistically significant (p-value: 0.000)
+- **CARDANO ↔ SOLANA**: Strong cross_correlation correlation (0.984)
+  - Time lag: -2 periods
+  - Statistically significant (p-value: 0.002)
 - **US_NY.GDP.MKTP.CD ↔ IN_NY.GDP.MKTP.CD**: Strong pearson correlation (0.984)
   - Statistically significant (p-value: 0.000)
 - **US_NY.GDP.MKTP.CD ↔ IN_NY.GDP.MKTP.CD**: Strong cross_correlation correlation (0.984)
@@ -92,11 +97,6 @@
 - **JP_FP.CPI.TOTL.ZG ↔ GB_FP.CPI.TOTL.ZG**: Strong cross_correlation correlation (0.975)
   - Time lag: -1 periods
   - Statistically significant (p-value: 0.002)
-- **CARDANO ↔ SOLANA**: Strong cross_correlation correlation (0.975)
-  - Time lag: -2 periods
-  - Statistically significant (p-value: 0.002)
-- **CARDANO ↔ SOLANA**: Strong pearson correlation (0.975)
-  - Statistically significant (p-value: 0.000)
 
 ## Analytical Insights
 - **US_SL.UEM.TOTL.ZS** (anomaly): Moderate spike detected in US_SL.UEM.TOTL.ZS (z-score: 2.63). Likely causes: Strong correlation with GB_NE.TRD.GNFS.ZS.

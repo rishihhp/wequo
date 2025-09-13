@@ -178,7 +178,7 @@ class MonitoringDashboard:
                 }), 500
         
         # Search routes
-        @self.app.route('/search')
+        @self.app.route('/monitoring/search')
         def search_page():
             """Search interface page."""
             query = request.args.get('q', '')
@@ -954,7 +954,7 @@ SEARCH_TEMPLATE = """
                     <i data-lucide="activity"></i>
                     Dashboard
                 </a>
-                <a href="/search" class="nav-link active">
+                <a href="/monitoring/search" class="nav-link active">
                     <i data-lucide="search"></i>
                     Search & Export
                 </a>
@@ -1188,7 +1188,7 @@ SEARCH_TEMPLATE = """
             lucide.createIcons();
             
             try {
-                const response = await fetch("/api/search/rebuild", {
+                const response = await fetch("/monitoring/api/search/rebuild", {
                     method: "POST",
                 });
                 const result = await response.json();
@@ -1777,8 +1777,8 @@ DASHBOARD_TEMPLATE = """
         async function updateHeaderStats() {
             try {
                 const [statusData, historyData] = await Promise.all([
-                    fetchData('/api/monitoring-status'),
-                    fetchData('/api/pipeline-history?days=7')
+                    fetchData('/monitoring/api/monitoring-status'),
+                    fetchData('/monitoring/api/pipeline-history?days=7')
                 ]);
 
                 if (statusData.status === 'success' && historyData.status === 'success') {
@@ -1793,7 +1793,7 @@ DASHBOARD_TEMPLATE = """
                     const avgDuration = slaReport.metrics.find(m => m.name === 'average_runtime_minutes')?.current_value || 0;
                     document.getElementById('avg-duration').textContent = `${avgDuration.toFixed(1)}m`;
                     
-                    const alertsData = await fetchData('/api/alerts?hours=24');
+                    const alertsData = await fetchData('/monitoring/api/alerts?hours=24');
                     const activeAlerts = alertsData.status === 'success' ? alertsData.data.length : 0;
                     document.getElementById('active-alerts').textContent = activeAlerts;
 
@@ -1813,7 +1813,7 @@ DASHBOARD_TEMPLATE = """
         }
         
         async function updateSLAStatus() {
-            const data = await fetchData('/api/monitoring-status');
+            const data = await fetchData('/monitoring/api/monitoring-status');
             const container = document.getElementById('sla-status');
             const cacheInfo = document.getElementById('sla-cache-info');
             
@@ -1866,7 +1866,7 @@ DASHBOARD_TEMPLATE = """
             lucide.createIcons();
             
             try {
-                const response = await fetch('/api/sla-refresh', {
+                const response = await fetch('/monitoring/api/sla-refresh', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -1892,7 +1892,7 @@ DASHBOARD_TEMPLATE = """
         }
         
         async function updateRecentAlerts() {
-            const data = await fetchData('/api/alerts?hours=24');
+            const data = await fetchData('/monitoring/api/alerts?hours=24');
             const container = document.getElementById('recent-alerts');
             
             if (data.status === 'error') {
@@ -1926,7 +1926,7 @@ DASHBOARD_TEMPLATE = """
         }
         
         async function updateDataFreshness() {
-            const data = await fetchData('/api/data-freshness');
+            const data = await fetchData('/monitoring/api/data-freshness');
             const container = document.getElementById('data-freshness');
             
             if (data.status === 'error') {
@@ -1958,7 +1958,7 @@ DASHBOARD_TEMPLATE = """
         }
         
         async function updateSystemHealth() {
-            const data = await fetchData('/api/monitoring-status');
+            const data = await fetchData('/monitoring/api/monitoring-status');
             const container = document.getElementById('system-health');
             
             if (data.status === 'error') {
@@ -1988,7 +1988,7 @@ DASHBOARD_TEMPLATE = """
         }
         
         async function updateSLATrend() {
-            const data = await fetchData('/api/sla-trend?days=30');
+            const data = await fetchData('/monitoring/api/sla-trend?days=30');
             
             if (data.status === 'error' || !data.data.dates.length) {
                 return;
@@ -2031,7 +2031,7 @@ DASHBOARD_TEMPLATE = """
         }
         
         async function updatePipelineHistory() {
-            const data = await fetchData('/api/pipeline-history?days=7');
+            const data = await fetchData('/monitoring/api/pipeline-history?days=7');
             const container = document.getElementById('pipeline-history');
             
             if (data.status === 'error') {
