@@ -206,165 +206,156 @@
     },
     {
       "series_id": "BITCOIN",
-      "slope": 1.1625352328598607e-11,
-      "r_squared": 0.9368227456045287,
+      "slope": 1.1738427453921248e-11,
+      "r_squared": 0.9385632112646004,
       "trend_strength": "strong",
       "direction": "upward",
-      "p_value": 8.074203886098197e-05,
+      "p_value": 7.42000387380921e-05,
       "source": "crypto"
     },
     {
       "series_id": "ETHEREUM",
-      "slope": 7.871875505692466e-13,
-      "r_squared": 0.7530545716486899,
+      "slope": 7.996827555938048e-13,
+      "r_squared": 0.7502351846508997,
       "trend_strength": "moderate",
       "direction": "upward",
-      "p_value": 0.005220004841737381,
+      "p_value": 0.005408054373187558,
       "source": "crypto"
     },
     {
       "series_id": "BINANCECOIN",
-      "slope": 1.1949729745127031e-13,
-      "r_squared": 0.8685242300049808,
+      "slope": 1.2145545269594506e-13,
+      "r_squared": 0.8597219365444536,
       "trend_strength": "strong",
       "direction": "upward",
-      "p_value": 0.0007482686681759842,
-      "source": "crypto"
-    },
-    {
-      "series_id": "SOLANA",
-      "slope": 7.56187976438153e-14,
-      "r_squared": 0.978257455978039,
-      "trend_strength": "strong",
-      "direction": "upward",
-      "p_value": 3.2385772419584395e-06,
+      "p_value": 0.0009122324096248582,
       "source": "crypto"
     },
     {
       "series_id": "GOLD",
-      "slope": 2.888971560846537e-14,
-      "r_squared": 0.007800076961846072,
+      "slope": 8.444940476190457e-14,
+      "r_squared": 0.1615407316337437,
       "trend_strength": "none",
       "direction": "upward",
-      "p_value": 0.8506506922994693,
+      "p_value": 0.37142628002764,
       "source": "commodities"
     },
     {
-      "series_id": "BRENT",
-      "slope": 7.94477513227512e-15,
-      "r_squared": 0.41494775416600727,
-      "trend_strength": "weak",
+      "series_id": "SOLANA",
+      "slope": 7.65176019130881e-14,
+      "r_squared": 0.9772277508024505,
+      "trend_strength": "strong",
       "direction": "upward",
-      "p_value": 0.11839712128654799,
-      "source": "commodities"
-    },
-    {
-      "series_id": "GHCND:USW00023174_TMIN",
-      "slope": 4.856977513227513e-15,
-      "r_squared": 0.5754368839777528,
-      "trend_strength": "moderate",
-      "direction": "upward",
-      "p_value": 0.048061318817726774,
-      "source": "noaa"
-    },
-    {
-      "series_id": "GHCND:USW00014732_TMAX",
-      "slope": -1.7278439153439153e-15,
-      "r_squared": 0.041946753426341334,
-      "trend_strength": "none",
-      "direction": "downward",
-      "p_value": 0.6595515469520576,
-      "source": "noaa"
+      "p_value": 3.722303723435945e-06,
+      "source": "crypto"
     },
     {
       "series_id": "GHCND:USW00012960_TMAX",
-      "slope": 1.7071759259259257e-15,
-      "r_squared": 0.12916414248500627,
-      "trend_strength": "none",
-      "direction": "upward",
-      "p_value": 0.42850117086095424,
-      "source": "noaa"
-    },
-    {
-      "series_id": "GHCND:USW00014732_TMIN",
-      "slope": -1.6575727513227509e-15,
-      "r_squared": 0.06401945733495978,
-      "trend_strength": "none",
+      "slope": -4.9892526455026455e-15,
+      "r_squared": 0.4508793832989594,
+      "trend_strength": "weak",
       "direction": "downward",
-      "p_value": 0.5840752139543978,
+      "p_value": 0.09858824378554448,
       "source": "noaa"
-    },
-    {
-      "series_id": "POLKADOT",
-      "slope": 9.83796296296297e-16,
-      "r_squared": 0.14450589819992668,
-      "trend_strength": "none",
-      "direction": "upward",
-      "p_value": 0.400254632396116,
-      "source": "crypto"
     },
     {
       "series_id": "GHCND:USW00012960_TMIN",
-      "slope": -8.143187830687834e-16,
-      "r_squared": 0.02459541059740314,
-      "trend_strength": "none",
-      "direction": "downward",
-      "p_value": 0.7370204582787677,
+      "slope": 2.9885912698412702e-15,
+      "r_squared": 0.22809860015359917,
+      "trend_strength": "weak",
+      "direction": "upward",
+      "p_value": 0.27842099830346234,
       "source": "noaa"
     },
     {
-      "series_id": "GHCND:USW00023174_TMAX",
-      "slope": 4.836309523809525e-16,
-      "r_squared": 0.006627284135185174,
-      "trend_strength": "none",
-      "direction": "upward",
-      "p_value": 0.8622547596961422,
-      "source": "noaa"
-    },
-    {
-      "series_id": "SILVER",
-      "slope": 2.728174603174604e-16,
-      "r_squared": 0.006007679237372276,
-      "trend_strength": "none",
-      "direction": "upward",
-      "p_value": 0.8688111607868715,
-      "source": "commodities"
-    },
-    {
-      "series_id": "CARDANO",
-      "slope": 1.9578774036860574e-16,
-      "r_squared": 0.9542147616265009,
-      "trend_strength": "strong",
-      "direction": "upward",
-      "p_value": 3.0523036763010244e-05,
-      "source": "crypto"
-    },
-    {
-      "series_id": "NATURAL_GAS",
-      "slope": -1.322751322751324e-16,
-      "r_squared": 0.16368286445012856,
+      "series_id": "BRENT",
+      "slope": -2.7860449735449836e-15,
+      "r_squared": 0.08200306728975226,
       "trend_strength": "none",
       "direction": "downward",
-      "p_value": 0.3679710032333397,
-      "source": "commodities"
-    },
-    {
-      "series_id": "COPPER",
-      "slope": -9.507275132275095e-17,
-      "r_squared": 0.05492109634551437,
-      "trend_strength": "none",
-      "direction": "downward",
-      "p_value": 0.612985386796317,
+      "p_value": 0.5335421182026934,
       "source": "commodities"
     },
     {
       "series_id": "WTI",
-      "slope": -7.853835978835281e-17,
-      "r_squared": 2.2947338337586465e-05,
+      "slope": 2.331349206349195e-15,
+      "r_squared": 0.0438422200512932,
+      "trend_strength": "none",
+      "direction": "upward",
+      "p_value": 0.6522770506846893,
+      "source": "commodities"
+    },
+    {
+      "series_id": "GHCND:USW00014732_TMIN",
+      "slope": -2.2941468253968264e-15,
+      "r_squared": 0.31814979921006104,
+      "trend_strength": "weak",
+      "direction": "downward",
+      "p_value": 0.1871921201683519,
+      "source": "noaa"
+    },
+    {
+      "series_id": "GHCND:USW00014732_TMAX",
+      "slope": 2.1742724867724853e-15,
+      "r_squared": 0.1922172695137947,
+      "trend_strength": "none",
+      "direction": "upward",
+      "p_value": 0.32512568648481677,
+      "source": "noaa"
+    },
+    {
+      "series_id": "GHCND:USW00023174_TMAX",
+      "slope": 1.256613756613758e-15,
+      "r_squared": 0.03792303121624871,
+      "trend_strength": "none",
+      "direction": "upward",
+      "p_value": 0.6756347016352799,
+      "source": "noaa"
+    },
+    {
+      "series_id": "SILVER",
+      "slope": -1.2400793650793655e-15,
+      "r_squared": 0.11020768025078384,
       "trend_strength": "none",
       "direction": "downward",
-      "p_value": 0.9918677629091965,
+      "p_value": 0.4669560438046316,
       "source": "commodities"
+    },
+    {
+      "series_id": "GHCND:USW00023174_TMIN",
+      "slope": -4.505621693121698e-16,
+      "r_squared": 0.003684515421562407,
+      "trend_strength": "none",
+      "direction": "downward",
+      "p_value": 0.8971418597966341,
+      "source": "noaa"
+    },
+    {
+      "series_id": "NATURAL_GAS",
+      "slope": 2.3974867724867734e-16,
+      "r_squared": 0.15218964893231995,
+      "trend_strength": "none",
+      "direction": "upward",
+      "p_value": 0.3869441054195736,
+      "source": "commodities"
+    },
+    {
+      "series_id": "CARDANO",
+      "slope": 2.0258867132410769e-16,
+      "r_squared": 0.9349842672822833,
+      "trend_strength": "strong",
+      "direction": "upward",
+      "p_value": 8.806209921012834e-05,
+      "source": "crypto"
+    },
+    {
+      "series_id": "POLKADOT",
+      "slope": 9.920634920634789e-17,
+      "r_squared": 0.002085324528629713,
+      "trend_strength": "none",
+      "direction": "upward",
+      "p_value": 0.9225568937592188,
+      "source": "crypto"
     },
     {
       "series_id": "JP_NE.TRD.GNFS.ZS",
@@ -475,6 +466,15 @@
       "source": "economic"
     },
     {
+      "series_id": "COPPER",
+      "slope": -4.133597883597781e-18,
+      "r_squared": 3.3333333333331736e-05,
+      "trend_strength": "none",
+      "direction": "downward",
+      "p_value": 0.9901987607706169,
+      "source": "commodities"
+    },
+    {
       "series_id": "DE_SL.UEM.TOTL.ZS",
       "slope": -3.852524776448238e-18,
       "r_squared": 0.5600857741542878,
@@ -547,88 +547,88 @@
       "p95": 4.33
     },
     "WTI": {
-      "p25": 72.0,
-      "p50": 76.5,
-      "p75": 77.13499999999999,
-      "p90": 77.812,
-      "p95": 78.271
+      "p25": 74.6,
+      "p50": 75.78,
+      "p75": 76.965,
+      "p90": 77.84,
+      "p95": 77.855
     },
     "BRENT": {
-      "p25": 77.375,
-      "p50": 78.53,
-      "p75": 80.565,
-      "p90": 81.098,
-      "p95": 81.464
+      "p25": 77.33,
+      "p50": 79.1,
+      "p75": 80.155,
+      "p90": 80.74000000000001,
+      "p95": 80.89
     },
     "GOLD": {
-      "p25": 1947.73,
-      "p50": 2004.16,
-      "p75": 2051.295,
-      "p90": 2067.38,
-      "p95": 2070.965
+      "p25": 1980.31,
+      "p50": 2005.64,
+      "p75": 2021.31,
+      "p90": 2031.846,
+      "p95": 2034.7079999999999
     },
     "SILVER": {
-      "p25": 24.35,
-      "p50": 25.17,
-      "p75": 25.384999999999998,
-      "p90": 25.5,
-      "p95": 25.515
+      "p25": 24.305,
+      "p50": 24.48,
+      "p75": 25.275,
+      "p90": 25.701999999999998,
+      "p95": 25.741
     },
     "COPPER": {
-      "p25": 4.06,
-      "p50": 4.06,
-      "p75": 4.145,
-      "p90": 4.178,
-      "p95": 4.184
+      "p25": 3.875,
+      "p50": 4.01,
+      "p75": 4.07,
+      "p90": 4.128,
+      "p95": 4.149
     },
     "NATURAL_GAS": {
-      "p25": 3.475,
-      "p50": 3.51,
-      "p75": 3.525,
-      "p90": 3.55,
-      "p95": 3.565
+      "p25": 3.365,
+      "p50": 3.46,
+      "p75": 3.55,
+      "p90": 3.596,
+      "p95": 3.608
     },
     "BITCOIN": {
       "p25": 111443.57776997109,
       "p50": 113000.22683793769,
-      "p75": 115574.58238434678,
-      "p90": 115900.22378290069,
-      "p95": 116030.1836144228
+      "p75": 115607.96216134202,
+      "p90": 115993.68715848737,
+      "p95": 116076.91530221613
     },
     "ETHEREUM": {
       "p25": 4308.015164859018,
       "p50": 4328.58125322133,
-      "p75": 4516.045000356569,
-      "p90": 4693.00859064587,
-      "p95": 4700.9251673979325
+      "p75": 4519.733584879818,
+      "p90": 4703.336627310969,
+      "p95": 4706.089185730481
     },
     "BINANCECOIN": {
       "p25": 879.4338439667255,
       "p50": 887.4816647997675,
       "p75": 908.4491456903917,
-      "p90": 928.197341239902,
-      "p95": 931.7338572086153
+      "p90": 928.8909981537756,
+      "p95": 933.2367805220081
     },
     "CARDANO": {
       "p25": 0.8575862211558646,
       "p50": 0.8751258579422945,
       "p75": 0.899701151355413,
-      "p90": 0.9225493527128412,
-      "p95": 0.9290844804383683
+      "p90": 0.9249585144945183,
+      "p95": 0.9343043309653352
     },
     "SOLANA": {
       "p25": 212.1967972971308,
       "p50": 220.6924214614328,
-      "p75": 231.41295998204475,
-      "p90": 240.3648531855788,
-      "p95": 241.31154973701567
+      "p75": 231.6782870023341,
+      "p90": 241.10776884238894,
+      "p95": 241.68300756542072
     },
     "POLKADOT": {
-      "p25": 6.62,
-      "p50": 6.94,
-      "p75": 7.375,
-      "p90": 7.626,
-      "p95": 7.638
+      "p25": 6.725,
+      "p50": 6.89,
+      "p75": 7.28,
+      "p90": 7.402,
+      "p95": 7.4559999999999995
     },
     "US_NY.GDP.MKTP.CD": {
       "p25": 19873205500000.0,
@@ -799,46 +799,46 @@
       "p95": 47.98178853525857
     },
     "GHCND:USW00014732_TMAX": {
-      "p25": 14.275,
-      "p50": 15.46,
-      "p75": 16.935000000000002,
-      "p90": 17.058,
-      "p95": 17.139
+      "p25": 15.595,
+      "p50": 16.09,
+      "p75": 16.645,
+      "p90": 16.805999999999997,
+      "p95": 16.923
     },
     "GHCND:USW00014732_TMIN": {
-      "p25": 4.5,
-      "p50": 5.31,
-      "p75": 6.035,
-      "p90": 6.556,
-      "p95": 6.702999999999999
+      "p25": 4.734999999999999,
+      "p50": 5.28,
+      "p75": 5.82,
+      "p90": 6.186000000000001,
+      "p95": 6.333
     },
     "GHCND:USW00023174_TMAX": {
-      "p25": 14.7,
-      "p50": 15.41,
-      "p75": 16.125,
-      "p90": 16.58,
-      "p95": 16.715
+      "p25": 14.06,
+      "p50": 14.27,
+      "p75": 16.259999999999998,
+      "p90": 16.29,
+      "p95": 16.29
     },
     "GHCND:USW00023174_TMIN": {
-      "p25": 5.295,
-      "p50": 6.68,
-      "p75": 7.105,
-      "p90": 7.142,
-      "p95": 7.166
+      "p25": 4.055,
+      "p50": 4.39,
+      "p75": 6.025,
+      "p90": 6.688000000000001,
+      "p95": 6.993999999999999
     },
     "GHCND:USW00012960_TMAX": {
-      "p25": 14.845,
-      "p50": 15.96,
-      "p75": 16.115000000000002,
-      "p90": 16.36,
-      "p95": 16.465
+      "p25": 13.695,
+      "p50": 14.31,
+      "p75": 15.0,
+      "p90": 16.27,
+      "p95": 16.84
     },
     "GHCND:USW00012960_TMIN": {
-      "p25": 4.375,
-      "p50": 5.49,
-      "p75": 5.74,
-      "p90": 5.954,
-      "p95": 5.957
+      "p25": 3.755,
+      "p50": 4.28,
+      "p75": 5.215,
+      "p90": 6.134,
+      "p95": 6.3919999999999995
     }
   },
   "summary_stats": {
@@ -856,8 +856,8 @@
       "noaa"
     ],
     "value_stats": {
-      "mean": 1384705083760.8176,
-      "std": 4454728949331.929,
+      "mean": 1384705083761.099,
+      "std": 4454728949331.841,
       "min": -0.233352779398264,
       "max": 29184890000000.0
     }
@@ -880,42 +880,6 @@
         "n_observations": 10,
         "method": "spearman_rank",
         "contemporaneous": true
-      }
-    },
-    {
-      "series1_id": "CARDANO",
-      "series2_id": "SOLANA",
-      "correlation_type": "pearson",
-      "correlation_coefficient": 0.9840287142125043,
-      "statistical_significance": 2.7924771986196333e-07,
-      "lag": 0,
-      "confidence_interval": [
-        0.9315846491650874,
-        0.9963475843006704
-      ],
-      "description": "Pearson correlation: 0.984 (p=0.000)",
-      "context": {
-        "n_observations": 10,
-        "method": "pearson",
-        "contemporaneous": true
-      }
-    },
-    {
-      "series1_id": "CARDANO",
-      "series2_id": "SOLANA",
-      "correlation_type": "cross_correlation",
-      "correlation_coefficient": 0.9840287142125042,
-      "statistical_significance": 0.001859680543256248,
-      "lag": -2,
-      "confidence_interval": [
-        -1,
-        1
-      ],
-      "description": "Cross-correlation at lag -2: 0.984 (SOLANA leads CARDANO by 2 periods)",
-      "context": {
-        "method": "cross_correlation_function",
-        "max_lags": 2,
-        "critical_value": 0.6198064213930023
       }
     },
     {
@@ -1027,6 +991,42 @@
       }
     },
     {
+      "series1_id": "CARDANO",
+      "series2_id": "SOLANA",
+      "correlation_type": "pearson",
+      "correlation_coefficient": 0.9754948621213073,
+      "statistical_significance": 1.5317152782995365e-06,
+      "lag": 0,
+      "confidence_interval": [
+        0.8964905921774469,
+        0.9943773546026033
+      ],
+      "description": "Pearson correlation: 0.975 (p=0.000)",
+      "context": {
+        "n_observations": 10,
+        "method": "pearson",
+        "contemporaneous": true
+      }
+    },
+    {
+      "series1_id": "CARDANO",
+      "series2_id": "SOLANA",
+      "correlation_type": "cross_correlation",
+      "correlation_coefficient": 0.9754948621213072,
+      "statistical_significance": 0.002036989270717271,
+      "lag": -2,
+      "confidence_interval": [
+        -1,
+        1
+      ],
+      "description": "Cross-correlation at lag -2: 0.975 (SOLANA leads CARDANO by 2 periods)",
+      "context": {
+        "method": "cross_correlation_function",
+        "max_lags": 2,
+        "critical_value": 0.6198064213930023
+      }
+    },
+    {
       "series1_id": "JP_FP.CPI.TOTL.ZG",
       "series2_id": "GB_FP.CPI.TOTL.ZG",
       "correlation_type": "cross_correlation",
@@ -1045,17 +1045,17 @@
       }
     },
     {
-      "series1_id": "ETHEREUM",
-      "series2_id": "BINANCECOIN",
+      "series1_id": "BITCOIN",
+      "series2_id": "SOLANA",
       "correlation_type": "cross_correlation",
-      "correlation_coefficient": 0.9698203417546887,
-      "statistical_significance": 0.002163337519318187,
+      "correlation_coefficient": 0.9704445224674745,
+      "statistical_significance": 0.0021490960538834702,
       "lag": -2,
       "confidence_interval": [
         -1,
         1
       ],
-      "description": "Cross-correlation at lag -2: 0.970 (BINANCECOIN leads ETHEREUM by 2 periods)",
+      "description": "Cross-correlation at lag -2: 0.970 (SOLANA leads BITCOIN by 2 periods)",
       "context": {
         "method": "cross_correlation_function",
         "max_lags": 2,
@@ -1063,15 +1063,15 @@
       }
     },
     {
-      "series1_id": "ETHEREUM",
-      "series2_id": "BINANCECOIN",
+      "series1_id": "BITCOIN",
+      "series2_id": "SOLANA",
       "correlation_type": "pearson",
-      "correlation_coefficient": 0.9698203417546882,
-      "statistical_significance": 3.4996088308949885e-06,
+      "correlation_coefficient": 0.9704445224674744,
+      "statistical_significance": 3.221388081349791e-06,
       "lag": 0,
       "confidence_interval": [
-        0.8736912019326653,
-        0.9930599885856574
+        0.8761785673297756,
+        0.9932051810269265
       ],
       "description": "Pearson correlation: 0.970 (p=0.000)",
       "context": {
@@ -1081,33 +1081,15 @@
       }
     },
     {
-      "series1_id": "BITCOIN",
-      "series2_id": "SOLANA",
-      "correlation_type": "cross_correlation",
-      "correlation_coefficient": 0.9680631117105548,
-      "statistical_significance": 0.0022038968414801463,
-      "lag": -2,
-      "confidence_interval": [
-        -1,
-        1
-      ],
-      "description": "Cross-correlation at lag -2: 0.968 (SOLANA leads BITCOIN by 2 periods)",
-      "context": {
-        "method": "cross_correlation_function",
-        "max_lags": 2,
-        "critical_value": 0.6198064213930023
-      }
-    },
-    {
-      "series1_id": "BITCOIN",
-      "series2_id": "SOLANA",
+      "series1_id": "ETHEREUM",
+      "series2_id": "BINANCECOIN",
       "correlation_type": "pearson",
-      "correlation_coefficient": 0.9680631117105547,
-      "statistical_significance": 4.37931625847375e-06,
+      "correlation_coefficient": 0.9679960733571249,
+      "statistical_significance": 4.4158430261568215e-06,
       "lag": 0,
       "confidence_interval": [
-        0.8667155143683329,
-        0.9926508535459606
+        0.8664501744976797,
+        0.9926352338987925
       ],
       "description": "Pearson correlation: 0.968 (p=0.000)",
       "context": {
@@ -1117,39 +1099,21 @@
       }
     },
     {
-      "series1_id": "BINANCECOIN",
-      "series2_id": "SOLANA",
+      "series1_id": "ETHEREUM",
+      "series2_id": "BINANCECOIN",
       "correlation_type": "cross_correlation",
-      "correlation_coefficient": 0.9665652333057244,
-      "statistical_significance": 0.0022390189376801928,
+      "correlation_coefficient": 0.9679960733571249,
+      "statistical_significance": 0.002205457892998419,
       "lag": -2,
       "confidence_interval": [
         -1,
         1
       ],
-      "description": "Cross-correlation at lag -2: 0.967 (SOLANA leads BINANCECOIN by 2 periods)",
+      "description": "Cross-correlation at lag -2: 0.968 (BINANCECOIN leads ETHEREUM by 2 periods)",
       "context": {
         "method": "cross_correlation_function",
         "max_lags": 2,
         "critical_value": 0.6198064213930023
-      }
-    },
-    {
-      "series1_id": "BINANCECOIN",
-      "series2_id": "SOLANA",
-      "correlation_type": "pearson",
-      "correlation_coefficient": 0.9665652333057242,
-      "statistical_significance": 5.2509637630131825e-06,
-      "lag": 0,
-      "confidence_interval": [
-        0.8608005106748732,
-        0.9923016588793375
-      ],
-      "description": "Pearson correlation: 0.967 (p=0.000)",
-      "context": {
-        "n_observations": 10,
-        "method": "pearson",
-        "contemporaneous": true
       }
     },
     {
@@ -1189,6 +1153,42 @@
       }
     },
     {
+      "series1_id": "BINANCECOIN",
+      "series2_id": "SOLANA",
+      "correlation_type": "cross_correlation",
+      "correlation_coefficient": 0.9647632620018134,
+      "statistical_significance": 0.0022819506932323375,
+      "lag": -2,
+      "confidence_interval": [
+        -1,
+        1
+      ],
+      "description": "Cross-correlation at lag -2: 0.965 (SOLANA leads BINANCECOIN by 2 periods)",
+      "context": {
+        "method": "cross_correlation_function",
+        "max_lags": 2,
+        "critical_value": 0.6198064213930023
+      }
+    },
+    {
+      "series1_id": "BINANCECOIN",
+      "series2_id": "SOLANA",
+      "correlation_type": "pearson",
+      "correlation_coefficient": 0.9647632620018133,
+      "statistical_significance": 6.463646000060116e-06,
+      "lag": 0,
+      "confidence_interval": [
+        0.8537223296091414,
+        0.9918810292210462
+      ],
+      "description": "Pearson correlation: 0.965 (p=0.000)",
+      "context": {
+        "n_observations": 10,
+        "method": "pearson",
+        "contemporaneous": true
+      }
+    },
+    {
       "series1_id": "JP_NY.GDP.MKTP.CD",
       "series2_id": "DE_FP.CPI.TOTL.ZG",
       "correlation_type": "cross_correlation",
@@ -1222,42 +1222,6 @@
         "method": "cross_correlation_function",
         "max_lags": 2,
         "critical_value": 0.6198064213930023
-      }
-    },
-    {
-      "series1_id": "BITCOIN",
-      "series2_id": "CARDANO",
-      "correlation_type": "cross_correlation",
-      "correlation_coefficient": 0.9550274961535079,
-      "statistical_significance": 0.002527228493959033,
-      "lag": -2,
-      "confidence_interval": [
-        -1,
-        1
-      ],
-      "description": "Cross-correlation at lag -2: 0.955 (CARDANO leads BITCOIN by 2 periods)",
-      "context": {
-        "method": "cross_correlation_function",
-        "max_lags": 2,
-        "critical_value": 0.6198064213930023
-      }
-    },
-    {
-      "series1_id": "BITCOIN",
-      "series2_id": "CARDANO",
-      "correlation_type": "pearson",
-      "correlation_coefficient": 0.9550274961535078,
-      "statistical_significance": 1.6948591950136956e-05,
-      "lag": 0,
-      "confidence_interval": [
-        0.8161768442791174,
-        0.9895981239321376
-      ],
-      "description": "Pearson correlation: 0.955 (p=0.000)",
-      "context": {
-        "n_observations": 10,
-        "method": "pearson",
-        "contemporaneous": true
       }
     },
     {
@@ -1405,35 +1369,17 @@
       }
     },
     {
-      "series1_id": "BINANCECOIN",
-      "series2_id": "CARDANO",
-      "correlation_type": "pearson",
-      "correlation_coefficient": 0.9481467006619584,
-      "statistical_significance": 2.9703000146398386e-05,
-      "lag": 0,
-      "confidence_interval": [
-        0.79033025195489,
-        0.9879741003833677
-      ],
-      "description": "Pearson correlation: 0.948 (p=0.000)",
-      "context": {
-        "n_observations": 10,
-        "method": "pearson",
-        "contemporaneous": true
-      }
-    },
-    {
-      "series1_id": "BINANCECOIN",
+      "series1_id": "BITCOIN",
       "series2_id": "CARDANO",
       "correlation_type": "cross_correlation",
-      "correlation_coefficient": 0.9481467006619584,
-      "statistical_significance": 0.002714874944467649,
+      "correlation_coefficient": 0.9454761152418766,
+      "statistical_significance": 0.002791071681167212,
       "lag": -2,
       "confidence_interval": [
         -1,
         1
       ],
-      "description": "Cross-correlation at lag -2: 0.948 (CARDANO leads BINANCECOIN by 2 periods)",
+      "description": "Cross-correlation at lag -2: 0.945 (CARDANO leads BITCOIN by 2 periods)",
       "context": {
         "method": "cross_correlation_function",
         "max_lags": 2,
@@ -1442,34 +1388,16 @@
     },
     {
       "series1_id": "BITCOIN",
-      "series2_id": "BINANCECOIN",
-      "correlation_type": "cross_correlation",
-      "correlation_coefficient": 0.943192504264451,
-      "statistical_significance": 0.0028577710297204018,
-      "lag": -2,
-      "confidence_interval": [
-        -1,
-        1
-      ],
-      "description": "Cross-correlation at lag -2: 0.943 (BINANCECOIN leads BITCOIN by 2 periods)",
-      "context": {
-        "method": "cross_correlation_function",
-        "max_lags": 2,
-        "critical_value": 0.6198064213930023
-      }
-    },
-    {
-      "series1_id": "BITCOIN",
-      "series2_id": "BINANCECOIN",
+      "series2_id": "CARDANO",
       "correlation_type": "pearson",
-      "correlation_coefficient": 0.9431925042644504,
-      "statistical_significance": 4.252879404533348e-05,
+      "correlation_coefficient": 0.9454761152418765,
+      "statistical_significance": 3.619282649188669e-05,
       "lag": 0,
       "confidence_interval": [
-        0.7720620545056428,
-        0.9867993311147387
+        0.7804476985655155,
+        0.9873414056334581
       ],
-      "description": "Pearson correlation: 0.943 (p=0.000)",
+      "description": "Pearson correlation: 0.945 (p=0.000)",
       "context": {
         "n_observations": 10,
         "method": "pearson",
@@ -1513,6 +1441,78 @@
       }
     },
     {
+      "series1_id": "ETHEREUM",
+      "series2_id": "SOLANA",
+      "correlation_type": "pearson",
+      "correlation_coefficient": 0.9413843209303797,
+      "statistical_significance": 4.810088126370062e-05,
+      "lag": 0,
+      "confidence_interval": [
+        0.7654642286035553,
+        0.9863694174419126
+      ],
+      "description": "Pearson correlation: 0.941 (p=0.000)",
+      "context": {
+        "n_observations": 10,
+        "method": "pearson",
+        "contemporaneous": true
+      }
+    },
+    {
+      "series1_id": "ETHEREUM",
+      "series2_id": "SOLANA",
+      "correlation_type": "cross_correlation",
+      "correlation_coefficient": 0.9413843209303794,
+      "statistical_significance": 0.0029116129635253785,
+      "lag": -2,
+      "confidence_interval": [
+        -1,
+        1
+      ],
+      "description": "Cross-correlation at lag -2: 0.941 (SOLANA leads ETHEREUM by 2 periods)",
+      "context": {
+        "method": "cross_correlation_function",
+        "max_lags": 2,
+        "critical_value": 0.6198064213930023
+      }
+    },
+    {
+      "series1_id": "BITCOIN",
+      "series2_id": "BINANCECOIN",
+      "correlation_type": "cross_correlation",
+      "correlation_coefficient": 0.9411186704607256,
+      "statistical_significance": 0.0029196007281984127,
+      "lag": -2,
+      "confidence_interval": [
+        -1,
+        1
+      ],
+      "description": "Cross-correlation at lag -2: 0.941 (BINANCECOIN leads BITCOIN by 2 periods)",
+      "context": {
+        "method": "cross_correlation_function",
+        "max_lags": 2,
+        "critical_value": 0.6198064213930023
+      }
+    },
+    {
+      "series1_id": "BITCOIN",
+      "series2_id": "BINANCECOIN",
+      "correlation_type": "pearson",
+      "correlation_coefficient": 0.9411186704607255,
+      "statistical_significance": 4.896285994136543e-05,
+      "lag": 0,
+      "confidence_interval": [
+        0.764498010958395,
+        0.9863062045997706
+      ],
+      "description": "Pearson correlation: 0.941 (p=0.000)",
+      "context": {
+        "n_observations": 10,
+        "method": "pearson",
+        "contemporaneous": true
+      }
+    },
+    {
       "series1_id": "JP_SL.UEM.TOTL.ZS",
       "series2_id": "GB_SL.UEM.TOTL.ZS",
       "correlation_type": "pearson",
@@ -1549,89 +1549,17 @@
       }
     },
     {
-      "series1_id": "BITCOIN",
+      "series1_id": "BINANCECOIN",
       "series2_id": "CARDANO",
-      "correlation_type": "spearman",
-      "correlation_coefficient": 0.9386503067484664,
-      "statistical_significance": 5.752950235040849e-05,
-      "lag": 0,
-      "confidence_interval": [
-        0.19785355221471979,
-        1
-      ],
-      "description": "Spearman correlation: 0.939 (p=0.000)",
-      "context": {
-        "n_observations": 10,
-        "method": "spearman_rank",
-        "contemporaneous": true
-      }
-    },
-    {
-      "series1_id": "BITCOIN",
-      "series2_id": "SOLANA",
-      "correlation_type": "spearman",
-      "correlation_coefficient": 0.9386503067484664,
-      "statistical_significance": 5.752950235040849e-05,
-      "lag": 0,
-      "confidence_interval": [
-        0.19785355221471979,
-        1
-      ],
-      "description": "Spearman correlation: 0.939 (p=0.000)",
-      "context": {
-        "n_observations": 10,
-        "method": "spearman_rank",
-        "contemporaneous": true
-      }
-    },
-    {
-      "series1_id": "ETHEREUM",
-      "series2_id": "CARDANO",
-      "correlation_type": "spearman",
-      "correlation_coefficient": 0.9386503067484664,
-      "statistical_significance": 5.752950235040849e-05,
-      "lag": 0,
-      "confidence_interval": [
-        0.19785355221471979,
-        1
-      ],
-      "description": "Spearman correlation: 0.939 (p=0.000)",
-      "context": {
-        "n_observations": 10,
-        "method": "spearman_rank",
-        "contemporaneous": true
-      }
-    },
-    {
-      "series1_id": "ETHEREUM",
-      "series2_id": "SOLANA",
-      "correlation_type": "spearman",
-      "correlation_coefficient": 0.9386503067484664,
-      "statistical_significance": 5.752950235040849e-05,
-      "lag": 0,
-      "confidence_interval": [
-        0.19785355221471979,
-        1
-      ],
-      "description": "Spearman correlation: 0.939 (p=0.000)",
-      "context": {
-        "n_observations": 10,
-        "method": "spearman_rank",
-        "contemporaneous": true
-      }
-    },
-    {
-      "series1_id": "ETHEREUM",
-      "series2_id": "SOLANA",
       "correlation_type": "cross_correlation",
-      "correlation_coefficient": 0.937945511464546,
-      "statistical_significance": 0.0030165719431447524,
+      "correlation_coefficient": 0.9389512442896595,
+      "statistical_significance": 0.0029855234763553895,
       "lag": -2,
       "confidence_interval": [
         -1,
         1
       ],
-      "description": "Cross-correlation at lag -2: 0.938 (SOLANA leads ETHEREUM by 2 periods)",
+      "description": "Cross-correlation at lag -2: 0.939 (CARDANO leads BINANCECOIN by 2 periods)",
       "context": {
         "method": "cross_correlation_function",
         "max_lags": 2,
@@ -1639,20 +1567,92 @@
       }
     },
     {
-      "series1_id": "ETHEREUM",
-      "series2_id": "SOLANA",
+      "series1_id": "BINANCECOIN",
+      "series2_id": "CARDANO",
       "correlation_type": "pearson",
-      "correlation_coefficient": 0.9379455114645455,
-      "statistical_significance": 6.016695762592561e-05,
+      "correlation_coefficient": 0.9389512442896593,
+      "statistical_significance": 5.642982793781274e-05,
       "lag": 0,
       "confidence_interval": [
-        0.7530177028125483,
-        0.9855501078865824
+        0.7566442403533122,
+        0.9857899582884785
       ],
-      "description": "Pearson correlation: 0.938 (p=0.000)",
+      "description": "Pearson correlation: 0.939 (p=0.000)",
       "context": {
         "n_observations": 10,
         "method": "pearson",
+        "contemporaneous": true
+      }
+    },
+    {
+      "series1_id": "BITCOIN",
+      "series2_id": "CARDANO",
+      "correlation_type": "spearman",
+      "correlation_coefficient": 0.9386503067484664,
+      "statistical_significance": 5.752950235040849e-05,
+      "lag": 0,
+      "confidence_interval": [
+        0.19785355221471979,
+        1
+      ],
+      "description": "Spearman correlation: 0.939 (p=0.000)",
+      "context": {
+        "n_observations": 10,
+        "method": "spearman_rank",
+        "contemporaneous": true
+      }
+    },
+    {
+      "series1_id": "BITCOIN",
+      "series2_id": "SOLANA",
+      "correlation_type": "spearman",
+      "correlation_coefficient": 0.9386503067484664,
+      "statistical_significance": 5.752950235040849e-05,
+      "lag": 0,
+      "confidence_interval": [
+        0.19785355221471979,
+        1
+      ],
+      "description": "Spearman correlation: 0.939 (p=0.000)",
+      "context": {
+        "n_observations": 10,
+        "method": "spearman_rank",
+        "contemporaneous": true
+      }
+    },
+    {
+      "series1_id": "ETHEREUM",
+      "series2_id": "CARDANO",
+      "correlation_type": "spearman",
+      "correlation_coefficient": 0.9386503067484664,
+      "statistical_significance": 5.752950235040849e-05,
+      "lag": 0,
+      "confidence_interval": [
+        0.19785355221471979,
+        1
+      ],
+      "description": "Spearman correlation: 0.939 (p=0.000)",
+      "context": {
+        "n_observations": 10,
+        "method": "spearman_rank",
+        "contemporaneous": true
+      }
+    },
+    {
+      "series1_id": "ETHEREUM",
+      "series2_id": "SOLANA",
+      "correlation_type": "spearman",
+      "correlation_coefficient": 0.9386503067484664,
+      "statistical_significance": 5.752950235040849e-05,
+      "lag": 0,
+      "confidence_interval": [
+        0.19785355221471979,
+        1
+      ],
+      "description": "Spearman correlation: 0.939 (p=0.000)",
+      "context": {
+        "n_observations": 10,
+        "method": "spearman_rank",
         "contemporaneous": true
       }
     },
@@ -2035,42 +2035,6 @@
       }
     },
     {
-      "series1_id": "ETHEREUM",
-      "series2_id": "CARDANO",
-      "correlation_type": "cross_correlation",
-      "correlation_coefficient": 0.9150729760662938,
-      "statistical_significance": 0.003807137544800998,
-      "lag": -2,
-      "confidence_interval": [
-        -1,
-        1
-      ],
-      "description": "Cross-correlation at lag -2: 0.915 (CARDANO leads ETHEREUM by 2 periods)",
-      "context": {
-        "method": "cross_correlation_function",
-        "max_lags": 2,
-        "critical_value": 0.6198064213930023
-      }
-    },
-    {
-      "series1_id": "ETHEREUM",
-      "series2_id": "CARDANO",
-      "correlation_type": "pearson",
-      "correlation_coefficient": 0.9150729760662933,
-      "statistical_significance": 0.00020521056837211207,
-      "lag": 0,
-      "confidence_interval": [
-        0.6734679201887617,
-        0.9800433613709327
-      ],
-      "description": "Pearson correlation: 0.915 (p=0.000)",
-      "context": {
-        "n_observations": 10,
-        "method": "pearson",
-        "contemporaneous": true
-      }
-    },
-    {
       "series1_id": "CN_FP.CPI.TOTL.ZG",
       "series2_id": "IN_FP.CPI.TOTL.ZG",
       "correlation_type": "cross_correlation",
@@ -2125,6 +2089,42 @@
       }
     },
     {
+      "series1_id": "ETHEREUM",
+      "series2_id": "CARDANO",
+      "correlation_type": "cross_correlation",
+      "correlation_coefficient": 0.9141006193692024,
+      "statistical_significance": 0.003844582865411006,
+      "lag": -2,
+      "confidence_interval": [
+        -1,
+        1
+      ],
+      "description": "Cross-correlation at lag -2: 0.914 (CARDANO leads ETHEREUM by 2 periods)",
+      "context": {
+        "method": "cross_correlation_function",
+        "max_lags": 2,
+        "critical_value": 0.6198064213930023
+      }
+    },
+    {
+      "series1_id": "ETHEREUM",
+      "series2_id": "CARDANO",
+      "correlation_type": "pearson",
+      "correlation_coefficient": 0.9141006193692022,
+      "statistical_significance": 0.00021451277710413124,
+      "lag": 0,
+      "confidence_interval": [
+        0.6702057188520517,
+        0.9798070279207038
+      ],
+      "description": "Pearson correlation: 0.914 (p=0.000)",
+      "context": {
+        "n_observations": 10,
+        "method": "pearson",
+        "contemporaneous": true
+      }
+    },
+    {
       "series1_id": "US_FP.CPI.TOTL.ZG",
       "series2_id": "DE_FP.CPI.TOTL.ZG",
       "correlation_type": "cross_correlation",
@@ -2158,6 +2158,42 @@
         "n_observations": 10,
         "method": "pearson",
         "contemporaneous": true
+      }
+    },
+    {
+      "series1_id": "BITCOIN",
+      "series2_id": "ETHEREUM",
+      "correlation_type": "pearson",
+      "correlation_coefficient": 0.9071593874475962,
+      "statistical_significance": 0.0002902054279928604,
+      "lag": 0,
+      "confidence_interval": [
+        0.6471888602387572,
+        0.978114595932251
+      ],
+      "description": "Pearson correlation: 0.907 (p=0.000)",
+      "context": {
+        "n_observations": 10,
+        "method": "pearson",
+        "contemporaneous": true
+      }
+    },
+    {
+      "series1_id": "BITCOIN",
+      "series2_id": "ETHEREUM",
+      "correlation_type": "cross_correlation",
+      "correlation_coefficient": 0.9071593874475962,
+      "statistical_significance": 0.004121757322462116,
+      "lag": -2,
+      "confidence_interval": [
+        -1,
+        1
+      ],
+      "description": "Cross-correlation at lag -2: 0.907 (ETHEREUM leads BITCOIN by 2 periods)",
+      "context": {
+        "method": "cross_correlation_function",
+        "max_lags": 2,
+        "critical_value": 0.6198064213930023
       }
     },
     {
@@ -2212,42 +2248,6 @@
         "method": "cross_correlation_function",
         "max_lags": 2,
         "critical_value": 0.6198064213930023
-      }
-    },
-    {
-      "series1_id": "BITCOIN",
-      "series2_id": "ETHEREUM",
-      "correlation_type": "cross_correlation",
-      "correlation_coefficient": 0.9038904539078284,
-      "statistical_significance": 0.004258469171126267,
-      "lag": -2,
-      "confidence_interval": [
-        -1,
-        1
-      ],
-      "description": "Cross-correlation at lag -2: 0.904 (ETHEREUM leads BITCOIN by 2 periods)",
-      "context": {
-        "method": "cross_correlation_function",
-        "max_lags": 2,
-        "critical_value": 0.6198064213930023
-      }
-    },
-    {
-      "series1_id": "BITCOIN",
-      "series2_id": "ETHEREUM",
-      "correlation_type": "pearson",
-      "correlation_coefficient": 0.9038904539078282,
-      "statistical_significance": 0.0003319366214324942,
-      "lag": 0,
-      "confidence_interval": [
-        0.636510923702351,
-        0.9773142893077638
-      ],
-      "description": "Pearson correlation: 0.904 (p=0.000)",
-      "context": {
-        "n_observations": 10,
-        "method": "pearson",
-        "contemporaneous": true
       }
     },
     {
@@ -2524,14 +2524,14 @@
       "series1_id": "ETHEREUM",
       "series2_id": "SOLANA",
       "correlation_type": "cross_correlation",
-      "correlation_coefficient": 0.8873088117111948,
-      "statistical_significance": 0.005017364035835081,
+      "correlation_coefficient": 0.8863869656115846,
+      "statistical_significance": 0.00506294025295051,
       "lag": -1,
       "confidence_interval": [
         -1,
         1
       ],
-      "description": "Cross-correlation at lag -1: 0.887 (SOLANA leads ETHEREUM by 1 periods)",
+      "description": "Cross-correlation at lag -1: 0.886 (SOLANA leads ETHEREUM by 1 periods)",
       "context": {
         "method": "cross_correlation_function",
         "max_lags": 2,
@@ -3169,24 +3169,6 @@
       }
     },
     {
-      "series1_id": "ETHEREUM",
-      "series2_id": "BINANCECOIN",
-      "correlation_type": "cross_correlation",
-      "correlation_coefficient": 0.8279750455061617,
-      "statistical_significance": 0.008837244632181163,
-      "lag": -1,
-      "confidence_interval": [
-        -1,
-        1
-      ],
-      "description": "Cross-correlation at lag -1: 0.828 (BINANCECOIN leads ETHEREUM by 1 periods)",
-      "context": {
-        "method": "cross_correlation_function",
-        "max_lags": 2,
-        "critical_value": 0.6198064213930023
-      }
-    },
-    {
       "series1_id": "DE_SL.UEM.TOTL.ZS",
       "series2_id": "GB_NE.TRD.GNFS.ZS",
       "correlation_type": "pearson",
@@ -3244,14 +3226,32 @@
       "series1_id": "BINANCECOIN",
       "series2_id": "SOLANA",
       "correlation_type": "cross_correlation",
-      "correlation_coefficient": 0.8253162447467309,
-      "statistical_significance": 0.009057422062094478,
+      "correlation_coefficient": 0.8250540526195642,
+      "statistical_significance": 0.009079397519475174,
       "lag": -1,
       "confidence_interval": [
         -1,
         1
       ],
       "description": "Cross-correlation at lag -1: 0.825 (SOLANA leads BINANCECOIN by 1 periods)",
+      "context": {
+        "method": "cross_correlation_function",
+        "max_lags": 2,
+        "critical_value": 0.6198064213930023
+      }
+    },
+    {
+      "series1_id": "ETHEREUM",
+      "series2_id": "BINANCECOIN",
+      "correlation_type": "cross_correlation",
+      "correlation_coefficient": 0.824382213376981,
+      "statistical_significance": 0.00913592468792146,
+      "lag": -1,
+      "confidence_interval": [
+        -1,
+        1
+      ],
+      "description": "Cross-correlation at lag -1: 0.824 (BINANCECOIN leads ETHEREUM by 1 periods)",
       "context": {
         "method": "cross_correlation_function",
         "max_lags": 2,
@@ -3346,24 +3346,6 @@
         "n_observations": 10,
         "method": "spearman_rank",
         "contemporaneous": true
-      }
-    },
-    {
-      "series1_id": "ETHEREUM",
-      "series2_id": "CARDANO",
-      "correlation_type": "cross_correlation",
-      "correlation_coefficient": 0.8158294379083098,
-      "statistical_significance": 0.009883487996632079,
-      "lag": -1,
-      "confidence_interval": [
-        -1,
-        1
-      ],
-      "description": "Cross-correlation at lag -1: 0.816 (CARDANO leads ETHEREUM by 1 periods)",
-      "context": {
-        "method": "cross_correlation_function",
-        "max_lags": 2,
-        "critical_value": 0.6198064213930023
       }
     },
     {
@@ -3565,6 +3547,24 @@
       }
     },
     {
+      "series1_id": "CARDANO",
+      "series2_id": "SOLANA",
+      "correlation_type": "cross_correlation",
+      "correlation_coefficient": 0.8020356940633321,
+      "statistical_significance": 0.011204365469928979,
+      "lag": -1,
+      "confidence_interval": [
+        -1,
+        1
+      ],
+      "description": "Cross-correlation at lag -1: 0.802 (SOLANA leads CARDANO by 1 periods)",
+      "context": {
+        "method": "cross_correlation_function",
+        "max_lags": 2,
+        "critical_value": 0.6198064213930023
+      }
+    },
+    {
       "series1_id": "JP_NY.GDP.MKTP.CD",
       "series2_id": "GB_NY.GDP.MKTP.CD",
       "correlation_type": "cross_correlation",
@@ -3598,6 +3598,24 @@
         "n_observations": 10,
         "method": "pearson",
         "contemporaneous": true
+      }
+    },
+    {
+      "series1_id": "ETHEREUM",
+      "series2_id": "CARDANO",
+      "correlation_type": "cross_correlation",
+      "correlation_coefficient": 0.7992813094684481,
+      "statistical_significance": 0.011486165423249428,
+      "lag": -1,
+      "confidence_interval": [
+        -1,
+        1
+      ],
+      "description": "Cross-correlation at lag -1: 0.799 (CARDANO leads ETHEREUM by 1 periods)",
+      "context": {
+        "method": "cross_correlation_function",
+        "max_lags": 2,
+        "critical_value": 0.6198064213930023
       }
     },
     {
@@ -3648,24 +3666,6 @@
         1
       ],
       "description": "Cross-correlation at lag -1: 0.798 (GB_FP.CPI.TOTL.ZG leads IN_NY.GDP.MKTP.CD by 1 periods)",
-      "context": {
-        "method": "cross_correlation_function",
-        "max_lags": 2,
-        "critical_value": 0.6198064213930023
-      }
-    },
-    {
-      "series1_id": "CARDANO",
-      "series2_id": "SOLANA",
-      "correlation_type": "cross_correlation",
-      "correlation_coefficient": 0.7962571219877878,
-      "statistical_significance": 0.011802797595678705,
-      "lag": -1,
-      "confidence_interval": [
-        -1,
-        1
-      ],
-      "description": "Cross-correlation at lag -1: 0.796 (SOLANA leads CARDANO by 1 periods)",
       "context": {
         "method": "cross_correlation_function",
         "max_lags": 2,
@@ -3979,6 +3979,24 @@
       }
     },
     {
+      "series1_id": "BITCOIN",
+      "series2_id": "SOLANA",
+      "correlation_type": "cross_correlation",
+      "correlation_coefficient": 0.7818544824264252,
+      "statistical_significance": 0.013419387606529387,
+      "lag": -1,
+      "confidence_interval": [
+        -1,
+        1
+      ],
+      "description": "Cross-correlation at lag -1: 0.782 (SOLANA leads BITCOIN by 1 periods)",
+      "context": {
+        "method": "cross_correlation_function",
+        "max_lags": 2,
+        "critical_value": 0.6198064213930023
+      }
+    },
+    {
       "series1_id": "US_NY.GDP.MKTP.CD",
       "series2_id": "IN_SL.UEM.TOTL.ZS",
       "correlation_type": "spearman",
@@ -4048,24 +4066,6 @@
         "n_observations": 10,
         "method": "spearman_rank",
         "contemporaneous": true
-      }
-    },
-    {
-      "series1_id": "BITCOIN",
-      "series2_id": "SOLANA",
-      "correlation_type": "cross_correlation",
-      "correlation_coefficient": 0.781395535975835,
-      "statistical_significance": 0.013473971939797602,
-      "lag": -1,
-      "confidence_interval": [
-        -1,
-        1
-      ],
-      "description": "Cross-correlation at lag -1: 0.781 (SOLANA leads BITCOIN by 1 periods)",
-      "context": {
-        "method": "cross_correlation_function",
-        "max_lags": 2,
-        "critical_value": 0.6198064213930023
       }
     },
     {
@@ -4242,24 +4242,6 @@
         1
       ],
       "description": "Cross-correlation at lag -2: -0.768 (DE_SL.UEM.TOTL.ZS leads IN_NY.GDP.MKTP.CD by 2 periods)",
-      "context": {
-        "method": "cross_correlation_function",
-        "max_lags": 2,
-        "critical_value": 0.6198064213930023
-      }
-    },
-    {
-      "series1_id": "BINANCECOIN",
-      "series2_id": "CARDANO",
-      "correlation_type": "cross_correlation",
-      "correlation_coefficient": 0.7675045218656618,
-      "statistical_significance": 0.015221637382510922,
-      "lag": -1,
-      "confidence_interval": [
-        -1,
-        1
-      ],
-      "description": "Cross-correlation at lag -1: 0.768 (CARDANO leads BINANCECOIN by 1 periods)",
       "context": {
         "method": "cross_correlation_function",
         "max_lags": 2,
@@ -4584,6 +4566,24 @@
         1
       ],
       "description": "Cross-correlation at lag -1: 0.755 (GB_FP.CPI.TOTL.ZG leads DE_NY.GDP.MKTP.CD by 1 periods)",
+      "context": {
+        "method": "cross_correlation_function",
+        "max_lags": 2,
+        "critical_value": 0.6198064213930023
+      }
+    },
+    {
+      "series1_id": "BINANCECOIN",
+      "series2_id": "CARDANO",
+      "correlation_type": "cross_correlation",
+      "correlation_coefficient": 0.7547946484651069,
+      "statistical_significance": 0.01699248702813616,
+      "lag": -1,
+      "confidence_interval": [
+        -1,
+        1
+      ],
+      "description": "Cross-correlation at lag -1: 0.755 (CARDANO leads BINANCECOIN by 1 periods)",
       "context": {
         "method": "cross_correlation_function",
         "max_lags": 2,
@@ -5149,24 +5149,6 @@
       }
     },
     {
-      "series1_id": "BITCOIN",
-      "series2_id": "CARDANO",
-      "correlation_type": "cross_correlation",
-      "correlation_coefficient": 0.7232141593703031,
-      "statistical_significance": 0.02219559080607114,
-      "lag": -1,
-      "confidence_interval": [
-        -1,
-        1
-      ],
-      "description": "Cross-correlation at lag -1: 0.723 (CARDANO leads BITCOIN by 1 periods)",
-      "context": {
-        "method": "cross_correlation_function",
-        "max_lags": 2,
-        "critical_value": 0.6198064213930023
-      }
-    },
-    {
       "series1_id": "US_NE.TRD.GNFS.ZS",
       "series2_id": "CN_NE.TRD.GNFS.ZS",
       "correlation_type": "pearson",
@@ -5671,6 +5653,24 @@
       }
     },
     {
+      "series1_id": "BITCOIN",
+      "series2_id": "CARDANO",
+      "correlation_type": "cross_correlation",
+      "correlation_coefficient": 0.705669321912346,
+      "statistical_significance": 0.02564654992372839,
+      "lag": -1,
+      "confidence_interval": [
+        -1,
+        1
+      ],
+      "description": "Cross-correlation at lag -1: 0.706 (CARDANO leads BITCOIN by 1 periods)",
+      "context": {
+        "method": "cross_correlation_function",
+        "max_lags": 2,
+        "critical_value": 0.6198064213930023
+      }
+    },
+    {
       "series1_id": "JP_SL.UEM.TOTL.ZS",
       "series2_id": "GB_NE.TRD.GNFS.ZS",
       "correlation_type": "spearman",
@@ -6106,14 +6106,14 @@
       "series1_id": "BITCOIN",
       "series2_id": "BINANCECOIN",
       "correlation_type": "cross_correlation",
-      "correlation_coefficient": 0.6826107863048981,
-      "statistical_significance": 0.030880836939971346,
+      "correlation_coefficient": 0.6811916461355206,
+      "statistical_significance": 0.031230987896516904,
       "lag": -1,
       "confidence_interval": [
         -1,
         1
       ],
-      "description": "Cross-correlation at lag -1: 0.683 (BINANCECOIN leads BITCOIN by 1 periods)",
+      "description": "Cross-correlation at lag -1: 0.681 (BINANCECOIN leads BITCOIN by 1 periods)",
       "context": {
         "method": "cross_correlation_function",
         "max_lags": 2,
@@ -7039,6 +7039,24 @@
       }
     },
     {
+      "series1_id": "BITCOIN",
+      "series2_id": "ETHEREUM",
+      "correlation_type": "cross_correlation",
+      "correlation_coefficient": 0.6381517401331739,
+      "statistical_significance": 0.043589908307260616,
+      "lag": -1,
+      "confidence_interval": [
+        -1,
+        1
+      ],
+      "description": "Cross-correlation at lag -1: 0.638 (ETHEREUM leads BITCOIN by 1 periods)",
+      "context": {
+        "method": "cross_correlation_function",
+        "max_lags": 2,
+        "critical_value": 0.6198064213930023
+      }
+    },
+    {
       "series1_id": "IN_NY.GDP.MKTP.CD",
       "series2_id": "JP_SL.UEM.TOTL.ZS",
       "correlation_type": "pearson",
@@ -7158,24 +7176,6 @@
         1
       ],
       "description": "Cross-correlation at lag -1: -0.635 (DE_SL.UEM.TOTL.ZS leads JP_FP.CPI.TOTL.ZG by 1 periods)",
-      "context": {
-        "method": "cross_correlation_function",
-        "max_lags": 2,
-        "critical_value": 0.6198064213930023
-      }
-    },
-    {
-      "series1_id": "BITCOIN",
-      "series2_id": "ETHEREUM",
-      "correlation_type": "cross_correlation",
-      "correlation_coefficient": 0.6342902060025968,
-      "statistical_significance": 0.044877404046917535,
-      "lag": -1,
-      "confidence_interval": [
-        -1,
-        1
-      ],
-      "description": "Cross-correlation at lag -1: 0.634 (ETHEREUM leads BITCOIN by 1 periods)",
       "context": {
         "method": "cross_correlation_function",
         "max_lags": 2,
@@ -13398,7 +13398,7 @@
     {
       "analysis_type": "anomaly",
       "series_id": "US_SL.UEM.TOTL.ZS",
-      "timestamp": "2025-09-13T19:41:29.071835",
+      "timestamp": "2025-09-13T20:04:01.428839",
       "confidence": 0.6565101157192198,
       "primary_explanation": "Moderate spike detected in US_SL.UEM.TOTL.ZS (z-score: 2.63). Likely causes: Strong correlation with GB_NE.TRD.GNFS.ZS.",
       "contributing_factors": [
@@ -13422,7 +13422,7 @@
     {
       "analysis_type": "anomaly",
       "series_id": "US_FP.CPI.TOTL.ZG",
-      "timestamp": "2025-09-13T19:41:31.791698",
+      "timestamp": "2025-09-13T20:04:04.412453",
       "confidence": 0.5979905520053369,
       "primary_explanation": "Moderate spike detected in US_FP.CPI.TOTL.ZG (z-score: 2.39). Likely causes: Strong correlation with DE_FP.CPI.TOTL.ZG.",
       "contributing_factors": [
@@ -13446,7 +13446,7 @@
     {
       "analysis_type": "anomaly",
       "series_id": "DE_NE.TRD.GNFS.ZS",
-      "timestamp": "2025-09-13T19:41:34.543735",
+      "timestamp": "2025-09-13T20:04:07.606700",
       "confidence": 0.5881400553149478,
       "primary_explanation": "Moderate spike detected in DE_NE.TRD.GNFS.ZS (z-score: 2.35). Likely causes: Strong correlation with DE_FP.CPI.TOTL.ZG.",
       "contributing_factors": [
@@ -13470,7 +13470,7 @@
     {
       "analysis_type": "anomaly",
       "series_id": "DE_SL.UEM.TOTL.ZS",
-      "timestamp": "2025-09-13T19:41:37.794461",
+      "timestamp": "2025-09-13T20:04:10.550517",
       "confidence": 0.5361448876429163,
       "primary_explanation": "Moderate spike detected in DE_SL.UEM.TOTL.ZS (z-score: 2.14). Likely causes: Strong correlation with GB_SL.UEM.TOTL.ZS.",
       "contributing_factors": [
@@ -13494,7 +13494,7 @@
     {
       "analysis_type": "anomaly",
       "series_id": "GB_NY.GDP.MKTP.CD",
-      "timestamp": "2025-09-13T19:41:40.785582",
+      "timestamp": "2025-09-13T20:04:13.532726",
       "confidence": 0.5317937635317818,
       "primary_explanation": "Moderate spike detected in GB_NY.GDP.MKTP.CD (z-score: 2.13). Likely causes: Strong correlation with GB_FP.CPI.TOTL.ZG.",
       "contributing_factors": [
@@ -13518,7 +13518,7 @@
     {
       "analysis_type": "trend",
       "series_id": "US_NY.GDP.MKTP.CD",
-      "timestamp": "2025-09-13T19:41:46.348073",
+      "timestamp": "2025-09-13T20:04:20.386838",
       "confidence": 0.939999219288577,
       "primary_explanation": "Strong upward trend in US_NY.GDP.MKTP.CD (R\u00b2 = 0.940). Pattern may be influenced by: Correlated with IN_NY.GDP.MKTP.CD trend, Correlated with IN_NY.GDP.MKTP.CD trend.",
       "contributing_factors": [
@@ -13546,7 +13546,7 @@
     {
       "analysis_type": "trend",
       "series_id": "CN_NY.GDP.MKTP.CD",
-      "timestamp": "2025-09-13T19:41:48.986298",
+      "timestamp": "2025-09-13T20:04:23.807656",
       "confidence": 0.9412541065306207,
       "primary_explanation": "Strong upward trend in CN_NY.GDP.MKTP.CD (R\u00b2 = 0.941). Pattern may be influenced by: Correlated with US_NY.GDP.MKTP.CD trend, Correlated with IN_NY.GDP.MKTP.CD trend.",
       "contributing_factors": [
@@ -13574,7 +13574,7 @@
     {
       "analysis_type": "trend",
       "series_id": "IN_NY.GDP.MKTP.CD",
-      "timestamp": "2025-09-13T19:41:51.633803",
+      "timestamp": "2025-09-13T20:04:26.755616",
       "confidence": 0.9372413481327113,
       "primary_explanation": "Strong upward trend in IN_NY.GDP.MKTP.CD (R\u00b2 = 0.937). Pattern may be influenced by: Correlated with US_NY.GDP.MKTP.CD trend, Correlated with US_NY.GDP.MKTP.CD trend.",
       "contributing_factors": [
@@ -13602,7 +13602,7 @@
     {
       "analysis_type": "correlation",
       "series_id": "US_NY.GDP.MKTP.CD \u00d7 IN_NY.GDP.MKTP.CD",
-      "timestamp": "2025-09-13T19:41:54.326725",
+      "timestamp": "2025-09-13T20:04:29.712827",
       "confidence": 0.9999999069254001,
       "primary_explanation": "Very strong positive correlation between US_NY.GDP.MKTP.CD and IN_NY.GDP.MKTP.CD (r = 0.988). Highly statistically significant. ",
       "contributing_factors": [
@@ -13623,17 +13623,17 @@
     },
     {
       "analysis_type": "correlation",
-      "series_id": "CARDANO \u00d7 SOLANA",
-      "timestamp": "2025-09-13T19:41:54.368306",
-      "confidence": 0.9999997207522802,
-      "primary_explanation": "Very strong positive correlation between CARDANO and SOLANA (r = 0.984). Highly statistically significant. ",
+      "series_id": "US_NY.GDP.MKTP.CD \u00d7 IN_NY.GDP.MKTP.CD",
+      "timestamp": "2025-09-13T20:04:29.757896",
+      "confidence": 0.9999997069475401,
+      "primary_explanation": "Very strong positive correlation between US_NY.GDP.MKTP.CD and IN_NY.GDP.MKTP.CD (r = 0.984). Highly statistically significant. ",
       "contributing_factors": [
-        "Both series are in unknown domain"
+        "Both series are in macroeconomic domain"
       ],
       "evidence": {
         "correlation_metrics": {
-          "coefficient": 0.9840287142125043,
-          "p_value": 2.7924771986196333e-07,
+          "coefficient": 0.9838339341803428,
+          "p_value": 2.930524598454087e-07,
           "type": "pearson",
           "lag": 0
         }
@@ -13645,24 +13645,24 @@
     },
     {
       "analysis_type": "correlation",
-      "series_id": "CARDANO \u00d7 SOLANA",
-      "timestamp": "2025-09-13T19:41:54.410063",
-      "confidence": 0.9981403194567438,
-      "primary_explanation": "Very strong positive correlation between CARDANO and SOLANA (r = 0.984) with SOLANA leading by 2 periods. Highly statistically significant. ",
+      "series_id": "US_NY.GDP.MKTP.CD \u00d7 IN_NY.GDP.MKTP.CD",
+      "timestamp": "2025-09-13T20:04:29.804896",
+      "confidence": 0.99813643583577,
+      "primary_explanation": "Very strong positive correlation between US_NY.GDP.MKTP.CD and IN_NY.GDP.MKTP.CD (r = 0.984) with IN_NY.GDP.MKTP.CD leading by 2 periods. Highly statistically significant. ",
       "contributing_factors": [
-        "Both series are in unknown domain",
-        "SOLANA leads CARDANO by 2 periods"
+        "Both series are in macroeconomic domain",
+        "IN_NY.GDP.MKTP.CD leads US_NY.GDP.MKTP.CD by 2 periods"
       ],
       "evidence": {
         "correlation_metrics": {
-          "coefficient": 0.9840287142125042,
-          "p_value": 0.001859680543256248,
+          "coefficient": 0.9838339341803426,
+          "p_value": 0.0018635641642299472,
           "type": "cross_correlation",
           "lag": -2
         },
         "lead_lag": {
-          "leading": "SOLANA",
-          "lagging": "CARDANO",
+          "leading": "IN_NY.GDP.MKTP.CD",
+          "lagging": "US_NY.GDP.MKTP.CD",
           "lag_periods": 2
         }
       },

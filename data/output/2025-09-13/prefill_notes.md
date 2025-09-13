@@ -10,13 +10,13 @@
 - **Anomalies**: 12 anomalies detected
 -   - US_SL.UEM.TOTL.ZS: 8.05 (z-score: 2.63)
 -   - US_FP.CPI.TOTL.ZG: 8.00 (z-score: 2.39)
-- **Trends**: 13 significant trends
+- **Trends**: 12 significant trends
 -   - US_NY.GDP.MKTP.CD: 📈 strong trend
 -   - CN_NY.GDP.MKTP.CD: 📈 strong trend
 - **Correlations**: 461 strong correlations found
 -   - US_NY.GDP.MKTP.CD ↔ IN_NY.GDP.MKTP.CD: 0.99 (spearman)
--   - CARDANO ↔ SOLANA: 0.98 (pearson)
+-   - US_NY.GDP.MKTP.CD ↔ IN_NY.GDP.MKTP.CD: 0.98 (pearson)
 - **Insights**: 11 analytical explanations generated
 -   - 6 high-confidence insights available
-- **Data Package**: Generated at 2025-09-13T19:41:26.044573
+- **Data Package**: Generated at 2025-09-13T20:03:58.165703
 - **Sources**: fred, commodities, crypto, economic, noaa

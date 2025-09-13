@@ -2,7 +2,7 @@
   "id": "a50d2572-0ae1-4701-8bac-befdd521f680",
   "title": "Test Brief",
   "package_date": "2025-09-13",
-  "current_version": "b458505e-dd24-4675-83ea-5a54d9e17313",
+  "current_version": "0625eae3-e1cf-4540-96e2-2f1531ed5eb1",
   "versions": {
     "72e56aaa-c27e-4d88-a3d4-8c8f1849a366": {
       "id": "72e56aaa-c27e-4d88-a3d4-8c8f1849a366",
@@ -36,10 +36,27 @@
       "approvals": [],
       "parent_version": "72e56aaa-c27e-4d88-a3d4-8c8f1849a366",
       "tags": []
+    },
+    "0625eae3-e1cf-4540-96e2-2f1531ed5eb1": {
+      "id": "0625eae3-e1cf-4540-96e2-2f1531ed5eb1",
+      "version_number": "1.2",
+      "author": "template_editor",
+      "timestamp": "2025-09-13T19:53:11.471602",
+      "content": "edited this",
+      "metadata": {
+        "updated_from": "b458505e-dd24-4675-83ea-5a54d9e17313",
+        "package_date": "2025-09-13",
+        "commit_message": "Updated via template editor"
+      },
+      "state": "draft",
+      "comments": [],
+      "approvals": [],
+      "parent_version": "b458505e-dd24-4675-83ea-5a54d9e17313",
+      "tags": []
     }
   },
   "created_at": "2025-09-13T13:31:07.603611",
-  "updated_at": "2025-09-13T15:37:11.449869",
+  "updated_at": "2025-09-13T19:53:11.471602",
   "author": "test_author",
   "reviewers": [],
   "file_path": "documents/2025-09-13_brief.md"

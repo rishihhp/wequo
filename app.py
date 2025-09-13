@@ -7,7 +7,7 @@ Combines both authoring and monitoring dashboards into a single Flask app
 import os
 import sys
 from pathlib import Path
-from flask import Flask, render_template_string, redirect, url_for, jsonify, render_template
+from flask import Flask, render_template_string, redirect, url_for, jsonify, render_template, request
 
 # Add src to Python path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
@@ -245,6 +245,53 @@ def create_main_app():
             return jsonify(json.loads(summary_path.read_text()))
         else:
             return jsonify({"error": "Summary not found"}), 404
+    
+    @app.route("/api/template/<date>/save", methods=['POST'])
+    def save_template_edit(date: str):
+        """Save template edit as a new version."""
+        try:
+            data = request.get_json()
+            content = data.get('content', '')
+            author = data.get('author', 'unknown')
+            commit_message = data.get('commit_message', 'Updated via template editor')
+            
+            if not content:
+                return jsonify({"error": "No content provided"}), 400
+            
+            # Check if document exists
+            document = vc.get_document_by_date(date)
+            
+            if not document:
+                # Create new document
+                title = f"Weekly Brief - {date}"
+                document = vc.create_document(
+                    title=title,
+                    package_date=date,
+                    author=author,
+                    initial_content=content,
+                    reviewers=[]
+                )
+            else:
+                # Update existing document
+                vc.update_document(
+                    document=document,
+                    content=content,
+                    author=author,
+                    commit_message=commit_message
+                )
+            
+            return jsonify({
+                "success": True,
+                "document_id": document.id,
+                "version_id": document.current_version,
+                "message": "Template saved successfully"
+            })
+            
+        except Exception as e:
+            return jsonify({
+                "success": False,
+                "error": str(e)
+            }), 500
     
     # Add pipeline execution API endpoints
     pipeline_status = {

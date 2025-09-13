@@ -178,7 +178,7 @@ class MonitoringDashboard:
                 }), 500
         
         # Search routes
-        @self.app.route('/monitoring/search')
+        @self.app.route('/search')
         def search_page():
             """Search interface page."""
             query = request.args.get('q', '')
