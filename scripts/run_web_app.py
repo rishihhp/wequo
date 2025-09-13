@@ -18,9 +18,9 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     debug = os.environ.get("DEBUG", "false").lower() == "true"
     
-    print(f"🚀 Starting WeQuo Author Dashboard")
-    print(f"📊 Dashboard: http://{host}:{port}")
-    print(f"🔧 Debug mode: {debug}")
-    print(f"📁 Data directory: {app.config['OUTPUT_ROOT']}")
+    print(f"Starting WeQuo Author Dashboard")
+    print(f"Dashboard: http://{host}:{port}")
+    print(f"Debug mode: {debug}")
+    print(f"Data directory: {app.config['OUTPUT_ROOT']}")
     
     app.run(host=host, port=port, debug=debug)

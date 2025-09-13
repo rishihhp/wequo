@@ -6,17 +6,26 @@ from typing import Dict, Any, List
 from datetime import datetime
 
 from flask import Flask, render_template, request, jsonify, send_file, redirect, url_for
+from flask_cors import CORS
 import pandas as pd
 
 
 def create_app() -> Flask:
     """Create the WeQuo author web application."""
-    app = Flask(__name__)
+    # Determine repo root and templates directory relative to this file
+    # Path(__file__).resolve().parents[3] points to the repository root (wequo/)
+    module_dir = Path(__file__).resolve().parents[3]
+    templates_dir = module_dir / "templates"
+
+    # Create Flask app and point Jinja to the repo templates directory
+    app = Flask(__name__, template_folder=str(templates_dir))
+    # Enable CORS for API endpoints during development
+    CORS(app, resources={r"/api/*": {"origins": "*"}})
     app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key")
     
-    # Configuration
-    app.config["OUTPUT_ROOT"] = Path("data/output")
-    app.config["TEMPLATE_PATH"] = Path("docs/template.md")
+    # Configuration (store absolute paths)
+    app.config["OUTPUT_ROOT"] = (module_dir / "data" / "output")
+    app.config["TEMPLATE_PATH"] = module_dir / "docs" / "template.md"
     
     @app.route("/")
     def index():
@@ -51,12 +60,12 @@ def create_app() -> Flask:
         # Generate pre-filled template
         template_content = generate_prefilled_template(package_data, date)
         
-        # Save to temporary file
+        # Save to temporary file (ensure UTF-8 encoding to support emojis and other Unicode)
         temp_path = package_dir / "template_prefilled.md"
-        temp_path.write_text(template_content)
-        
-        return send_file(temp_path, as_attachment=True, 
-                        download_name=f"wequo_brief_{date}.md")
+        temp_path.write_text(template_content, encoding="utf-8")
+
+        return send_file(temp_path, as_attachment=True,
+                         download_name=f"wequo_brief_{date}.md")
     
     @app.route("/api/packages")
     def api_packages():
@@ -74,9 +83,17 @@ def create_app() -> Flask:
         
         summary_path = package_dir / "package_summary.json"
         if summary_path.exists():
-            return jsonify(json.loads(summary_path.read_text()))
+            return jsonify(json.loads(summary_path.read_text(encoding="utf-8")))
         else:
             return jsonify({"error": "Summary not found"}), 404
+
+    # Add permissive CORS headers for local development and Vite dev server
+    @app.after_request
+    def add_cors_headers(response):
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Methods'] = 'GET,POST,OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
+        return response
     
     return app
 
@@ -95,7 +112,7 @@ def get_available_packages() -> List[Dict[str, Any]]:
             summary_path = package_dir / "package_summary.json"
             if summary_path.exists():
                 try:
-                    summary = json.loads(summary_path.read_text())
+                    summary = json.loads(summary_path.read_text(encoding="utf-8"))
                     packages.append({
                         "date": package_dir.name,
                         "timestamp": summary.get("timestamp", ""),
@@ -127,7 +144,8 @@ def load_package_data(package_dir: Path) -> Dict[str, Any]:
     # Load summary
     summary_path = package_dir / "package_summary.json"
     if summary_path.exists():
-        data["summary"] = json.loads(summary_path.read_text())
+        # Read JSON summary with UTF-8 encoding
+        data["summary"] = json.loads(summary_path.read_text(encoding="utf-8"))
     
     # Load CSV files
     for csv_file in package_dir.glob("*.csv"):
@@ -139,7 +157,8 @@ def load_package_data(package_dir: Path) -> Dict[str, Any]:
     
     # Load reports
     for md_file in package_dir.glob("*.md"):
-        data["reports"][md_file.stem] = md_file.read_text()
+        # Read markdown reports as UTF-8 (templates or reports may contain emojis)
+        data["reports"][md_file.stem] = md_file.read_text(encoding="utf-8")
     
     return data
 
@@ -151,7 +170,8 @@ def generate_prefilled_template(package_data: Dict[str, Any], date: str) -> str:
     if not template_path.exists():
         return "# Template not found"
     
-    template_content = template_path.read_text()
+    # Read template using UTF-8 to preserve any Unicode characters
+    template_content = template_path.read_text(encoding="utf-8")
     
     # Get summary data
     summary = package_data.get("summary", {})

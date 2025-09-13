@@ -8,3 +8,4 @@ flask>=2.0.0
 click>=8.0.0
 numpy>=1.21.0
 scipy>=1.9.0
+flask-cors>=3.0.10
