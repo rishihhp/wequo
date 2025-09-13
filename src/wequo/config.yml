@@ -114,7 +114,7 @@ connectors:
       - "826" # United Kingdom
 
   noaa:
-    enabled: false
+    enabled: true
     api_key: ""
     datasets:
       - GHCND # Global Historical Climatology Network Daily

@@ -1,0 +1,23 @@
+{
+  "run_id": "run_1757761846",
+  "start_time": "2025-09-13T16:40:46.539833",
+  "connectors": [
+    "fred",
+    "commodities",
+    "crypto",
+    "economic"
+  ],
+  "status": "success",
+  "end_time": "2025-09-13T16:41:51.366435",
+  "duration_seconds": 64.826602,
+  "connectors_succeeded": [
+    "fred",
+    "commodities",
+    "crypto",
+    "economic"
+  ],
+  "connectors_failed": [],
+  "data_points_collected": 426,
+  "errors": [],
+  "output_dir": "D:\\PV\\wequo-1\\wequo\\data\\output\\2025-09-13"
+}

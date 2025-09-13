@@ -33,7 +33,7 @@ def main():
     sla_tracker = SLATracker(monitoring_engine, monitoring_config)
     
     # Create and run dashboard
-    dashboard = MonitoringDashboard(monitoring_engine, alert_manager, sla_tracker)
+    dashboard = MonitoringDashboard(monitoring_engine, alert_manager, sla_tracker, output_root)
     
     print("Starting WeQuo Monitoring Dashboard...")
     print("Dashboard will be available at: http://localhost:5001")

@@ -32,33 +32,69 @@ from wequo.metadata import MetadataTracker, add_metadata_to_dataframe
 
 
 def main() -> int:
-    load_dotenv()
-    with open("src/wequo/config.yml", "r") as fh:
-        cfg = yaml.safe_load(fh)
+    try:
+        load_dotenv()
+        
+        # Try to load config from multiple possible locations
+        config_paths = [
+            "src/wequo/config.yml",
+            "wequo/src/wequo/config.yml",
+            Path(__file__).parent.parent / "src" / "wequo" / "config.yml"
+        ]
+        
+        cfg = None
+        for config_path in config_paths:
+            try:
+                with open(config_path, "r") as fh:
+                    cfg = yaml.safe_load(fh)
+                print(f"Loaded config from: {config_path}")
+                break
+            except FileNotFoundError:
+                continue
+        
+        if cfg is None:
+            print("Error: Could not find config.yml file")
+            return 1
 
-    output_root = Path(cfg["run"]["output_root"]).resolve()
-    lookback_days = int(cfg["run"].get("lookback_days", 7))
-    start, end = daterange_lookback(lookback_days)
+        output_root = Path(cfg["run"]["output_root"]).resolve()
+        lookback_days = int(cfg["run"].get("lookback_days", 7))
+        start, end = daterange_lookback(lookback_days)
 
-    outdir = output_root / end
-    ensure_dir(outdir)
+        outdir = output_root / end
+        ensure_dir(outdir)
+        
+        print(f"Output directory: {outdir}")
+        print(f"Date range: {start} to {end}")
+        
+    except Exception as e:
+        print(f"Error during initialization: {e}")
+        return 1
 
-    # Initialize monitoring
+    # Initialize monitoring with error handling
     monitoring_config = cfg.get("monitoring", {})
     monitoring_enabled = monitoring_config.get("enabled", True)
     
-    if monitoring_enabled:
-        print("Initializing monitoring system...")
-        monitoring_engine = MonitoringEngine(monitoring_config, output_root)
-        alert_manager = AlertManager(monitoring_config, monitoring_engine.monitoring_dir)
-        sla_tracker = SLATracker(monitoring_engine, monitoring_config)
-        
-        # Start pipeline run monitoring
-        connectors_to_run = [name for name, config in cfg["connectors"].items() if config.get("enabled", False)]
-        run_id = monitoring_engine.start_pipeline_run(connectors_to_run)
-        print(f"Monitoring directory created at: {monitoring_engine.monitoring_dir}")
-    else:
-        print("Monitoring is disabled in configuration")
+    try:
+        if monitoring_enabled:
+            print("Initializing monitoring system...")
+            monitoring_engine = MonitoringEngine(monitoring_config, output_root)
+            alert_manager = AlertManager(monitoring_config, monitoring_engine.monitoring_dir)
+            sla_tracker = SLATracker(monitoring_engine, monitoring_config)
+            
+            # Start pipeline run monitoring
+            connectors_to_run = [name for name, config in cfg["connectors"].items() if config.get("enabled", False)]
+            run_id = monitoring_engine.start_pipeline_run(connectors_to_run)
+            print(f"Monitoring directory created at: {monitoring_engine.monitoring_dir}")
+        else:
+            print("Monitoring is disabled in configuration")
+            monitoring_engine = None
+            alert_manager = None
+            sla_tracker = None
+            run_id = None
+    except Exception as e:
+        print(f"Warning: Monitoring initialization failed: {e}")
+        print("Continuing without monitoring...")
+        monitoring_enabled = False
         monitoring_engine = None
         alert_manager = None
         sla_tracker = None
@@ -74,11 +110,11 @@ def main() -> int:
     metadata_tracker = MetadataTracker()
 
     # FRED
-    if cfg["connectors"]["fred"]["enabled"]:
+    if cfg["connectors"].get("fred", {}).get("enabled", False):
         try:
             print("Fetching FRED data...")
             fred = FredConnector(
-                series_ids=cfg["connectors"]["fred"]["series_ids"],
+                series_ids=cfg["connectors"]["fred"].get("series_ids", []),
                 api_key=os.environ.get("FRED_API_KEY", ""),
                 lookback_start=start,
                 lookback_end=end,
@@ -109,6 +145,8 @@ def main() -> int:
             connectors_failed.append("fred")
             errors.append(f"FRED connector failed: {str(e)}")
             print(f"Error in FRED connector: {e}")
+    else:
+        print("FRED connector is disabled")
 
     # Commodities
     if cfg["connectors"]["commodities"]["enabled"]:
@@ -310,20 +348,53 @@ def main() -> int:
 
     # Validation
     print("Running validation...")
-    results = v.validate_frames(frames)
-    report_lines = ["# QA Report\n"]
-    for r in results:
-        report_lines.append(f"- {r.name}: rows={r.rows}, latest_date={r.latest_date}")
-    write_md(outdir / "qa_report.md", "\n".join(report_lines))
+    try:
+        results = v.validate_frames(frames)
+        report_lines = ["# QA Report\n"]
+        for r in results:
+            report_lines.append(f"- {r.name}: rows={r.rows}, latest_date={r.latest_date}")
+        write_md(outdir / "qa_report.md", "\n".join(report_lines))
+        print(f"Validation completed: {len(results)} datasets validated")
+    except Exception as e:
+        print(f"Warning: Validation failed: {e}")
+        # Write a simple report as fallback
+        report_lines = ["# QA Report\n", "Validation failed, but data collection completed.\n"]
+        for name, df in frames.items():
+            if not df.empty:
+                report_lines.append(f"- {name}: {len(df)} rows")
+        write_md(outdir / "qa_report.md", "\n".join(report_lines))
 
     # Aggregation with analytics and provenance
     print("Running analytics and aggregation...")
-    analytics_enabled = cfg.get("analytics", {}).get("enabled", True)
-    agg = Aggregator(outdir, analytics_enabled=analytics_enabled, metadata_tracker=metadata_tracker)
-    summary = agg.summarize(frames, metadata_tracker=metadata_tracker)
-    agg.write_prefill(summary)
+    try:
+        analytics_enabled = cfg.get("analytics", {}).get("enabled", True)
+        agg = Aggregator(outdir, analytics_enabled=analytics_enabled, metadata_tracker=metadata_tracker)
+        summary = agg.summarize(frames, metadata_tracker=metadata_tracker)
+        agg.write_prefill(summary)
+        print("Analytics and aggregation completed successfully")
+    except Exception as e:
+        print(f"Warning: Analytics failed: {e}")
+        # Create a basic summary as fallback
+        basic_summary = {
+            "timestamp": pd.Timestamp.now().isoformat(),
+            "sources": list(frames.keys()),
+            "total_data_points": sum(len(df) for df in frames.values()),
+            "connectors_succeeded": connectors_succeeded,
+            "connectors_failed": connectors_failed
+        }
+        
+        # Write basic prefill notes
+        basic_notes = ["# Data Collection Summary\n"]
+        basic_notes.append(f"- Total data points: {basic_summary['total_data_points']}")
+        basic_notes.append(f"- Successful connectors: {', '.join(connectors_succeeded)}")
+        if connectors_failed:
+            basic_notes.append(f"- Failed connectors: {', '.join(connectors_failed)}")
+        
+        write_md(outdir / "prefill_notes.md", "\n".join(basic_notes))
 
     print(f"Wrote weekly package to {outdir}")
+    print(f"Summary: {len(connectors_succeeded)} successful, {len(connectors_failed)} failed connectors")
+    print(f"Total data points collected: {total_data_points}")
     
     # Complete pipeline run monitoring
     if monitoring_enabled and monitoring_engine:

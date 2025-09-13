@@ -4,174 +4,649 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WeQuo Brief: {{ date }}</title>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
       body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          sans-serif;
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #f8f9fa;
-        line-height: 1.6;
-      }
-      .header {
-        background: white;
-        padding: 20px;
-        border-radius: 8px;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .header h1 {
+          "Helvetica Neue", sans-serif;
+        background: linear-gradient(
+          135deg,
+          #0f0c29 0%,
+          #24243e 50%,
+          #404041 100%
+        );
+        min-height: 100vh;
+        padding: 0;
         margin: 0;
-        font-size: 1.8em;
+        line-height: 1.6;
         color: #333;
       }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+      /* Navigation Bar */
+      .navbar {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        padding: 15px 30px;
+        margin: 20px;
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 20px;
+        z-index: 100;
+      }
+
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.5em;
+        font-weight: 700;
+        color: #2d3748;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 8px;
+      }
+
+      .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        border-radius: 12px;
+        text-decoration: none;
+        color: #718096;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+
+      .nav-link:hover,
+      .nav-link.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+      }
+
+      .header {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        padding: 40px 50px;
+        margin: 30px 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        text-align: center;
+      }
+
+      .header h1 {
+        color: #2d3748;
+        font-size: 2.8em;
+        font-weight: 800;
+        margin-bottom: 16px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      .header-subtitle {
+        color: #718096;
+        font-size: 1.2em;
+        margin-bottom: 30px;
+        font-weight: 500;
+      }
+
       .actions {
         display: flex;
-        gap: 10px;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
       }
+
       .btn {
-        padding: 8px 16px;
+        padding: 12px 24px;
         border: none;
-        border-radius: 4px;
+        border-radius: 12px;
         cursor: pointer;
         text-decoration: none;
-        font-size: 13px;
-        font-weight: 500;
-        transition: all 0.2s;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
       }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      }
+
       .btn-primary {
-        background-color: #007bff;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
       }
+
       .btn-primary:hover {
-        background-color: #0056b3;
+        background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
       }
-      .btn-secondary {
-        background-color: #6c757d;
+
+      .btn-success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         color: white;
       }
+
+      .btn-success:hover {
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      }
+
+      .btn-secondary {
+        background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+        color: white;
+      }
+
       .btn-secondary:hover {
-        background-color: #545b62;
+        background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+      }
+
+      .save-status {
+        margin-left: 15px;
+        font-size: 14px;
+        color: #718096;
+        font-weight: 500;
       }
       .editor-container {
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         overflow: hidden;
+        margin: 20px;
+        transition: all 0.3s ease;
       }
+
+      .editor-container:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.12);
+      }
+
       .editor-toolbar {
-        background: #f8f9fa;
-        padding: 10px 15px;
-        border-bottom: 1px solid #dee2e6;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px 30px;
         display: flex;
         justify-content: space-between;
         align-items: center;
       }
+
       .editor-toolbar h3 {
         margin: 0;
-        font-size: 1.1em;
-        color: #495057;
+        font-size: 1.3em;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
       }
+
+      .editor-info {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.9em;
+        font-weight: 500;
+      }
+
       .template-editor {
         width: 100%;
-        min-height: 600px;
-        padding: 20px;
+        min-height: 700px;
+        padding: 30px;
         border: none;
         outline: none;
         font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas,
           "Courier New", monospace;
-        font-size: 14px;
-        line-height: 1.6;
+        font-size: 15px;
+        line-height: 1.7;
         resize: vertical;
-        color: #333;
+        color: #2d3748;
+        background: #f8fafc;
+        transition: all 0.3s ease;
       }
+
       .template-editor:focus {
-        background-color: #fff;
+        background-color: #ffffff;
+        box-shadow: inset 0 0 0 2px rgba(102, 126, 234, 0.2);
       }
+
       .copy-feedback {
-        background: #28a745;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         color: white;
-        padding: 5px 10px;
-        border-radius: 4px;
-        font-size: 12px;
+        padding: 12px 20px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
         opacity: 0;
-        transition: opacity 0.3s;
+        transition: all 0.3s ease;
         position: fixed;
-        top: 20px;
-        right: 20px;
+        top: 30px;
+        right: 30px;
         z-index: 1000;
+        box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+        display: flex;
+        align-items: center;
+        gap: 8px;
       }
+
       .copy-feedback.show {
         opacity: 1;
+        transform: translateY(0);
       }
-      @media (max-width: 768px) {
-        body {
-          padding: 10px;
-        }
+
+      .copy-feedback:not(.show) {
+        transform: translateY(-20px);
+      }
+      @media (max-width: 1024px) {
         .header {
-          flex-direction: column;
-          gap: 15px;
+          margin: 20px 10px;
+          padding: 30px 25px;
         }
+
+        .nav-links {
+          flex-wrap: wrap;
+          gap: 4px;
+        }
+
+        .nav-link {
+          padding: 10px 16px;
+          font-size: 0.9em;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .navbar {
+          margin: 10px;
+          padding: 12px 20px;
+        }
+
+        .nav-brand {
+          font-size: 1.3em;
+        }
+
+        .nav-links {
+          display: none;
+        }
+
+        .header {
+          margin: 10px 5px;
+          padding: 20px 15px;
+        }
+
+        .header h1 {
+          font-size: 2.2em;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .header-subtitle {
+          font-size: 1em;
+        }
+
         .actions {
+          flex-direction: column;
           width: 100%;
+        }
+
+        .btn {
           justify-content: center;
         }
+
+        .editor-container {
+          margin: 10px 5px;
+        }
+
+        .editor-toolbar {
+          padding: 15px 20px;
+          flex-direction: column;
+          gap: 10px;
+          text-align: center;
+        }
+
+        .template-editor {
+          font-size: 13px;
+          padding: 20px;
+          min-height: 500px;
+        }
+
+        .copy-feedback {
+          top: 20px;
+          right: 20px;
+          font-size: 12px;
+          padding: 8px 16px;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .container {
+          padding: 0 10px;
+        }
+
+        .header h1 {
+          font-size: 1.8em;
+        }
+
+        .actions {
+          gap: 8px;
+        }
+
+        .btn {
+          font-size: 12px;
+          padding: 10px 16px;
+        }
+
         .template-editor {
           font-size: 12px;
           padding: 15px;
+          line-height: 1.5;
         }
       }
     </style>
   </head>
   <body>
-    <div class="header">
-      <h1>📝 WeQuo Brief: {{ date }}</h1>
-      <div class="actions">
-        <button onclick="copyToClipboard()" class="btn btn-primary">
-          Copy
-        </button>
-        <a href="/template/{{ date }}/download" class="btn btn-secondary"
-          >Download</a
-        >
-        <a href="/package/{{ date }}" class="btn btn-secondary">← Back</a>
-      </div>
-    </div>
+    <div class="container">
+      <!-- Navigation Bar -->
+      <nav class="navbar">
+        <div class="nav-brand">
+          <i
+            data-lucide="edit-3"
+            style="width: 32px; height: 32px; color: #667eea"
+          ></i>
+          <span>WeQuo Editor</span>
+        </div>
+        <div class="nav-links">
+          <a href="/" class="nav-link">
+            <i data-lucide="home"></i>
+            Dashboard
+          </a>
+          <a href="/package/{{ date }}" class="nav-link">
+            <i data-lucide="database"></i>
+            Package
+          </a>
+          <a href="/authoring" class="nav-link">
+            <i data-lucide="layers"></i>
+            Authoring
+          </a>
+        </div>
+      </nav>
 
-    <div class="editor-container">
-      <div class="editor-toolbar">
-        <h3>Editable WeQuo Brief</h3>
-        <small style="color: #6c757d"
-          >Click in the text area to edit • Auto-saves locally</small
-        >
+      <!-- Header with Template Overview -->
+      <div class="header">
+        <h1>
+          <i data-lucide="file-text"></i>
+          WeQuo Brief: {{ date }}
+        </h1>
+        <div class="header-subtitle">
+          Interactive template editor with real-time collaboration and version
+          control
+        </div>
+
+        <div class="actions">
+          <button onclick="saveTemplate()" class="btn btn-success">
+            <i data-lucide="save"></i>
+            Save Version
+          </button>
+          <button onclick="copyToClipboard()" class="btn btn-primary">
+            <i data-lucide="copy"></i>
+            Copy to Clipboard
+          </button>
+          <a href="/template/{{ date }}/download" class="btn btn-secondary">
+            <i data-lucide="download"></i>
+            Download
+          </a>
+          <a href="/authoring" class="btn btn-secondary">
+            <i data-lucide="layers"></i>
+            Authoring
+          </a>
+          <span id="save-status" class="save-status"></span>
+        </div>
       </div>
-      <textarea class="template-editor" id="templateEditor" spellcheck="false">
+
+      <!-- Prefill Notes Section -->
+      {% if prefill_notes %}
+      <div class="section" style="margin: 30px 20px">
+        <h3>
+          <i data-lucide="sticky-note"></i>
+          Prefilled Notes
+        </h3>
+        <div
+          class="preview"
+          style="
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+            white-space: pre-line;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono',
+              Consolas, 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+          "
+        >
+          {{ prefill_notes }}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Pre-filled Executive Summary Section -->
+      {% if package_data.summary.analytics %}
+      <div class="section" style="margin: 30px 20px">
+        <h3>
+          <i data-lucide="trending-up"></i>
+          Pre-filled Executive Summary
+        </h3>
+        <div
+          class="preview"
+          style="
+            background: #f0f9ff;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #0ea5e9;
+          "
+        >
+          <h4 style="color: #0c4a6e; margin-bottom: 16px; font-size: 1.1em">
+            Key Market Changes:
+          </h4>
+          {% if package_data.summary.analytics.top_deltas %} {% for delta in
+          package_data.summary.analytics.top_deltas[:5] %}
+          <div
+            style="
+              margin-bottom: 8px;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+            "
+          >
+            <span style="color: #0ea5e9">📈</span>
+            <strong>{{ delta.series_id }}</strong>: {{
+            "%.1f"|format(delta.delta_pct) }}% change ({{
+            "%.2f"|format(delta.old_value) }} → {{
+            "%.2f"|format(delta.new_value) }})
+          </div>
+          {% endfor %} {% endif %} {% if
+          package_data.summary.analytics.anomalies %}
+          <h4 style="color: #0c4a6e; margin: 20px 0 16px 0; font-size: 1.1em">
+            Key Anomalies:
+          </h4>
+          {% for anomaly in package_data.summary.analytics.anomalies[:3] %}
+          <div
+            style="
+              margin-bottom: 8px;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+            "
+          >
+            <span style="color: #dc2626">⚠️</span>
+            <strong>{{ anomaly.series_id }}</strong>: {{
+            "%.2f"|format(anomaly.value) }} (z-score: {{
+            "%.2f"|format(anomaly.z_score) }})
+          </div>
+          {% endfor %} {% endif %}
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="editor-container">
+        <div class="editor-toolbar">
+          <h3>
+            <i data-lucide="edit"></i>
+            Editable WeQuo Brief
+          </h3>
+          <div class="editor-info">
+            Real-time editing • Auto-saves locally • Keyboard shortcuts enabled
+          </div>
+        </div>
+        <textarea
+          class="template-editor"
+          id="templateEditor"
+          spellcheck="false"
+          placeholder="Start writing your WeQuo brief here..."
+        >
 {{ template_content }}</textarea
-      >
-    </div>
+        >
+      </div>
 
-    <div class="copy-feedback" id="copyFeedback">Copied to clipboard!</div>
+      <div class="copy-feedback" id="copyFeedback">
+        <i data-lucide="check-circle" style="width: 16px; height: 16px"></i>
+        Copied to clipboard!
+      </div>
+    </div>
 
     <script>
-      const editor = document.getElementById("templateEditor");
+      // Initialize Lucide icons
+      lucide.createIcons();
 
-      // Auto-save to localStorage
+      const editor = document.getElementById("templateEditor");
+      let saveTimeout;
+
+      // Auto-save to localStorage with debouncing
       editor.addEventListener("input", function () {
-        localStorage.setItem("wequo-brief-{{ date }}", editor.value);
+        clearTimeout(saveTimeout);
+        saveTimeout = setTimeout(() => {
+          localStorage.setItem("wequo-brief-{{ date }}", editor.value);
+          updateSaveStatus("Auto-saved locally", "#10b981");
+        }, 1000);
       });
 
-      // Load from localStorage on page load
-      window.addEventListener("load", function () {
-        const saved = localStorage.getItem("wequo-brief-{{ date }}");
-        if (saved && saved !== editor.value) {
-          if (confirm("Found a locally saved version. Load it?")) {
-            editor.value = saved;
+      // Update save status
+      function updateSaveStatus(message, color = "#718096") {
+        const saveStatus = document.getElementById("save-status");
+        saveStatus.textContent = message;
+        saveStatus.style.color = color;
+
+        if (message.includes("success") || message.includes("Auto-saved")) {
+          setTimeout(() => {
+            saveStatus.textContent = "";
+          }, 3000);
+        }
+      }
+
+      // Load from localStorage or specific version on page load
+      window.addEventListener("load", async function () {
+        // Check if we need to load a specific version
+        const urlParams = new URLSearchParams(window.location.search);
+        const versionId = urlParams.get("version");
+
+        if (versionId) {
+          // Load specific version
+          await loadSpecificVersion(versionId);
+        } else {
+          // Regular local storage check
+          const saved = localStorage.getItem("wequo-brief-{{ date }}");
+          if (saved && saved !== editor.value.trim()) {
+            if (
+              confirm(
+                "Found a locally saved version that differs from the server version. Load the local version?"
+              )
+            ) {
+              editor.value = saved;
+              updateSaveStatus("Loaded from local storage", "#f59e0b");
+            }
           }
         }
+
+        // Initialize Lucide icons
+        lucide.createIcons();
       });
+
+      async function loadSpecificVersion(versionId) {
+        try {
+          updateSaveStatus("Loading version...", "#3b82f6");
+
+          // First, find the document ID for this date
+          const documentsResponse = await fetch("/api/authoring/my-documents");
+          if (!documentsResponse.ok) {
+            throw new Error("Failed to fetch documents");
+          }
+
+          const documents = await documentsResponse.json();
+          const document = documents.find(
+            (doc) => doc.package_date === "{{ date }}"
+          );
+
+          if (!document) {
+            throw new Error("Document not found for this date");
+          }
+
+          // Now fetch the specific version
+          const versionResponse = await fetch(
+            `/api/authoring/documents/${document.id}/versions/${versionId}`
+          );
+          if (!versionResponse.ok) {
+            throw new Error("Failed to fetch version content");
+          }
+
+          const version = await versionResponse.json();
+
+          // Load the version content into the editor
+          editor.value = version.content;
+
+          // Update the header to show we're editing a specific version
+          const headerTitle = document.querySelector(".header h1");
+          if (headerTitle) {
+            headerTitle.innerHTML = `WeQuo Brief: {{ date }} <span style="font-size: 0.6em; color: #667eea;">(Editing v${version.version_number})</span>`;
+          }
+
+          updateSaveStatus(
+            `Loaded version ${version.version_number} by ${version.author}`,
+            "#10b981"
+          );
+        } catch (error) {
+          console.error("Error loading version:", error);
+          updateSaveStatus(
+            "Error loading version: " + error.message,
+            "#ef4444"
+          );
+        }
+      }
 
       function copyToClipboard() {
         const content = editor.value;
@@ -198,25 +673,92 @@
           showCopyFeedback();
         } catch (err) {
           console.error("Fallback copy failed: ", err);
-          alert("Copy failed. Please select and copy manually.");
+          updateSaveStatus(
+            "Copy failed. Please select and copy manually.",
+            "#ef4444"
+          );
         }
       }
 
       function showCopyFeedback() {
         const feedback = document.getElementById("copyFeedback");
         feedback.classList.add("show");
+        lucide.createIcons();
         setTimeout(() => {
           feedback.classList.remove("show");
-        }, 2000);
+        }, 2500);
       }
 
-      // Keyboard shortcuts
+      // Enhanced save template function
+      async function saveTemplate() {
+        const content = editor.value;
+        const saveButton = document.querySelector(
+          'button[onclick="saveTemplate()"]'
+        );
+        const originalText = saveButton.innerHTML;
+
+        if (!content.trim()) {
+          updateSaveStatus("No content to save", "#ef4444");
+          return;
+        }
+
+        // Update button to show saving state
+        saveButton.disabled = true;
+        saveButton.innerHTML =
+          '<i data-lucide="loader-2" style="width: 16px; height: 16px; animation: spin 1s linear infinite;"></i> Saving...';
+        lucide.createIcons();
+
+        updateSaveStatus("Saving to server...", "#f59e0b");
+
+        try {
+          const response = await fetch(`/api/template/{{ date }}/save`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              content: content,
+              author: "template_editor",
+              commit_message: "Updated via template editor",
+            }),
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            updateSaveStatus("Saved successfully to server!", "#10b981");
+            // Clear local storage since we've saved to server
+            localStorage.removeItem("wequo-brief-{{ date }}");
+          } else {
+            updateSaveStatus("Save failed: " + result.error, "#ef4444");
+          }
+        } catch (error) {
+          console.error("Save error:", error);
+          updateSaveStatus("Save failed: " + error.message, "#ef4444");
+        } finally {
+          // Restore button
+          saveButton.disabled = false;
+          saveButton.innerHTML = originalText;
+          lucide.createIcons();
+        }
+      }
+
+      // Enhanced keyboard shortcuts
       editor.addEventListener("keydown", function (e) {
         // Ctrl+S to save (prevent browser save dialog)
         if (e.ctrlKey && e.key === "s") {
           e.preventDefault();
-          localStorage.setItem("wequo-brief-{{ date }}", editor.value);
-          showCopyFeedback();
+          saveTemplate();
+        }
+
+        // Ctrl+C for copy (when text is selected)
+        if (
+          e.ctrlKey &&
+          e.key === "c" &&
+          this.selectionStart !== this.selectionEnd
+        ) {
+          // Let the default copy behavior work, but show feedback
+          setTimeout(showCopyFeedback, 100);
         }
 
         // Tab key for indentation
@@ -228,7 +770,35 @@
             this.value.substring(0, start) + "  " + this.value.substring(end);
           this.selectionStart = this.selectionEnd = start + 2;
         }
+
+        // Enhanced line navigation
+        if (e.ctrlKey && e.key === "Enter") {
+          e.preventDefault();
+          const start = this.selectionStart;
+          this.value =
+            this.value.substring(0, start) + "\n" + this.value.substring(start);
+          this.selectionStart = this.selectionEnd = start + 1;
+        }
       });
+
+      // Auto-resize editor height based on content
+      function autoResizeEditor() {
+        editor.style.height = "auto";
+        editor.style.height = Math.max(700, editor.scrollHeight + 40) + "px";
+      }
+
+      editor.addEventListener("input", autoResizeEditor);
+      window.addEventListener("load", autoResizeEditor);
+
+      // Add spin animation for loading icons
+      const style = document.createElement("style");
+      style.textContent = `
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `;
+      document.head.appendChild(style);
     </script>
   </body>
 </html>

@@ -40,8 +40,7 @@ class CryptoConnector:
         start_date = end_date - timedelta(days=self.lookback_days)
         
         params = {
-            "ids": symbol,
-            "vs_currencies": "usd",
+            "vs_currency": "usd",
             "days": str(self.lookback_days),
             "interval": "daily"
         }
