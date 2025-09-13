@@ -51,7 +51,7 @@ class MonitoringDashboard:
                 # Get recent alerts
                 recent_alerts = self.alert_manager.get_recent_alerts(24)
                 
-                # Get SLA status
+                # Get SLA status (uses cached report, regenerates only every 6 hours)
                 sla_report = self.sla_tracker.generate_sla_report(7)  # Weekly SLA
                 
                 return jsonify({
@@ -96,6 +96,23 @@ class MonitoringDashboard:
                 return jsonify({
                     "status": "success",
                     "data": trend
+                })
+            except Exception as e:
+                return jsonify({
+                    "status": "error",
+                    "message": str(e)
+                }), 500
+        
+        @self.app.route('/api/sla-refresh', methods=['POST'])
+        def sla_refresh():
+            """Force refresh SLA report (bypasses cache)."""
+            try:
+                # Force refresh the SLA report
+                sla_report = self.sla_tracker.generate_sla_report(7, force_refresh=True)
+                return jsonify({
+                    "status": "success",
+                    "message": "SLA report refreshed successfully",
+                    "data": self._serialize_sla_report(sla_report)
                 })
             except Exception as e:
                 return jsonify({
@@ -1671,8 +1688,16 @@ DASHBOARD_TEMPLATE = """
         <div class="dashboard-grid">
             <!-- SLA Status -->
             <div class="card">
-                <h3>SLA Status</h3>
+                <h3>
+                    <i data-lucide="shield-check"></i>
+                    SLA Status
+                    <button onclick="refreshSLA()" class="refresh-btn" style="float: right; padding: 8px 16px; font-size: 0.9em;">
+                        <i data-lucide="refresh-cw"></i>
+                        Refresh
+                    </button>
+                </h3>
                 <div id="sla-status" class="loading">Loading...</div>
+                <div id="sla-cache-info" class="timestamp" style="margin-top: 10px; font-size: 0.8em; color: #7f8c8d;"></div>
             </div>
             
             <!-- Recent Alerts -->
@@ -1790,6 +1815,7 @@ DASHBOARD_TEMPLATE = """
         async function updateSLAStatus() {
             const data = await fetchData('/api/monitoring-status');
             const container = document.getElementById('sla-status');
+            const cacheInfo = document.getElementById('sla-cache-info');
             
             if (data.status === 'error') {
                 container.innerHTML = `<div class="alert alert-critical">Error: ${data.message}</div>`;
@@ -1821,6 +1847,48 @@ DASHBOARD_TEMPLATE = """
             }
             
             container.innerHTML = html;
+            
+            // Update cache info
+            const reportDate = new Date(slaReport.report_date);
+            const now = new Date();
+            const ageMinutes = Math.floor((now - reportDate) / (1000 * 60));
+            const ageHours = Math.floor(ageMinutes / 60);
+            const ageDisplay = ageHours > 0 ? `${ageHours}h ${ageMinutes % 60}m ago` : `${ageMinutes}m ago`;
+            
+            cacheInfo.innerHTML = `Report generated: ${ageDisplay} (cached for 6 hours)`;
+        }
+        
+        async function refreshSLA() {
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.disabled = true;
+            button.innerHTML = '<i data-lucide="loader-2"></i> Refreshing...';
+            lucide.createIcons();
+            
+            try {
+                const response = await fetch('/api/sla-refresh', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    // Update the SLA status display
+                    await updateSLAStatus();
+                    console.log('SLA report refreshed successfully');
+                } else {
+                    alert('Error refreshing SLA report: ' + result.message);
+                }
+            } catch (error) {
+                alert('Error refreshing SLA report: ' + error.message);
+            } finally {
+                button.disabled = false;
+                button.innerHTML = originalText;
+                lucide.createIcons();
+            }
         }
         
         async function updateRecentAlerts() {

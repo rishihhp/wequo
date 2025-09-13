@@ -1,0 +1,39 @@
+services:
+  - type: web
+    name: wequo-platform
+    env: python
+    region: oregon
+    plan: starter
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+      python scripts/init_data.py
+    startCommand: python app.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+      - key: HOST
+        value: 0.0.0.0
+      - key: PORT
+        value: 10000
+      - key: DEBUG
+        value: false
+      - key: FRED_API_KEY
+        sync: false
+      - key: ALPHA_VANTAGE_API_KEY
+        sync: false
+      - key: ACLED_API_KEY
+        sync: false
+      - key: ACLED_EMAIL
+        sync: false
+      - key: NOAA_API_KEY
+        sync: false
+      - key: UNCOMTRADE_API_KEY
+        sync: false
+      - key: MARINETRAFFIC_API_KEY
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+    healthCheckPath: /health
+    autoDeploy: true
+    branch: main

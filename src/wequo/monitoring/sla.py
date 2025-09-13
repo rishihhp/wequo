@@ -61,9 +61,18 @@ class SLATracker:
             "anomaly_rate_threshold": 0.10,
             "connector_availability": 0.05
         })
+        
+        # Cache settings - generate SLA reports only every 6 hours
+        self.cache_duration_hours = config.get("sla_cache_duration_hours", 6)
+        self._cached_report = None
+        self._cache_timestamp = None
     
-    def generate_sla_report(self, measurement_period_days: int = 30) -> SLAReport:
-        """Generate comprehensive SLA report."""
+    def generate_sla_report(self, measurement_period_days: int = 30, force_refresh: bool = False) -> SLAReport:
+        """Generate comprehensive SLA report with caching to reduce frequency."""
+        
+        # Check if we have a cached report that's still valid
+        if not force_refresh and self._is_cache_valid():
+            return self._cached_report
         
         report_date = datetime.now()
         
@@ -91,6 +100,10 @@ class SLATracker:
             violations=violations,
             recommendations=recommendations
         )
+        
+        # Cache the report
+        self._cached_report = report
+        self._cache_timestamp = report_date
         
         # Save report
         self._save_report(report)
@@ -405,3 +418,17 @@ class SLATracker:
                     trend_data["freshness_compliance"].append(metric["current_value"])
         
         return trend_data
+    
+    def _is_cache_valid(self) -> bool:
+        """Check if the cached SLA report is still valid."""
+        if self._cached_report is None or self._cache_timestamp is None:
+            return False
+        
+        # Check if cache has expired (6 hours by default)
+        cache_age = datetime.now() - self._cache_timestamp
+        return cache_age.total_seconds() < (self.cache_duration_hours * 3600)
+    
+    def clear_cache(self):
+        """Clear the cached SLA report to force regeneration on next request."""
+        self._cached_report = None
+        self._cache_timestamp = None

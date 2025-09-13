@@ -1,6 +1,9 @@
 run:
   output_root: "data/output"
   lookback_days: 7
+  # Production settings
+  max_workers: 4
+  timeout_seconds: 300
 
 connectors:
   fred:
@@ -235,6 +238,12 @@ monitoring:
     data_freshness_hours: 25
     max_pipeline_duration_minutes: 30
     max_anomaly_rate: 0.1
+    # SLA report cache duration in hours (reduces generation frequency)
+    cache_duration_hours: 6
+  # Production monitoring settings
+  log_level: "INFO"
+  max_log_files: 10
+  log_rotation_size_mb: 10
   alerts:
     enabled: true
     handlers: ["file", "console"]
