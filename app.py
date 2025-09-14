@@ -7,7 +7,7 @@ Combines both authoring and monitoring dashboards into a single Flask app
 import os
 import sys
 from pathlib import Path
-from flask import Flask, render_template_string, redirect, url_for, jsonify, render_template, request
+from flask import Flask, render_template_string, redirect, url_for, jsonify, render_template, request, send_file
 
 # Add src to Python path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
@@ -469,6 +469,72 @@ def create_main_app():
     def main_index():
         packages = get_available_packages(output_root)
         return render_template("index.html", packages=packages)
+    
+    # Export endpoint (global, not prefixed)
+    @app.route('/export/<date>/<format>')
+    def export_brief(date: str, format: str):
+        """Export a brief in the specified format."""
+        print(f"Export route called: date={date}, format={format}")
+        
+        package_dir = output_root / date
+        print(f"Package directory: {package_dir}")
+        
+        if not package_dir.exists():
+            print(f"Package directory not found: {package_dir}")
+            return jsonify({"error": "Package not found"}), 404
+        
+        try:
+            # Load package data
+            print("Loading package data...")
+            package_data = load_package_data(package_dir)
+            print(f"Package data loaded: {len(package_data)} top-level keys")
+            
+            # Determine export format
+            if format.lower() == 'html':
+                export_format = ExportFormat.HTML
+            elif format.lower() == 'pdf':
+                export_format = ExportFormat.PDF
+            elif format.lower() in ['markdown', 'md']:
+                export_format = ExportFormat.MARKDOWN
+            else:
+                print(f"Unsupported format: {format}")
+                return jsonify({"error": "Unsupported format"}), 400
+            
+            print(f"Export format: {export_format}")
+            
+            # Export the brief
+            print("Starting export...")
+            output_path = brief_exporter.export_brief(
+                package_data=package_data,
+                package_date=date,
+                format=export_format
+            )
+            print(f"Export completed: {output_path}")
+            
+            # Determine MIME type and filename
+            if export_format == ExportFormat.HTML:
+                mimetype = 'text/html'
+                filename = f"wequo_brief_{date}.html"
+            elif export_format == ExportFormat.PDF:
+                mimetype = 'application/pdf'
+                filename = f"wequo_brief_{date}.pdf"
+            else:  # Markdown
+                mimetype = 'text/markdown'
+                filename = f"wequo_brief_{date}.md"
+            
+            print(f"Sending file: {output_path} as {filename}")
+            return send_file(
+                output_path,
+                mimetype=mimetype,
+                as_attachment=True,
+                download_name=filename
+            )
+            
+        except Exception as e:
+            print(f"Export error: {e}")
+            import traceback
+            traceback.print_exc()
+            return jsonify({"error": str(e)}), 500
     
     # Health check endpoint
     @app.route('/health')
