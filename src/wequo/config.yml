@@ -1,25 +1,28 @@
 run:
   output_root: "data/output"
   lookback_days: 7
+  # Production settings
+  max_workers: 4
+  timeout_seconds: 300
 
 connectors:
   fred:
     enabled: true
     series_ids:
-      - CPIAUCSL   # US CPI (monthly)
-      - DFF        # Effective Federal Funds Rate (daily)
-      - DGS10      # 10-Year Treasury Constant Maturity Rate (daily)
-  
+      - CPIAUCSL # US CPI (monthly)
+      - DFF # Effective Federal Funds Rate (daily)
+      - DGS10 # 10-Year Treasury Constant Maturity Rate (daily)
+
   commodities:
     enabled: true
     symbols:
-      - WTI        # West Texas Intermediate crude oil
-      - BRENT      # Brent crude oil
-      - GOLD       # Gold
-      - SILVER     # Silver
-      - COPPER     # Copper
+      - WTI # West Texas Intermediate crude oil
+      - BRENT # Brent crude oil
+      - GOLD # Gold
+      - SILVER # Silver
+      - COPPER # Copper
       - NATURAL_GAS # Natural gas
-  
+
   crypto:
     enabled: true
     symbols:
@@ -29,7 +32,7 @@ connectors:
       - cardano
       - solana
       - polkadot
-  
+
   github:
     enabled: false
     repos:
@@ -39,7 +42,7 @@ connectors:
       - pytorch/pytorch
       - openai/gpt-3
       - langchain-ai/langchain
-  
+
   weather:
     enabled: false
     cities:
@@ -49,24 +52,216 @@ connectors:
       - Sydney
       - Dubai
       - Singapore
-  
+
   economic:
     enabled: true
     indicators:
-      - NY.GDP.MKTP.CD      # GDP (current US$)
-      - FP.CPI.TOTL.ZG      # Inflation, consumer prices (annual %)
-      - SL.UEM.TOTL.ZS      # Unemployment, total (% of total labor force)
-      - NE.TRD.GNFS.ZS      # Trade (% of GDP)
+      - NY.GDP.MKTP.CD # GDP (current US$)
+      - FP.CPI.TOTL.ZG # Inflation, consumer prices (annual %)
+      - SL.UEM.TOTL.ZS # Unemployment, total (% of total labor force)
+      - NE.TRD.GNFS.ZS # Trade (% of GDP)
     countries:
-      - US   # United States
-      - CN   # China
-      - DE   # Germany
-      - JP   # Japan
-      - GB   # United Kingdom
-      - IN   # India
+      - US # United States
+      - CN # China
+      - DE # Germany
+      - JP # Japan
+      - GB # United Kingdom
+      - IN # India
+
+  acled:
+    enabled: false
+    api_key: ""
+    email: ""
+    countries:
+      - United States of America
+      - Syria
+      - Ukraine
+      - Afghanistan
+      - Somalia
+      - Myanmar
+      - Yemen
+      - Nigeria
+      - Democratic Republic of Congo
+      - Ethiopia
+    event_types:
+      - Battles
+      - Explosions/Remote violence
+      - Violence against civilians
+      - Riots
+      - Protests
+      - Strategic developments
+
+  fao:
+    enabled: false
+    indicators:
+      - Production_Crops_E
+      - Trade_Crops_Livestock_E
+      - Food_Balances_E
+      - Prices_E
+      - Population_E
+      - Land_Use_E
+    countries:
+      - "2" # Afghanistan
+      - "32" # Argentina
+      - "36" # Australia
+      - "76" # Brazil
+      - "124" # Canada
+      - "156" # China
+      - "250" # France
+      - "276" # Germany
+      - "356" # India
+      - "392" # Japan
+      - "484" # Mexico
+      - "643" # Russian Federation
+      - "840" # United States
+      - "826" # United Kingdom
+
+  noaa:
+    enabled: true
+    api_key: ""
+    datasets:
+      - GHCND # Global Historical Climatology Network Daily
+      - GSOM # Global Summary of the Month
+      - GSOY # Global Summary of the Year
+    stations:
+      - GHCND:USW00014732 # New York Central Park
+      - GHCND:USW00023174 # Los Angeles LAX
+      - GHCND:USW00012960 # Chicago O'Hare
+      - GHCND:USW00013881 # Miami International
+      - GHCND:CA001158355 # Toronto Pearson
+      - GHCND:GM000010393 # Berlin Tempelhof
+      - GHCND:JA000047662 # Tokyo
+      - GHCND:AS000066062 # Sydney Observatory Hill
+    datatypes:
+      - TMAX # Maximum temperature
+      - TMIN # Minimum temperature
+      - PRCP # Precipitation
+      - SNOW # Snowfall
+      - SNWD # Snow depth
+      - AWND # Average wind speed
+
+  uncomtrade:
+    enabled: false
+    subscription_key: ""
+    reporters:
+      - "842" # United States
+      - "276" # Germany
+      - "156" # China
+      - "392" # Japan
+      - "826" # United Kingdom
+      - "250" # France
+      - "380" # Italy
+      - "124" # Canada
+      - "356" # India
+      - "076" # Brazil
+    partners:
+      - "0" # World
+      - "842" # United States
+      - "156" # China
+      - "276" # Germany
+      - "392" # Japan
+    commodities:
+      - "01" # Live animals
+      - "02" # Meat and edible meat offal
+      - "10" # Cereals
+      - "15" # Animal or vegetable fats and oils
+      - "27" # Mineral fuels, oils, distillation products
+      - "71" # Pearls, precious stones, metals
+      - "84" # Machinery, mechanical appliances
+      - "85" # Electrical, electronic equipment
+      - "87" # Vehicles other than railway
+      - "99" # Commodities not elsewhere specified
+    trade_flows:
+      - "M" # Import
+      - "X" # Export
+
+  shipping_ais:
+    enabled: false
+    api_key: ""
+    vessel_types:
+      - "70" # Cargo ships
+      - "80" # Tankers
+      - "71" # Cargo ships (hazardous category A)
+      - "81" # Tankers (hazardous category A)
+    ports:
+      - Shanghai
+      - Singapore
+      - Rotterdam
+      - Ningbo
+      - Busan
+      - Guangzhou
+      - Qingdao
+      - Dubai
+      - Tianjin
+      - Port Klang
+      - Antwerp
+      - Xiamen
+      - Kaohsiung
+      - Dalian
+      - Los Angeles
+      - Hamburg
+      - Long Beach
+      - New York
+    areas:
+      - name: "Strait_of_Malacca"
+        min_lat: 1.0
+        max_lat: 6.0
+        min_lon: 99.0
+        max_lon: 105.0
+      - name: "Suez_Canal"
+        min_lat: 29.0
+        max_lat: 32.0
+        min_lon: 32.0
+        max_lon: 35.0
+      - name: "English_Channel"
+        min_lat: 49.0
+        max_lat: 52.0
+        min_lon: -2.0
+        max_lon: 3.0
+      - name: "Panama_Canal"
+        min_lat: 8.0
+        max_lat: 10.0
+        min_lon: -81.0
+        max_lon: -79.0
 
 analytics:
   enabled: true
   anomaly_threshold: 2.0
   delta_threshold: 0.05
   min_data_points: 5
+  enable_advanced_analytics: true
+
+monitoring:
+  enabled: true
+  sla:
+    pipeline_success_rate: 0.99
+    data_freshness_hours: 25
+    max_pipeline_duration_minutes: 30
+    max_anomaly_rate: 0.1
+    # SLA report cache duration in hours (reduces generation frequency)
+    cache_duration_hours: 6
+  # Production monitoring settings
+  log_level: "INFO"
+  max_log_files: 10
+  log_rotation_size_mb: 10
+  alerts:
+    enabled: true
+    handlers: ["file", "console"]
+    min_severity: "warning"
+    email:
+      enabled: false
+      smtp_host: "smtp.gmail.com"
+      smtp_port: 587
+      smtp_user: ""
+      smtp_password: ""
+      recipients: []
+    webhook:
+      enabled: false
+      url: ""
+      headers: {}
+  alert_thresholds:
+    pipeline_failure_immediate: true
+    sla_breach_threshold: 0.95
+    freshness_hours: 25
+    anomaly_rate_threshold: 0.15
+    disk_usage_threshold: 85

@@ -1,0 +1,11 @@
+{
+  "run_id": "run_1757681958",
+  "start_time": "2025-09-12T18:29:18.152630",
+  "connectors": [
+    "fred",
+    "commodities",
+    "crypto",
+    "economic"
+  ],
+  "status": "running"
+}

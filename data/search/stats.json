@@ -1,0 +1,18 @@
+{
+  "total_documents": 643,
+  "documents_by_type": {
+    "package": 3,
+    "data_point": 523,
+    "report": 9,
+    "analytics": 10,
+    "anomaly": 24,
+    "trend": 74
+  },
+  "total_sources": 7,
+  "date_range": [
+    "2025-09-10",
+    "2025-09-12"
+  ],
+  "last_updated": "2025-09-12T19:30:43.020348",
+  "index_size_mb": 0.31602001190185547
+}

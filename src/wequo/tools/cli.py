@@ -9,6 +9,14 @@ from datetime import datetime
 import click
 import pandas as pd
 
+# Phase 2 imports
+try:
+    from ..search import DataIndexer, SearchEngine
+    from ..export import BriefExporter, ExportFormat
+    HAS_PHASE2 = True
+except ImportError:
+    HAS_PHASE2 = False
+
 
 @click.group()
 def cli():
@@ -116,7 +124,7 @@ def generate_template(date: str, output_dir: str, template_path: str, output_fil
     
     # Write template
     output_path = Path(output_file)
-    output_path.write_text(template_content)
+    output_path.write_text(template_content, encoding='utf-8')
     
     click.echo(f"✅ Generated pre-filled template: {output_path}")
     click.echo(f"📝 Edit the template and customize as needed.")
@@ -146,7 +154,7 @@ def quick_start(date: str, output_dir: str, open_editor: bool):
     template_content = generate_prefilled_template(package_data, date, template_path)
     output_file = f"wequo_brief_{date}.md"
     output_path = Path(output_file)
-    output_path.write_text(template_content)
+    output_path.write_text(template_content, encoding='utf-8')
     
     click.echo(f"✅ Generated pre-filled template: {output_path}")
     
@@ -362,6 +370,147 @@ def get_week_number(date_str: str) -> int:
         return date_obj.isocalendar()[1]
     except:
         return 1
+
+
+@cli.command()
+@click.option("--output-dir", default="data/output", help="Output directory containing packages")
+def rebuild_search_index(output_dir: str):
+    """Rebuild the search index from all data packages."""
+    if not HAS_PHASE2:
+        click.echo("❌ Search functionality not available. Install Phase 2 dependencies.")
+        return
+    
+    output_path = Path(output_dir)
+    if not output_path.exists():
+        click.echo(f"❌ Output directory not found: {output_path}")
+        return
+    
+    click.echo("🔄 Rebuilding search index...")
+    indexer = DataIndexer()
+    
+    try:
+        doc_count = indexer.rebuild_index(output_path)
+        click.echo(f"✅ Search index rebuilt with {doc_count} documents")
+        
+        # Show statistics
+        stats = indexer.get_stats()
+        click.echo(f"📊 Index statistics:")
+        click.echo(f"   - Total documents: {stats.total_documents}")
+        click.echo(f"   - Sources: {stats.total_sources}")
+        click.echo(f"   - Size: {stats.index_size_mb:.1f} MB")
+        
+    except Exception as e:
+        click.echo(f"❌ Error rebuilding index: {e}")
+
+
+@cli.command()
+@click.argument("query")
+@click.option("--limit", default=10, help="Maximum number of results")
+def search(query: str, limit: int):
+    """Search through indexed data packages."""
+    if not HAS_PHASE2:
+        click.echo("❌ Search functionality not available. Install Phase 2 dependencies.")
+        return
+    
+    engine = SearchEngine()
+    results = engine.search_simple(query, limit)
+    
+    if not results:
+        click.echo(f"No results found for: {query}")
+        return
+    
+    click.echo(f"🔍 Found {len(results)} results for: {query}")
+    click.echo()
+    
+    for i, result in enumerate(results, 1):
+        click.echo(f"{i}. {result.document.title}")
+        click.echo(f"   Type: {result.document.type.value}")
+        click.echo(f"   Score: {result.score:.2f}")
+        click.echo(f"   Date: {result.document.timestamp.strftime('%Y-%m-%d')}")
+        if result.highlights:
+            click.echo(f"   Preview: {result.highlights[0][:100]}...")
+        click.echo()
+
+
+@cli.command()
+@click.argument("package_date")
+@click.option("--format", "export_format", 
+              type=click.Choice(['html', 'pdf', 'markdown']), 
+              default='html',
+              help="Export format")
+@click.option("--output", help="Output file path")
+def export_brief(package_date: str, export_format: str, output: Optional[str]):
+    """Export a weekly brief to HTML, PDF, or Markdown."""
+    if not HAS_PHASE2:
+        click.echo("❌ Export functionality not available. Install Phase 2 dependencies.")
+        return
+    
+    package_dir = Path("data/output") / package_date
+    if not package_dir.exists():
+        click.echo(f"❌ Package not found: {package_date}")
+        return
+    
+    click.echo(f"📄 Exporting brief for {package_date} to {export_format.upper()}...")
+    
+    try:
+        # Load package data
+        package_data = load_package_data(package_dir)
+        
+        # Set up exporter
+        exporter = BriefExporter()
+        
+        # Determine format
+        if export_format == 'html':
+            format_enum = ExportFormat.HTML
+        elif export_format == 'pdf':
+            format_enum = ExportFormat.PDF
+        else:
+            format_enum = ExportFormat.MARKDOWN
+        
+        # Export
+        output_path = exporter.export_brief(
+            package_data=package_data,
+            package_date=package_date,
+            format=format_enum,
+            output_path=Path(output) if output else None
+        )
+        
+        click.echo(f"✅ Brief exported to: {output_path}")
+        
+    except Exception as e:
+        click.echo(f"❌ Export failed: {e}")
+
+
+def load_package_data(package_dir: Path) -> Dict[str, Any]:
+    """Load package data for export."""
+    data = {
+        "summary": {},
+        "csv_files": {},
+        "reports": {}
+    }
+    
+    # Load summary
+    summary_path = package_dir / "package_summary.json"
+    if summary_path.exists():
+        with open(summary_path) as f:
+            data["summary"] = json.load(f)
+    
+    # Load CSV files
+    for csv_file in package_dir.glob("*.csv"):
+        try:
+            df = pd.read_csv(csv_file)
+            data["csv_files"][csv_file.stem] = df.to_dict(orient="records")
+        except Exception:
+            pass
+    
+    # Load reports
+    for md_file in package_dir.glob("*.md"):
+        try:
+            data["reports"][md_file.stem] = md_file.read_text()
+        except Exception:
+            pass
+    
+    return data
 
 
 if __name__ == "__main__":

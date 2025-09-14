@@ -1,0 +1,71 @@
+{
+  "report_date": "2025-09-13 19:42:22.570969",
+  "measurement_period_days": 7,
+  "overall_compliance": false,
+  "compliance_score": 0.9937317784256561,
+  "metrics": [
+    {
+      "name": "pipeline_success_rate",
+      "current_value": 1.0,
+      "target_threshold": 0.99,
+      "is_compliant": true,
+      "measurement_period_days": 7,
+      "last_updated": "2025-09-13 19:42:22.575268"
+    },
+    {
+      "name": "data_freshness_compliance",
+      "current_value": 1.0,
+      "target_threshold": 0.95,
+      "is_compliant": true,
+      "measurement_period_days": 7,
+      "last_updated": "2025-09-13 19:42:22.575268"
+    },
+    {
+      "name": "average_runtime_minutes",
+      "current_value": 1.1702737499999998,
+      "target_threshold": 15,
+      "is_compliant": true,
+      "measurement_period_days": 7,
+      "last_updated": "2025-09-13 19:42:22.575268"
+    },
+    {
+      "name": "max_runtime_minutes",
+      "current_value": 1.1702737499999998,
+      "target_threshold": 30,
+      "is_compliant": true,
+      "measurement_period_days": 7,
+      "last_updated": "2025-09-13 19:42:22.575268"
+    },
+    {
+      "name": "anomaly_rate_threshold",
+      "current_value": 0.0,
+      "target_threshold": 0.1,
+      "is_compliant": true,
+      "measurement_period_days": 7,
+      "last_updated": "2025-09-13 19:42:22.575268"
+    },
+    {
+      "name": "connector_availability",
+      "current_value": 0.8571428571428571,
+      "target_threshold": 0.98,
+      "is_compliant": false,
+      "measurement_period_days": 7,
+      "last_updated": "2025-09-13 19:42:22.576264"
+    }
+  ],
+  "violations": [
+    {
+      "metric": "connector_availability",
+      "severity": "minor",
+      "current_value": 0.8571428571428571,
+      "target_threshold": 0.98,
+      "deviation_ratio": 1.1433333333333333,
+      "description": "Connector availability is 85.7%, below target of 98.0%"
+    }
+  ],
+  "recommendations": [
+    "Implement robust error handling and retries",
+    "Add health checks for external APIs",
+    "Consider backup data sources for unreliable connectors"
+  ]
+}

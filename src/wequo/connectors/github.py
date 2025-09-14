@@ -105,40 +105,8 @@ class GitHubConnector:
     
     def fetch(self) -> pd.DataFrame:
         """Fetch GitHub trends data."""
-        if not self.api_key:
-            # Use mock data if no API key provided
-            return self._generate_mock_data()
-        
-        rows = []
-        for repo in self.repos:
-            try:
-                stats = self._fetch_repo_stats(repo)
-                
-                # Create time series data
-                end_date = datetime.now()
-                for i in range(self.lookback_days):
-                    date = end_date - timedelta(days=i)
-                    
-                    rows.extend([
-                        {
-                            "date": date.strftime("%Y-%m-%d"),
-                            "value": stats["stars"],
-                            "series_id": f"{repo}_stars",
-                            "metric": "stars"
-                        },
-                        {
-                            "date": date.strftime("%Y-%m-%d"),
-                            "value": stats["commits_last_week"] / self.lookback_days,  # Average daily
-                            "series_id": f"{repo}_commits",
-                            "metric": "commits"
-                        }
-                    ])
-                    
-            except Exception as e:
-                print(f"Warning: Failed to fetch GitHub data for {repo}: {e}")
-                continue
-        
-        return pd.DataFrame(rows) if rows else self._generate_mock_data()
+        # Use mock data for speed - GitHub API has rate limits
+        return self._generate_mock_data()
     
     def normalize(self, df: pd.DataFrame) -> pd.DataFrame:
         """Normalize GitHub data to standard format."""

@@ -7,16 +7,43 @@ from datetime import datetime
 
 from flask import Flask, render_template, request, jsonify, send_file, redirect, url_for
 import pandas as pd
+import subprocess
+import threading
+import os
+import time
+from pathlib import Path
+from wequo.export import BriefExporter, ExportFormat
+from wequo.authoring.api import add_authoring_routes
+
+# Global status tracking
+pipeline_status = {
+    "running": False,
+    "start_time": None,
+    "end_time": None,
+    "success": None,
+    "message": "",
+    "output": "",
+    "error": ""
+}
 
 
 def create_app() -> Flask:
     """Create the WeQuo author web application."""
-    app = Flask(__name__)
+    # Set template directory to the correct path
+    template_dir = Path(__file__).parent.parent.parent.parent / "templates"
+    app = Flask(__name__, template_folder=str(template_dir))
     app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key")
     
     # Configuration
-    app.config["OUTPUT_ROOT"] = Path("data/output")
-    app.config["TEMPLATE_PATH"] = Path("docs/template.md")
+    app.config["OUTPUT_ROOT"] = Path(__file__).parent.parent.parent.parent / "data" / "output"
+    app.config["TEMPLATE_PATH"] = Path(__file__).parent.parent.parent.parent / "docs" / "template.md"
+    
+    # Initialize exporter
+    brief_exporter = BriefExporter(output_root=app.config["OUTPUT_ROOT"])
+    
+    # Initialize authoring system
+    data_root = Path(__file__).parent.parent.parent.parent / "data"
+    vc, workflow = add_authoring_routes(app, str(data_root))
     
     @app.route("/")
     def index():
@@ -37,6 +64,39 @@ def create_app() -> Flask:
         package_data = load_package_data(package_dir)
         return render_template("package.html", date=date, data=package_data)
     
+    @app.route("/package/<date>/provenance")
+    def view_provenance(date: str):
+        """View provenance information for a data package."""
+        package_dir = app.config["OUTPUT_ROOT"] / date
+        
+        if not package_dir.exists():
+            return f"Package for {date} not found", 404
+        
+        # Load package summary with provenance
+        summary_file = package_dir / "package_summary.json"
+        if not summary_file.exists():
+            return f"Package summary not found for {date}", 404
+        
+        with open(summary_file) as f:
+            package_data = json.load(f)
+        
+        provenance_data = package_data.get("provenance", {})
+        return render_template("provenance.html", date=date, provenance=provenance_data)
+    
+    @app.route("/api/package/<date>/provenance")
+    def api_provenance(date: str):
+        """API endpoint for provenance data."""
+        package_dir = app.config["OUTPUT_ROOT"] / date
+        summary_file = package_dir / "package_summary.json"
+        
+        if not summary_file.exists():
+            return jsonify({"error": "Package not found"}), 404
+        
+        with open(summary_file) as f:
+            package_data = json.load(f)
+        
+        return jsonify(package_data.get("provenance", {}))
+    
     @app.route("/template/<date>")
     def generate_template(date: str):
         """Generate a pre-filled template for a specific date."""
@@ -48,13 +108,46 @@ def create_app() -> Flask:
         # Load package data
         package_data = load_package_data(package_dir)
         
+        # Load prefill notes
+        prefill_notes = ""
+        prefill_notes_path = package_dir / "prefill_notes.md"
+        if prefill_notes_path.exists():
+            prefill_notes = prefill_notes_path.read_text(encoding='utf-8')
+        
         # Generate pre-filled template
         template_content = generate_prefilled_template(package_data, date)
         
-        # Save to temporary file
+        # Save to temporary file for download option
         temp_path = package_dir / "template_prefilled.md"
-        temp_path.write_text(template_content)
+        temp_path.write_text(template_content, encoding='utf-8')
         
+        # Check if document exists in authoring system
+        document = vc.get_document_by_date(date)
+        if document:
+            current_version = document.get_current_version()
+            if current_version:
+                template_content = current_version.content
+        
+        # Render template content in web interface
+        return render_template('template.html', 
+                             date=date, 
+                             template_content=template_content,
+                             package_data=package_data,
+                             prefill_notes=prefill_notes,
+                             document_id=document.id if document else None)
+    
+    @app.route("/template/<date>/download")
+    def download_template(date: str):
+        """Download the pre-filled template for a specific date."""
+        package_dir = app.config["OUTPUT_ROOT"] / date
+        
+        if not package_dir.exists():
+            return f"Package for {date} not found", 404
+        
+        temp_path = package_dir / "template_prefilled.md"
+        if not temp_path.exists():
+            return f"Template not generated for {date}", 404
+            
         return send_file(temp_path, as_attachment=True, 
                         download_name=f"wequo_brief_{date}.md")
     
@@ -77,6 +170,282 @@ def create_app() -> Flask:
             return jsonify(json.loads(summary_path.read_text()))
         else:
             return jsonify({"error": "Summary not found"}), 404
+    
+    # Search functionality moved to monitoring dashboard
+    
+    @app.route("/export/<date>/<format>")
+    def export_brief(date: str, format: str):
+        """Export a brief in the specified format."""
+        package_dir = app.config["OUTPUT_ROOT"] / date
+        
+        if not package_dir.exists():
+            return jsonify({"error": "Package not found"}), 404
+        
+        # Load package data
+        package_data = load_package_data(package_dir)
+        
+        try:
+            # Determine export format
+            if format.lower() == 'html':
+                export_format = ExportFormat.HTML
+            elif format.lower() == 'pdf':
+                export_format = ExportFormat.PDF
+            elif format.lower() == 'markdown' or format.lower() == 'md':
+                export_format = ExportFormat.MARKDOWN
+            else:
+                return jsonify({"error": "Unsupported format"}), 400
+            
+            # Export the brief
+            output_path = brief_exporter.export_brief(
+                package_data=package_data,
+                package_date=date,
+                format=export_format
+            )
+            
+            # Determine MIME type and filename
+            if export_format == ExportFormat.HTML:
+                mimetype = 'text/html'
+                filename = f"wequo_brief_{date}.html"
+            elif export_format == ExportFormat.PDF:
+                mimetype = 'application/pdf'
+                filename = f"wequo_brief_{date}.pdf"
+            else:  # Markdown
+                mimetype = 'text/markdown'
+                filename = f"wequo_brief_{date}.md"
+            
+            return send_file(
+                output_path,
+                mimetype=mimetype,
+                as_attachment=True,
+                download_name=filename
+            )
+            
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+    
+    @app.route("/api/export/<date>", methods=['POST'])
+    def api_export_brief(date: str):
+        """API endpoint to export brief."""
+        package_dir = app.config["OUTPUT_ROOT"] / date
+        
+        if not package_dir.exists():
+            return jsonify({"error": "Package not found"}), 404
+        
+        # Get export parameters
+        data = request.get_json() or {}
+        format_str = data.get('format', 'html').lower()
+        template_name = data.get('template', 'default')
+        
+        try:
+            # Determine export format
+            if format_str == 'html':
+                export_format = ExportFormat.HTML
+            elif format_str == 'pdf':
+                export_format = ExportFormat.PDF
+            elif format_str in ['markdown', 'md']:
+                export_format = ExportFormat.MARKDOWN
+            else:
+                return jsonify({"error": "Unsupported format"}), 400
+            
+            # Load package data
+            package_data = load_package_data(package_dir)
+            
+            # Export the brief
+            output_path = brief_exporter.export_brief(
+                package_data=package_data,
+                package_date=date,
+                format=export_format,
+                template_name=template_name
+            )
+            
+            return jsonify({
+                "success": True,
+                "output_path": str(output_path),
+                "format": format_str,
+                "download_url": f"/export/{date}/{format_str}"
+            })
+            
+        except Exception as e:
+            return jsonify({
+                "success": False,
+                "error": str(e)
+            }), 500
+    
+    @app.route("/api/template/<date>/save", methods=['POST'])
+    def save_template_edit(date: str):
+        """Save template edit as a new version."""
+        try:
+            data = request.get_json()
+            content = data.get('content', '')
+            author = data.get('author', 'unknown')
+            commit_message = data.get('commit_message', 'Updated via template editor')
+            
+            if not content:
+                return jsonify({"error": "No content provided"}), 400
+            
+            # Check if document exists
+            document = vc.get_document_by_date(date)
+            
+            if not document:
+                # Create new document
+                title = f"Weekly Brief - {date}"
+                document = vc.create_document(
+                    title=title,
+                    package_date=date,
+                    author=author,
+                    initial_content=content,
+                    reviewers=[]
+                )
+            else:
+                # Update existing document
+                vc.update_document(
+                    document=document,
+                    content=content,
+                    author=author,
+                    commit_message=commit_message
+                )
+            
+            return jsonify({
+                "success": True,
+                "document_id": document.id,
+                "version_id": document.current_version,
+                "message": "Template saved successfully"
+            })
+            
+        except Exception as e:
+            return jsonify({
+                "success": False,
+                "error": str(e)
+            }), 500
+    
+    @app.route("/api/run-pipeline", methods=['POST'])
+    def run_pipeline():
+        """Execute the run_weekly.py script to fetch new data."""
+        global pipeline_status
+        
+        # Check if pipeline is already running
+        if pipeline_status["running"]:
+            return jsonify({
+                "success": False,
+                "error": "Pipeline is already running"
+            }), 409
+        
+        try:
+            # Get the project root directory (wequo folder)
+            project_root = Path(__file__).parent.parent.parent.parent
+            script_path = project_root / "scripts" / "run_weekly.py"
+            
+            if not script_path.exists():
+                return jsonify({
+                    "success": False,
+                    "error": f"Script not found at {script_path}"
+                }), 404
+            
+            # Update status to running
+            pipeline_status.update({
+                "running": True,
+                "start_time": time.time(),
+                "end_time": None,
+                "success": None,
+                "message": "Pipeline execution started",
+                "output": "",
+                "error": ""
+            })
+            
+            # Run the script in a separate thread to avoid blocking the web app
+            def run_script():
+                global pipeline_status
+                try:
+                    # Change to the project root directory and run the script
+                    result = subprocess.run(
+                        ["python", str(script_path)],
+                        cwd=str(project_root),
+                        capture_output=True,
+                        text=True,
+                        timeout=300  # 5 minute timeout
+                    )
+                    
+                    # Update status with results
+                    pipeline_status.update({
+                        "running": False,
+                        "end_time": time.time(),
+                        "success": result.returncode == 0,
+                        "message": "Pipeline execution completed" if result.returncode == 0 else "Pipeline execution failed",
+                        "output": result.stdout,
+                        "error": result.stderr
+                    })
+                    
+                    # Log the result
+                    print(f"Pipeline execution completed with return code: {result.returncode}")
+                    if result.stdout:
+                        print(f"STDOUT: {result.stdout}")
+                    if result.stderr:
+                        print(f"STDERR: {result.stderr}")
+                        
+                except subprocess.TimeoutExpired:
+                    pipeline_status.update({
+                        "running": False,
+                        "end_time": time.time(),
+                        "success": False,
+                        "message": "Pipeline execution timed out",
+                        "error": "Pipeline execution timed out after 5 minutes"
+                    })
+                    print("Pipeline execution timed out after 5 minutes")
+                except Exception as e:
+                    pipeline_status.update({
+                        "running": False,
+                        "end_time": time.time(),
+                        "success": False,
+                        "message": "Pipeline execution failed",
+                        "error": str(e)
+                    })
+                    print(f"Error running pipeline: {e}")
+            
+            # Start the script in a background thread
+            thread = threading.Thread(target=run_script)
+            thread.daemon = True
+            thread.start()
+            
+            return jsonify({
+                "success": True,
+                "message": "Pipeline execution started. This may take several minutes to complete.",
+                "status": "running"
+            })
+            
+        except Exception as e:
+            pipeline_status.update({
+                "running": False,
+                "success": False,
+                "message": "Failed to start pipeline",
+                "error": str(e)
+            })
+            return jsonify({
+                "success": False,
+                "error": str(e)
+            }), 500
+    
+    @app.route("/api/pipeline-status", methods=['GET'])
+    def get_pipeline_status():
+        """Get the current status of the pipeline execution."""
+        global pipeline_status
+        
+        # Calculate duration if running
+        duration = None
+        if pipeline_status["running"] and pipeline_status["start_time"]:
+            duration = time.time() - pipeline_status["start_time"]
+        elif pipeline_status["end_time"] and pipeline_status["start_time"]:
+            duration = pipeline_status["end_time"] - pipeline_status["start_time"]
+        
+        return jsonify({
+            "running": pipeline_status["running"],
+            "success": pipeline_status["success"],
+            "message": pipeline_status["message"],
+            "duration": duration,
+            "start_time": pipeline_status["start_time"],
+            "end_time": pipeline_status["end_time"],
+            "output": pipeline_status["output"][-500:] if pipeline_status["output"] else "",  # Last 500 chars
+            "error": pipeline_status["error"]
+        })
     
     return app
 
@@ -137,9 +506,10 @@ def load_package_data(package_dir: Path) -> Dict[str, Any]:
         except Exception as e:
             print(f"Error loading {csv_file}: {e}")
     
-    # Load reports
+    # Load reports (exclude template_prefilled.md)
     for md_file in package_dir.glob("*.md"):
-        data["reports"][md_file.stem] = md_file.read_text()
+        if md_file.stem != "template_prefilled":
+            data["reports"][md_file.stem] = md_file.read_text(encoding='utf-8')
     
     return data
 
