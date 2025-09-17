@@ -1,0 +1,44 @@
+{
+  "premium_monthly": {
+    "id": "price_1S8EtPJLp4Jsp3ORfNPTVV0h",
+    "product_id": "prod_T4NeLT4NbDW8yP",
+    "amount": 3000,
+    "currency": "usd",
+    "interval": "month",
+    "interval_count": 1,
+    "display_name": "Premium Monthly",
+    "display_price": "$30"
+  },
+  "premium_annual": {
+    "id": "price_1S8Ew8JLp4Jsp3OR6XRlesw2",
+    "product_id": "prod_T4NhpXUGjjWz2m",
+    "amount": 30000,
+    "currency": "usd",
+    "interval": "year",
+    "interval_count": 1,
+    "display_name": "Premium Annual",
+    "display_price": "$300",
+    "savings": "Save $60/year"
+  },
+  "pro_monthly": {
+    "id": "price_1S8Eu2JLp4Jsp3OR7QIsqZGD",
+    "product_id": "prod_T4NfU5fHFqzVEm",
+    "amount": 9000,
+    "currency": "usd",
+    "interval": "month",
+    "interval_count": 1,
+    "display_name": "Pro Monthly",
+    "display_price": "$90"
+  },
+  "pro_annual": {
+    "id": "price_1S8EwmJLp4Jsp3ORH9rH6Tnm",
+    "product_id": "prod_T4NiE1XNa2sQVx",
+    "amount": 91800,
+    "currency": "usd",
+    "interval": "year",
+    "interval_count": 1,
+    "display_name": "Pro Annual",
+    "display_price": "$918",
+    "savings": "Save $162/year"
+  }
+}

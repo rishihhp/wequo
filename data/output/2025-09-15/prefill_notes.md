@@ -1,0 +1,25 @@
+- **FRED**: Latest values available for 2 series
+- **COMMODITIES**: Latest values available for 6 series
+- **CRYPTO**: Latest values available for 6 series
+- **ECONOMIC**: Latest values available for 24 series
+- **NOAA**: Latest values available for 6 series
+- **Key Changes**: 5 significant deltas detected
+-   - US_FP.CPI.TOTL.ZG: 2386.4% change (0.12 -> 2.95)
+-   - GB_FP.CPI.TOTL.ZG: 788.9% change (0.37 -> 3.27)
+-   - DE_FP.CPI.TOTL.ZG: 338.6% change (0.51 -> 2.26)
+- **Anomalies**: 12 anomalies detected
+-   - US_SL.UEM.TOTL.ZS: 8.05 (z-score: 2.63)
+-   - US_FP.CPI.TOTL.ZG: 8.00 (z-score: 2.39)
+- **Trends**: 16 significant trends
+-   - US_NY.GDP.MKTP.CD: 📈 strong trend
+-   - CN_NY.GDP.MKTP.CD: 📈 strong trend
+- **Change Points**: 8 structural changes detected
+-   - GOLD: mean on 2018-10-11
+-   - GOLD: variance on 2018-09-18
+- **Correlations**: 458 strong correlations found
+-   - BINANCECOIN ↔ SOLANA: 0.99 (cross_correlation)
+-   - BINANCECOIN ↔ SOLANA: 0.99 (pearson)
+- **Insights**: 14 analytical explanations generated
+-   - 9 high-confidence insights available
+- **Data Package**: Generated at 2025-09-15T12:59:17.254822
+- **Sources**: fred, commodities, crypto, economic, noaa

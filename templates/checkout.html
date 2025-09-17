@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WeQuo - Choose Your Plan</title>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", sans-serif;
+        background: linear-gradient(
+          135deg,
+          #1a365d 0%,
+          #2d3748 50%,
+          #4a5568 100%
+        );
+        min-height: 100vh;
+        color: #333;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 60px;
+        color: white;
+      }
+
+      .header h1 {
+        font-size: 3em;
+        font-weight: 800;
+        margin-bottom: 20px;
+        background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .header p {
+        font-size: 1.2em;
+        opacity: 0.9;
+      }
+
+      .pricing-toggle {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 40px;
+      }
+
+      .toggle-container {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50px;
+        padding: 8px;
+        display: flex;
+        gap: 8px;
+      }
+
+      .toggle-option {
+        padding: 12px 24px;
+        border-radius: 50px;
+        background: transparent;
+        color: white;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+      }
+
+      .toggle-option.active {
+        background: white;
+        color: #2d3748;
+      }
+
+      .plans-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 40px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .plan-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .plan-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.15);
+      }
+
+      .plan-card.popular {
+        border: 2px solid #667eea;
+        transform: scale(1.05);
+      }
+
+      .popular-badge {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 0 20px 0 20px;
+        font-size: 0.9em;
+        font-weight: 600;
+      }
+
+      .plan-name {
+        font-size: 1.8em;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 10px;
+      }
+
+      .plan-price {
+        font-size: 3em;
+        font-weight: 800;
+        color: #667eea;
+        margin-bottom: 5px;
+      }
+
+      .plan-period {
+        color: #718096;
+        margin-bottom: 10px;
+      }
+
+      .plan-savings {
+        background: #f0fff4;
+        color: #38a169;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.9em;
+        font-weight: 600;
+        margin-bottom: 30px;
+        display: inline-block;
+      }
+
+      .plan-description {
+        color: #4a5568;
+        margin-bottom: 30px;
+        line-height: 1.6;
+      }
+
+      .plan-features {
+        list-style: none;
+        margin-bottom: 40px;
+      }
+
+      .plan-features li {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 0;
+        color: #2d3748;
+      }
+
+      .feature-check {
+        width: 20px;
+        height: 20px;
+        color: #38a169;
+        flex-shrink: 0;
+      }
+
+      .plan-button {
+        width: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 16px 32px;
+        border-radius: 12px;
+        font-size: 1.1em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+      }
+
+      .plan-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+      }
+
+      .plan-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: white;
+        text-decoration: none;
+        margin-bottom: 40px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .back-link:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        text-decoration: none;
+      }
+
+      .loading {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(4px);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top: 4px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 20px 10px;
+        }
+
+        .plans-grid {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+
+        .plan-card {
+          padding: 30px 20px;
+        }
+
+        .plan-card.popular {
+          transform: none;
+        }
+
+        .header h1 {
+          font-size: 2.5em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+    </div>
+
+    <div class="container">
+      <a href="/" class="back-link">
+        <i data-lucide="arrow-left"></i>
+        Back to Dashboard
+      </a>
+
+      <div class="header">
+        <h1>Choose Your Plan</h1>
+        <p>Unlock the full potential of WeQuo with our subscription plans</p>
+      </div>
+
+      <div class="pricing-toggle">
+        <div class="toggle-container">
+          <button
+            class="toggle-option active"
+            data-period="monthly"
+            onclick="togglePricing('monthly')"
+          >
+            Monthly
+          </button>
+          <button
+            class="toggle-option"
+            data-period="annual"
+            onclick="togglePricing('annual')"
+          >
+            Annual
+          </button>
+        </div>
+      </div>
+
+      <div class="plans-grid">
+        <!-- Premium Plan -->
+        <div class="plan-card" data-plan="premium">
+          <div class="plan-name">Premium</div>
+          <div class="plan-price" data-monthly="$30" data-annual="$300">
+            $30
+          </div>
+          <div
+            class="plan-period"
+            data-monthly="per month"
+            data-annual="per year"
+          >
+            per month
+          </div>
+          <div
+            class="plan-savings"
+            data-annual="Save $60/year"
+            style="display: none"
+          >
+            Save $60/year
+          </div>
+          <div class="plan-description">
+            Perfect for small teams getting started with data analytics
+          </div>
+          <ul class="plan-features">
+            <li>
+              <i data-lucide="check" class="feature-check"></i>
+              Full analytics access
+            </li>
+            <li>
+              <i data-lucide="check" class="feature-check"></i>
+              Automated report generation
+            </li>
+            <li>
+              <i data-lucide="check" class="feature-check"></i>
+              Data export capabilities
+            </li>
+            <li>
+              <i data-lucide="check" class="feature-check"></i>
+              Real-time monitoring
+            </li>
+          </ul>
+          <button
+            class="plan-button"
+            onclick="selectPlan('premium', 'monthly')"
+            data-monthly-price="price_1S8EtPJLp4Jsp3ORfNPTVV0h"
+            data-annual-price="price_1S8Ew8JLp4Jsp3OR6XRlesw2"
+          >
+            Get Premium
+          </button>
+        </div>
+
+        <!-- Pro Plan -->
+        <div class="plan-card popular" data-plan="pro">
+          <div class="popular-badge">Most Popular</div>
+          <div class="plan-name">Pro</div>
+          <div class="plan-price" data-monthly="$90" data-annual="$918">
+            $90
+          </div>
+          <div
+            class="plan-period"
+            data-monthly="per month"
+            data-annual="per year"
+          >
+            per month
+          </div>
+          <div
+            class="plan-savings"
+            data-annual="Save $162/year"
+            style="display: none"
+          >
+            Save $162/year
+          </div>
+          <div class="plan-description">
+            Advanced features for growing businesses and professional use
+          </div>
+          <ul class="plan-features">
+            <li>
+              <i data-lucide="check" class="feature-check"></i>
+              Everything in Premium
+            </li>
+            <li>
+              <i data-lucide="check" class="feature-check"></i>
+              Advanced analytics
+            </li>
+            <li>
+              <i data-lucide="check" class="feature-check"></i>
+              Custom integrations
+            </li>
+            <li>
+              <i data-lucide="check" class="feature-check"></i>
+              Priority support
+            </li>
+            <li>
+              <i data-lucide="check" class="feature-check"></i>
+              Advanced monitoring
+            </li>
+          </ul>
+          <button
+            class="plan-button"
+            onclick="selectPlan('pro', 'monthly')"
+            data-monthly-price="price_1S8Eu2JLp4Jsp3OR7QIsqZGD"
+            data-annual-price="price_1S8EwmJLp4Jsp3ORH9rH6Tnm"
+          >
+            Get Pro
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      lucide.createIcons();
+
+      function togglePricing(period) {
+        // Update toggle buttons
+        document.querySelectorAll(".toggle-option").forEach((btn) => {
+          btn.classList.remove("active");
+        });
+        document
+          .querySelector(`[data-period="${period}"]`)
+          .classList.add("active");
+
+        // Update prices and text
+        document.querySelectorAll("[data-monthly]").forEach((element) => {
+          if (element.hasAttribute("data-annual")) {
+            element.textContent = element.getAttribute(`data-${period}`);
+          }
+        });
+
+        // Show/hide savings badges
+        document.querySelectorAll(".plan-savings").forEach((badge) => {
+          if (period === "annual") {
+            badge.style.display = "inline-block";
+          } else {
+            badge.style.display = "none";
+          }
+        });
+
+        // Update button onclick handlers
+        document.querySelectorAll(".plan-button").forEach((button) => {
+          const planCard = button.closest("[data-plan]");
+          const planType = planCard.getAttribute("data-plan");
+          button.onclick = () => selectPlan(planType, period);
+        });
+      }
+
+      async function selectPlan(planType, period) {
+        const button = event.target;
+        const priceId = button.getAttribute(`data-${period}-price`);
+
+        // Show loading state
+        button.disabled = true;
+        button.textContent = "Processing...";
+        document.getElementById("loading").style.display = "flex";
+
+        try {
+          const response = await fetch("/checkout/create-session", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              price_id: priceId,
+              plan_type: planType,
+              billing_period: period,
+            }),
+          });
+
+          const data = await response.json();
+
+          if (data.success && data.checkout_url) {
+            window.location.href = data.checkout_url;
+          } else {
+            throw new Error(data.error || "Failed to create checkout session");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert(
+            "Sorry, there was an error processing your request. Please try again."
+          );
+
+          // Reset button state
+          button.disabled = false;
+          button.textContent =
+            button.closest("[data-plan]").getAttribute("data-plan") ===
+            "premium"
+              ? "Get Premium"
+              : "Get Pro";
+          document.getElementById("loading").style.display = "none";
+        }
+      }
+    </script>
+  </body>
+</html>
