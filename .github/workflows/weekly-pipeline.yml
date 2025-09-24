@@ -1,0 +1,86 @@
+name: Weekly WeQuo Pipeline
+
+on:
+  schedule:
+    # Run every Monday at 9 AM UTC (adjust timezone as needed)
+    - cron: '0 9 * * 1'
+  workflow_dispatch: # Allow manual triggers
+
+jobs:
+  weekly-data-collection:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        
+    - name: Cache pip dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+          
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Create data directories
+      run: |
+        mkdir -p data/output
+        mkdir -p data/logs
+        
+    - name: Run weekly pipeline
+      env:
+        FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+        COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      run: |
+        python scripts/run_weekly.py
+        
+    - name: Upload weekly package artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: weekly-package-${{ github.run_number }}
+        path: data/output/
+        retention-days: 30
+        
+    - name: Generate pipeline report
+      run: |
+        echo "# Weekly Pipeline Report - $(date)" > pipeline_report.md
+        echo "" >> pipeline_report.md
+        echo "## Run Details" >> pipeline_report.md
+        echo "- **Run ID**: ${{ github.run_number }}" >> pipeline_report.md
+        echo "- **Triggered by**: ${{ github.event_name }}" >> pipeline_report.md
+        echo "- **Timestamp**: $(date -u)" >> pipeline_report.md
+        echo "" >> pipeline_report.md
+        echo "## Generated Files" >> pipeline_report.md
+        ls -la data/output/ >> pipeline_report.md
+        
+    - name: Upload pipeline report
+      uses: actions/upload-artifact@v4
+      with:
+        name: pipeline-report-${{ github.run_number }}
+        path: pipeline_report.md
+        
+    - name: Notify on failure
+      if: failure()
+      run: |
+        echo "Pipeline failed at step: ${{ job.status }}"
+        # Add notification logic here (email, Slack, etc.)
+        
+    - name: Notify on success
+      if: success()
+      run: |
+        echo "Pipeline completed successfully!"
+        # Add success notification logic here

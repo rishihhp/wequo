@@ -17,6 +17,7 @@ class CryptoConnector:
     
     symbols: List[str]
     lookback_days: int = 7
+    api_key: str = "CG-nStdindLxxTWR6dZAxGz4CKf"  # CoinGecko demo API key
     
     name: str = "crypto"
     
@@ -40,15 +41,19 @@ class CryptoConnector:
         start_date = end_date - timedelta(days=self.lookback_days)
         
         params = {
-            "ids": symbol,
-            "vs_currencies": "usd",
+            "vs_currency": "usd",
             "days": str(self.lookback_days),
             "interval": "daily"
         }
         
+        # Set up headers and API key
+        headers = {"accept": "application/json"}
+        if self.api_key:
+            headers["x-cg-demo-api-key"] = self.api_key
+        
         try:
             r = requests.get(f"{COINGECKO_API}/coins/{symbol}/market_chart", 
-                           params=params, timeout=30)
+                           params=params, headers=headers, timeout=30)
             r.raise_for_status()
             data = r.json()
             
