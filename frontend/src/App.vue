@@ -9,7 +9,7 @@ const sidebarOpen = ref(false);
 function onScroll() {
 	// toggle when user has scrolled past 100vh
 	if (typeof window === 'undefined' || typeof document === 'undefined') return;
-	if (window.scrollY < window.innerHeight) document.body.classList.add('hero-visible');
+	if (window.scrollY < (window.innerHeight - 72)) document.body.classList.add('hero-visible');
 	else document.body.classList.remove('hero-visible');
 }
 

@@ -32,7 +32,7 @@ import logo from '../assets/logo.png';
 .nav-inner{display:flex;align-items:center;justify-content:space-between}
 .nav-left{display:flex;align-items:center}
 .nav-center-logo{position:absolute;left:50%;transform:translateX(-50%)}
-.hamburger{display:inline-flex;flex-direction:column;gap:4px;padding:8px;border-radius:8px;border:0;background:transparent;cursor:pointer}
+.hamburger{display:inline-flex;flex-direction:column;gap:4px;padding:8px;border-radius:8px;border:0;background:transparent;cursor:pointer; height: 42px; width: 42px; align-items: center; justify-content: center;}
 .hamburger .bar{width:22px;height:2px;background:var(--token-text-dark);display:block}
 /* No outline when active/focused; but keep accessible focus styles via background */
 .hamburger:focus{outline:none}

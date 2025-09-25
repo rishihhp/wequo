@@ -5,7 +5,7 @@
 				<img :src="heroImg" alt="hero" />
 			</div>
 			<div class="hero-content hero-content-inner">
-				<p class="eyebrow text-white">International Collective Intelligence & Collaboration</p>
+				<p class="eyebrow text-white">International Collective Collaboration</p>
 				<h1 class="hero-title hero-title-large"><span>World</span> <span>Economic</span> <span>Quorum</span></h1>
 				<h6 class="hero-sub hero-subtext">Bringing together diverse perspectives and expertise to tackle global challenges through collective action.</h6>
 				<div class="hero-cta hero-cta-row">
