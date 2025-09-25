@@ -33,47 +33,73 @@
 		</section>
 
 		<section id="publications" class="section publications">
-			<div class="flex-container publications-grid">
-				<div class="left">
-					<p class="eyebrow">Publications</p>
-					<h3>Research, Reports & Essays</h3>
-					<p>Curated publications offering research, briefings, and actionable recommendations from our community and partners.</p>
-				</div>
+			<div class="section-grid">
+                <div class="section-flex">
+                    <div class="left section-text">
+                        <p class="eyebrow">Publications</p>
+                        <h2>Bringing Coherence to mend a fragmented world</h2>
+                        <p>Curated publications offering research, briefings, and actionable recommendations from our community and partners.</p>
+                    </div>
+                </div>
 				<div class="right cards">
-					<a class="card" href="./publications/culture-storytelling-for-civic-strength" style="background-color: #000">
-						<img :src="card1" alt="Culture & Storytelling" />
-						<h3>Culture & Storytelling</h3>
-						<p>Shift global attention toward truth, coherence, and civic strength through canonical works, broadcast rituals, and durable memetics.</p>
-					</a>
-					<a class="card" href="./publications/learning-for-better-futures" style="background-color: #bf9b30">
-						<img :src="card2" alt="Learning" />
-						<h3>Learning for better Futures</h3>
-						<p>Raise learning outcomes at the lowest cost per uplift via AI tutors, teacher upskilling, and vocational fast-tracks.</p>
-					</a>
-					<a class="card" href="./publications/health-access-for-all" style="background-color: #844d24">
-						<img :src="card3" alt="Health" />
-						<h3>Living Healthy Lives</h3>
-						<p>Expand preventive and primary care via AI triage, clinics-in-a-box, and mental-health coverage.</p>
-					</a>
+					<!-- Card 1: sticky container (slightly shorter like Framer) -->
+					<div class="card-container tall">
+						<a class="card" href="./publications/culture-of-civic-responsibility" style="background-color: #000">
+							<div class="card-image">
+								<img :src="card1" alt="Culture of Civic Responsibility" />
+							</div>
+							<div class="card-body">
+								<h3>Culture of Civic Responsibility</h3>
+								<p>Shift global attention toward civic responsibility through transformative narratives based in truth and shared values.</p>
+							</div>
+						</a>
+						</div>
+
+					<!-- Card 2: sticky container -->
+					<div class="card-container">
+						<a class="card" href="./publications/learning-for-better-futures" style="background-color: #bf9b30">
+							<div class="card-image">
+								<img :src="card2" alt="Learning for better Futures" />
+							</div>
+							<div class="card-body">
+								<h3>Learning for better Futures</h3>
+								<p>Raise learning outcomes at the lowest cost per uplift via AI tutors, teacher upskilling, and vocational fast-tracks.</p>
+							</div>
+						</a>
+					</div>
+
+					<!-- Card 3: sticky container -->
+					<div class="card-container">
+						<a class="card" href="./publications/health-access-for-all" style="background-color: #844d24">
+							<div class="card-image">
+								<img :src="card3" alt="Living Healthy Lives" />
+							</div>
+							<div class="card-body">
+								<h3>Living Healthy Lives</h3>
+								<p>Expand preventive and primary care via AI triage, clinics-in-a-box, and mental-health coverage.</p>
+							</div>
+						</a>
+					</div>
 				</div>
 			</div>
 		</section>
 
 		<section id="partners" class="section partners">
-			<div class="flex-container">
-				<div class="left">
-					<h3>Partners</h3>
-					<p>Our ecosystem spans visionary organizations, funds, and initiatives working to reshape culture, technology, governance, and collective intelligence.</p>
-				</div>
+			<div class="section-grid">
+                <div class="section-flex">
+                    <div class="left section-text">
+                        <h2>Partners</h2>
+                        <p>Our ecosystem spans visionary organizations, funds, and initiatives working to reshape culture, technology, governance, and collective intelligence.</p>
+                    </div>
+                </div>
 				<div class="right logos">
 					<h4>Selected Partners</h4>
 					<div class="logo-grid">
-						<a href="https://persistventures.com/" target="_blank" rel="noopener">Persist Ventures</a>
-						<a href="https://dia.wiki/" target="_blank" rel="noopener">DIA</a>
-						<a href="https://federalpreserve.org/" target="_blank" rel="noopener">Federal Preserve</a>
-						<a href="https://www.solarpunkism.com/" target="_blank" rel="noopener">solarpunkism</a>
-						<a href="https://www.faithism.net/" target="_blank" rel="noopener">Faithism</a>
-						<a href="https://www.purplerock.xyz/" target="_blank" rel="noopener">Purple Rock</a>
+						<!-- Render a 3x2 grid of partner logos. Keep the anchor text/names but add the logo images. -->
+						<a v-for="(p, idx) in partners" :key="p.name" :href="p.url" target="_blank" rel="noopener" class="partner">
+							<img v-if="p.src" :src="p.src" :alt="p.name" class="partner-logo" />
+							<span class="partner-name">{{ p.name }}</span>
+						</a>
 					</div>
 					<div class="company-list">
 						<h4>All</h4>
@@ -163,6 +189,31 @@ import card1 from '../assets/LghU1ToVACojn81DkgMO6S2Dlg4.png';
 import card2 from '../assets/2qTb7a0TGpF3zVwt3pmEbInH40.png';
 import card3 from '../assets/C4wQP6LejcIeET5hC6YedS3tWHs.png';
 
+// Dynamically import partner logos from assets/partners
+const partnerFiles = import.meta.glob('../assets/partners/*.{png,jpg,jpeg,svg}', { eager: true, as: 'url' });
+
+// helper to normalize filename -> key
+function baseName(path) {
+	return path.replace(/^.*[\\/]/, '');
+}
+
+// Map filenames to partner entries (name and url)
+const partnersMeta = [
+	{ file: 'Persist_Ventures.png', name: 'Persist Ventures', url: 'https://persistventures.com/' },
+	{ file: 'DIA.png', name: 'DIA', url: 'https://dia.wiki/' },
+	{ file: 'Federal_Preserve.png', name: 'Federal Preserve', url: 'https://federalpreserve.org/' },
+	{ file: 'solarpunkism.png', name: 'solarpunkism', url: 'https://www.solarpunkism.com/' },
+	{ file: 'Faithism.png', name: 'Faithism', url: 'https://www.faithism.net/' },
+	{ file: 'Purple_Rock.png', name: 'Purple Rock', url: 'https://www.purplerock.xyz/' },
+];
+
+const partners = partnersMeta.map((m) => {
+	// find matching import by filename
+	const matchKey = Object.keys(partnerFiles).find((k) => baseName(k) === m.file) || null;
+	const src = matchKey ? partnerFiles[matchKey] : null;
+	return { name: m.name, url: m.url, src };
+});
+
 const form = reactive({ name: '', email: '', phone: '', message: '' });
 const sent = ref(false);
 const error = ref('');
@@ -185,3 +236,139 @@ async function submitForm() {
 </script>
 
 <!-- styles moved to TopNav.vue -->
+
+<style scoped>
+.logo-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 18px;
+	align-items: center;
+}
+.logo-grid .partner {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-decoration: none;
+	color: inherit;
+	padding: 18px;
+}
+.partner-logo {
+	width: 100%;
+	max-width: 154px;
+	height: 154px;
+	object-fit: contain;
+	background: var(--token-bg-light);
+	padding: 12px;
+    transition: transform .36s ease;
+}
+.partner-logo:hover {
+    transform: scale(1.18);
+}
+.partner-name {
+	margin-top: 8px;
+	font-size: 13px;
+	text-align: center;
+}
+
+@media (max-width: 800px) {
+	.logo-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Publications cards — mimic Framer look */
+.publications .cards {
+	display: flex;
+	flex-direction: column;
+	gap: 18px; /* no gap between cards */
+}
+
+.publications .card-container {
+	position: sticky;
+	top: 100px;
+	width: 100%;
+	height: 50vh; /* like Framer yj9404/aoety1 */
+	z-index: 1;
+	margin: 0; /* remove any vertical margins */
+}
+
+.publications .card-container.tall { height: 45vh; } /* like Framer 1pdlic6 */
+
+.publications .card {
+	display: block;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	border-radius: 0; /* square edges */
+	padding: 0; /* no internal padding that can create visual gaps */
+	overflow: hidden;
+	text-decoration: none;
+	color: #fff;
+	box-shadow: 0 0.72px 2.28px -1.21px rgba(0,0,0,0.18), 0 2.28px 18.5px -3.6px rgba(0,0,0,0.18), 0 6px 36px -3.6px rgba(0,0,0,0.06);
+	transition: transform .72s ease, box-shadow .28s ease, opacity .28s ease;
+}
+.publications .card img {
+    transition: transform .72s ease;
+}
+.publications .card:hover {
+	box-shadow: 0 1px 3px -1px rgba(0,0,0,0.24), 0 3px 12px -2px rgba(0,0,0,0.20), 0 16px 46px -4px rgba(0,0,0,0.14);
+}
+.publications .card:hover img {
+    transform: scale(1.05);
+}
+
+.publications .card-image {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+}
+
+.publications .card-image img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+}
+
+.publications .card::after {
+	/* Bottom gradient overlay like Framer to ensure text readability */
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,.6) 75%, rgba(0,0,0,.85) 100%);
+	z-index: 1;
+	pointer-events: none;
+}
+
+.publications .card-body {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	padding: 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	z-index: 2; /* above gradient */
+}
+
+.publications .card h3 {
+	margin: 0;
+	font-weight: 600;
+	font-family: "Mluvka", system-ui, sans-serif;
+	font-size: clamp(18px, 2.2vw, 28px);
+	line-height: 1.15;
+}
+
+.publications .card p {
+	margin: 0;
+	font-family: "Mluvka", system-ui, sans-serif;
+	font-size: clamp(14px, 1.6vw, 16px);
+	line-height: 1.35;
+}
+
+@media (max-width: 800px) {
+	.publications .card-container { height: 40vh; top: 80px; }
+	.publications .card-body { padding: 18px; }
+}
+
+</style>

@@ -115,6 +115,7 @@ body:not(.hero-visible) .topnav .nav-items a.text-nav, body:not(.hero-visible) .
 .hero-content{outline:none;display:flex;z-index:2;flex-direction:column;justify-content:flex-start;flex-shrink:0; padding:calc(26rem + var(--nav-height)) 3rem 6rem}
 .hero-title{font-size:clamp(28px, 6vw, 64px);margin:.72rem 0;line-height:1}
 .eyebrow{font-weight:500}
+section .eyebrow{font-size:var(--type-scale-sm);text-transform:uppercase;letter-spacing:0.05em;color:var(--token-text-dark);margin-bottom:0.5rem}
 .hero-cta{display:flex;gap:1rem;justify-content:center}
 .btn.primary{background:#000;color:#fff;padding:1rem 1.1rem;border-radius:6px;min-width:120px;min-height:48px}
 .btn.ghost{background:rgba(255,255,255,.95);color:#000;padding:1rem 1.1rem;border-radius:6px;min-width:120px;min-height:48px}
@@ -129,11 +130,23 @@ body:not(.hero-visible) .topnav .nav-items a.text-nav, body:not(.hero-visible) .
 .flex-container{display:flex;gap:2rem;align-items:center}
 .left{flex:1}
 .right{flex:1}
-.cards{display:flex;gap:1rem;flex-wrap:wrap}
+.cards{display:flex;gap:1rem;flex-direction:column;}
 .card{padding:1rem;color:#fff;border-radius:8px;flex:1;min-width:220px}
-.card img{width:100%;height:150px;object-fit:cover;border-radius:6px}
-
+.card img{width:100%;height:150px;object-fit:cover;}
 .logo-grid, .companies{display:flex;gap:1rem;flex-wrap:wrap}
+.section-grid{display:flex;flex-flow:row;align-items:flex-start;gap:0;height:min-content;overflow:visible;position:relative;}
+.section-flex{
+    flex-flow: column;
+    flex: 1 0 0;
+    align-self: stretch;
+    align-items: flex-start;
+    height: auto;
+    padding: 18px;
+    display: flex;
+    position: relative;
+    overflow: visible;
+}
+.section-text{flex: none; flex-flow: column; align-items: flex-start; height: min-content; padding: 0; display: flex; position:sticky; top:calc(var(--nav-height) + 3.6rem); overflow: visible; font-size:var(--type-scale-md);}
 
 /* Contact/form */
 .contact-grid{display:flex;gap:2rem;align-items:start}
