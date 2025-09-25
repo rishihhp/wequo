@@ -15,7 +15,7 @@
 			</div>
 		</header>
 
-		<section id="mission" class="section mission">
+		<section id="mission" class="section short">
 			<div class="flex-container">
 				<div class="left">
 					<h2>Representing the MAJORITY</h2>
@@ -32,18 +32,18 @@
 			</div>
 		</section>
 
-		<section id="publications" class="section publications">
+		<section id="publications" class="section publications" ref="pubSectionEl">
 			<div class="section-grid">
                 <div class="section-flex">
-                    <div class="left section-text">
+					<div class="left section-text" ref="pubTextEl">
                         <p class="eyebrow">Publications</p>
-                        <h2>Bringing Coherence to mend a fragmented world</h2>
+						<h2>Bringing Coherence to mend a fragmented world</h2>
                         <p>Curated publications offering research, briefings, and actionable recommendations from our community and partners.</p>
                     </div>
                 </div>
 				<div class="right cards">
 					<!-- Card 1: sticky container (slightly shorter like Framer) -->
-					<div class="card-container tall">
+					<div class="card-container">
 						<a class="card" href="./publications/culture-of-civic-responsibility" style="background-color: #000">
 							<div class="card-image">
 								<img :src="card1" alt="Culture of Civic Responsibility" />
@@ -93,7 +93,7 @@
                     </div>
                 </div>
 				<div class="right logos">
-					<h4>Selected Partners</h4>
+					<h2 class="section-title">Selected Partners</h2>
 					<div class="logo-grid">
 						<!-- Render a 3x2 grid of partner logos. Keep the anchor text/names but add the logo images. -->
 						<a v-for="(p, idx) in partners" :key="p.name" :href="p.url" target="_blank" rel="noopener" class="partner">
@@ -102,7 +102,7 @@
 						</a>
 					</div>
 					<div class="company-list">
-						<h4>All</h4>
+						<h2 class="section-title">All</h2>
 						<div class="companies">
 							<a href="https://www.synchronouscity.org/" target="_blank" rel="noopener">Synchronous City</a>
 							<a href="https://www.legacyforesight.org/" target="_blank" rel="noopener">Legacy Foresight</a>
@@ -128,7 +128,7 @@
 			</div>
 		</section>
 
-		<section id="work" class="section work">
+		<section id="work" class="section short">
 			<div class="flex-container">
 				<h2>Shaping the global vibe</h2>
 				<h4>Culture is infrastructure. We commission work that moves norms, not just news.</h4>
@@ -183,7 +183,7 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
+import { reactive, ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import heroImg from '../assets/GWlxgrH9lo91CE3UMYEiWcdMVsM.png';
 import card1 from '../assets/LghU1ToVACojn81DkgMO6S2Dlg4.png';
 import card2 from '../assets/2qTb7a0TGpF3zVwt3pmEbInH40.png';
@@ -218,6 +218,36 @@ const form = reactive({ name: '', email: '', phone: '', message: '' });
 const sent = ref(false);
 const error = ref('');
 // sidebarOpen is managed by App.vue
+
+// Dynamic sticky offset for publications cards: topnav height + section-text height
+const pubSectionEl = ref(null);
+const pubTextEl = ref(null);
+let resizeObs;
+
+function computeStickyTop() {
+	const root = document.documentElement;
+	const nav = document.querySelector('.topnav-fixed');
+	const navH = nav ? nav.getBoundingClientRect().height : parseFloat(getComputedStyle(root).getPropertyValue('--nav-height')) || 72;
+	const textEl = pubTextEl.value || document.querySelector('.publications .section-text');
+	const textH = textEl ? textEl.getBoundingClientRect().height : 0;
+	const top = Math.max(0, Math.round(navH + textH));
+	root.style.setProperty('--pub-sticky-top', `${top}px`);
+}
+
+onMounted(async () => {
+	await nextTick();
+	computeStickyTop();
+	resizeObs = new ResizeObserver(() => computeStickyTop());
+	if (pubTextEl.value) resizeObs.observe(pubTextEl.value);
+	const nav = document.querySelector('.topnav-fixed');
+	if (nav) resizeObs.observe(nav);
+	window.addEventListener('resize', computeStickyTop);
+});
+
+onBeforeUnmount(() => {
+	if (resizeObs) resizeObs.disconnect();
+	window.removeEventListener('resize', computeStickyTop);
+});
 
 async function submitForm() {
 	error.value = '';
@@ -255,7 +285,7 @@ async function submitForm() {
 .partner-logo {
 	width: 100%;
 	max-width: 154px;
-	height: 154px;
+	max-height: 154px;
 	object-fit: contain;
 	background: var(--token-bg-light);
 	padding: 12px;
@@ -270,27 +300,34 @@ async function submitForm() {
 	text-align: center;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 777px) {
+    .section-grid {
+        flex-direction: column;
+    }
+    .section-flex {
+        position: sticky;
+        top: 72px;
+    }
 	.logo-grid { grid-template-columns: repeat(2, 1fr); }
+
 }
 
 /* Publications cards — mimic Framer look */
 .publications .cards {
 	display: flex;
 	flex-direction: column;
-	gap: 18px; /* no gap between cards */
+	gap: 0; /* no gap between cards */
 }
 
 .publications .card-container {
 	position: sticky;
-	top: 100px;
+	top: 72px;
 	width: 100%;
 	height: 50vh; /* like Framer yj9404/aoety1 */
 	z-index: 1;
 	margin: 0; /* remove any vertical margins */
 }
 
-.publications .card-container.tall { height: 45vh; } /* like Framer 1pdlic6 */
 
 .publications .card {
 	display: block;
@@ -366,8 +403,8 @@ async function submitForm() {
 	line-height: 1.35;
 }
 
-@media (max-width: 800px) {
-	.publications .card-container { height: 40vh; top: 80px; }
+@media (max-width: 777px) {
+	.publications .card-container { height: 40vh; top: var(--pub-sticky-top, 72px); }
 	.publications .card-body { padding: 18px; }
 }
 
