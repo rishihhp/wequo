@@ -32,17 +32,16 @@
 			</div>
 		</section>
 
-		<section id="publications" class="section publications" ref="pubSectionEl">
+		<section id="publications" class="section publications">
 			<div class="section-grid">
                 <div class="section-flex">
-					<div class="left section-text" ref="pubTextEl">
+					<div class="left section-text">
                         <p class="eyebrow">Publications</p>
 						<h2>Bringing Coherence to mend a fragmented world</h2>
                         <p>Curated publications offering research, briefings, and actionable recommendations from our community and partners.</p>
                     </div>
                 </div>
 				<div class="right cards">
-					<!-- Card 1: sticky container (slightly shorter like Framer) -->
 					<div class="card-container">
 						<a class="card" href="./publications/culture-of-civic-responsibility" style="background-color: #000">
 							<div class="card-image">
@@ -134,7 +133,7 @@
 					<h1>Contact</h1>
 					<p class="section-text">We welcome dialogue with potential partners, collaborators, and supporters. Reach out to explore how we can work together to create meaningful impact.</p>
 				</div>
-				<div class="right" style="margin-right: 36px;">
+				<div class="right">
 					<form @submit.prevent="submitForm" class="contact-form">
 						<label class="label-name">
 							<div class="form-text-input form-input-wrapper">
@@ -175,21 +174,16 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
+import { reactive, ref } from 'vue';
 import heroImg from '../assets/GWlxgrH9lo91CE3UMYEiWcdMVsM.png';
 import card1 from '../assets/LghU1ToVACojn81DkgMO6S2Dlg4.png';
 import card2 from '../assets/2qTb7a0TGpF3zVwt3pmEbInH40.png';
 import card3 from '../assets/C4wQP6LejcIeET5hC6YedS3tWHs.png';
 
-// Dynamically import partner logos from assets/partners
+// Dynamically import partner logos from assets/partners (eager URL imports)
 const partnerFiles = import.meta.glob('../assets/partners/*.{png,jpg,jpeg,svg}', { eager: true, as: 'url' });
 
-// helper to normalize filename -> key
-function baseName(path) {
-	return path.replace(/^.*[\\/]/, '');
-}
-
-// Map filenames to partner entries (name and url)
+// Minimal partners metadata and map to available assets
 const partnersMeta = [
 	{ file: 'Persist_Ventures.png', name: 'Persist Ventures', url: 'https://persistventures.com/' },
 	{ file: 'DIA.png', name: 'DIA', url: 'https://dia.wiki/' },
@@ -200,46 +194,14 @@ const partnersMeta = [
 ];
 
 const partners = partnersMeta.map((m) => {
-	// find matching import by filename
-	const matchKey = Object.keys(partnerFiles).find((k) => baseName(k) === m.file) || null;
-	const src = matchKey ? partnerFiles[matchKey] : null;
-	return { name: m.name, url: m.url, src };
+	const key = Object.keys(partnerFiles).find((k) => k.endsWith('/' + m.file) || k.endsWith('\\' + m.file));
+	return { name: m.name, url: m.url, src: key ? partnerFiles[key] : null };
 });
 
 const form = reactive({ name: '', email: '', phone: '', message: '' });
 const sent = ref(false);
 const error = ref('');
 // sidebarOpen is managed by App.vue
-
-// Dynamic sticky offset for publications cards: topnav height + section-text height
-const pubSectionEl = ref(null);
-const pubTextEl = ref(null);
-let resizeObs;
-
-function computeStickyTop() {
-	const root = document.documentElement;
-	const nav = document.querySelector('.topnav-fixed');
-	const navH = nav ? nav.getBoundingClientRect().height : parseFloat(getComputedStyle(root).getPropertyValue('--nav-height')) || 72;
-	const textEl = pubTextEl.value || document.querySelector('.publications .section-text');
-	const textH = textEl ? textEl.getBoundingClientRect().height : 0;
-	const top = Math.max(0, Math.round(navH + textH));
-	root.style.setProperty('--pub-sticky-top', `${top}px`);
-}
-
-onMounted(async () => {
-	await nextTick();
-	computeStickyTop();
-	resizeObs = new ResizeObserver(() => computeStickyTop());
-	if (pubTextEl.value) resizeObs.observe(pubTextEl.value);
-	const nav = document.querySelector('.topnav-fixed');
-	if (nav) resizeObs.observe(nav);
-	window.addEventListener('resize', computeStickyTop);
-});
-
-onBeforeUnmount(() => {
-	if (resizeObs) resizeObs.disconnect();
-	window.removeEventListener('resize', computeStickyTop);
-});
 
 async function submitForm() {
 	error.value = '';
@@ -292,32 +254,32 @@ async function submitForm() {
 	text-align: center;
 }
 
-@media (max-width: 777px) {
-    .section-grid {
-        flex-direction: column;
-    }
-    .section-flex {
-        position: sticky;
-        top: 72px;
-    }
-	.logo-grid { grid-template-columns: repeat(2, 1fr); }
-
+@media (max-width: 1200px) {
+    .contact .section-grid { padding: 18px; flex-direction: column; margin: auto; }
+    .contact .section-grid .right { width: 100%; max-width: 666px; margin: auto; }
+    .partners .section-grid { flex-direction: column; }
+	.partners .section-flex { position: sticky; top: var(--nav-height, 72px); }
 }
 
-/* Publications cards — mimic Framer look */
+@media (max-width: 777px) {
+    .logo-grid { grid-template-columns: repeat(2, 1fr); }
+    .publications .card-container { height: 40vh; top: var(--pub-sticky-top, 72px); }
+	.publications .card-body { padding: 18px; }
+}
+
 .publications .cards {
 	display: flex;
 	flex-direction: column;
-	gap: 0; /* no gap between cards */
+	gap: 0;
 }
 
 .publications .card-container {
 	position: sticky;
 	top: 72px;
 	width: 100%;
-	height: 50vh; /* like Framer yj9404/aoety1 */
+	height: 50vh;
 	z-index: 1;
-	margin: 0; /* remove any vertical margins */
+	margin: 0;
 }
 
 
@@ -326,8 +288,8 @@ async function submitForm() {
 	position: relative;
 	width: 100%;
 	height: 100%;
-	border-radius: 0; /* square edges */
-	padding: 0; /* no internal padding that can create visual gaps */
+	border-radius: 0; 
+	padding: 0;
 	overflow: hidden;
 	text-decoration: none;
 	color: #fff;
@@ -359,7 +321,6 @@ async function submitForm() {
 }
 
 .publications .card::after {
-	/* Bottom gradient overlay like Framer to ensure text readability */
 	content: "";
 	position: absolute;
 	inset: 0;
@@ -393,11 +354,6 @@ async function submitForm() {
 	font-family: "Mluvka", system-ui, sans-serif;
 	font-size: clamp(14px, 1.6vw, 16px);
 	line-height: 1.35;
-}
-
-@media (max-width: 777px) {
-	.publications .card-container { height: 40vh; top: var(--pub-sticky-top, 72px); }
-	.publications .card-body { padding: 18px; }
 }
 
 </style>
