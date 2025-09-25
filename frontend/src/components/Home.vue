@@ -19,7 +19,7 @@
 			<div class="flex-container">
 				<div class="left">
 					<h2>Representing the MAJORITY</h2>
-					<p>We unite innovators, leaders, and communities to coordinate practical, outcome-driven solutions to global challenges.</p>
+					<p>We unite innovators, leaders, and communities to coordinate practical solutions to the world's most pressing issues.</p>
 				</div>
 				<div class="left">
 					<div class="filters">
@@ -128,20 +128,13 @@
 			</div>
 		</section>
 
-		<section id="work" class="section short">
-			<div class="flex-container">
-				<h2>Shaping the global vibe</h2>
-				<h4>Culture is infrastructure. We commission work that moves norms, not just news.</h4>
-			</div>
-		</section>
-
 		<section id="contact" class="section contact">
-			<div class="contact-grid">
-				<div class="left pos-relative">
+			<div class="section-grid">
+				<div class="left pos-relative section-flex">
 					<h1>Contact</h1>
-					<p>We welcome dialogue from councils, operators, media, and partners. Whether you are exploring membership, proposing a mandate, submitting an operator dossier, or simply seeking clarity about our work, we encourage you to reach out.</p>
+					<p class="section-text">We welcome dialogue with potential partners, collaborators, and supporters. Reach out to explore how we can work together to create meaningful impact.</p>
 				</div>
-				<div class="right">
+				<div class="right" style="margin-right: 36px;">
 					<form @submit.prevent="submitForm" class="contact-form">
 						<label class="label-name">
 							<div class="form-text-input form-input-wrapper">
@@ -176,7 +169,6 @@
 		<footer class="footer">
 			<div class="container footer-inner">
 				<div>© 2025 World Economic Quorum</div>
-				<div>Made by <a href="https://anterportfolio.framer.website/" target="_blank">Mohamed Anter</a> at Persist Ventures</div>
 			</div>
 		</footer>
 	</div>
