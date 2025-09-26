@@ -1,17 +1,17 @@
 <template>
-	<div class="mission-page chakra">
-		<article class="mission-layout wef-1or3k40">
-			<aside class="mission-sidebar wef-1uxkxjj">
-				<div class="mission-card wef-c9ggn4">
-					<h4 class="mission-eyebrow chakra-heading wef-ljorty">About us</h4>
-					<div class="mission-nav wef-1nvejj4">
-						<nav class="mission-nav-primary wef-cs712m" aria-label="Mission navigation">
+	<div class="mission-page chakra" ref="pageRoot">
+		<article class="mission-layout 0">
+			<aside class="mission-sidebar j">
+				<div class="mission-card">
+					<h4 class="mission-eyebrow chakra-heading">About us</h4>
+					<div class="mission-nav 4">
+						<nav class="mission-nav-primary" aria-label="Mission navigation">
 							<button
 								v-for="section in sections"
 								:key="section.id"
 								type="button"
 								class="mission-link"
-								:class="section.id === activeId ? 'wef-19t6g0o is-active' : 'wef-sd1y70'"
+								:class="section.id === activeId ? 'is-active' : ''"
 								@click="selectSection(section.id)"
 								:aria-current="section.id === activeId ? 'true' : undefined"
 							>
@@ -19,32 +19,36 @@
 							</button>
 						</nav>
 					</div>
-					<div class="mission-related wef-1lx4alh">
-						<p class="chakra-text wef-1sdljdm">Related links:</p>
-						<p class="chakra-text wef-h8e7xn"><a class="mission-related-link wef-spn4bz" href="/impact">Our impact</a></p>
-						<p class="chakra-text wef-h8e7xn"><a class="mission-related-link wef-spn4bz" href="/partners">Partners</a></p>
-						<p class="chakra-text wef-h8e7xn"><a class="mission-related-link wef-spn4bz" href="/communities">Communities</a></p>
-						<p class="chakra-text wef-h8e7xn"><a class="mission-related-link wef-spn4bz" href="/governance">Governance principles</a></p>
-						<p class="chakra-text wef-h8e7xn"><a class="mission-related-link wef-spn4bz" href="/careers">Careers</a></p>
+					<div class="mission-related h">
+						<p class="chakra-text m">Related links:</p>
+						<p class="chakra-text"><a class="mission-related-link" href="/impact">Our impact</a></p>
+						<p class="chakra-text"><a class="mission-related-link" href="/partners">Partners</a></p>
+						<p class="chakra-text"><a class="mission-related-link" href="/communities">Communities</a></p>
+						<p class="chakra-text"><a class="mission-related-link" href="/governance">Governance principles</a></p>
+						<p class="chakra-text"><a class="mission-related-link" href="/careers">Careers</a></p>
 					</div>
 				</div>
 			</aside>
-			<main class="mission-main wef-le0wje">
-				<div class="mission-spacer wef-0" aria-hidden="true"></div>
-				<h2 class="mission-heading chakra-heading wef-12y4nuq">
-					{{ activeSection.title }}
-				</h2>
-				<div class="mission-content wef-1mdveip">
-					<p v-if="activeSection.lead" class="mission-lead" v-html="activeSection.lead"></p>
-					<p
-						v-for="(paragraph, index) in activeSection.paragraphs"
-						:key="`${activeSection.id}-${index}`"
-						v-html="paragraph"
-					></p>
-				</div>
-				<div class="mission-back-top wef-bf7em1">
-					<button type="button" class="mission-top-btn chakra-button wef-1rmscmr" @click="scrollToTop" aria-label="Back to top">
-						<svg viewBox="0 0 21 20" focusable="false" class="chakra-icon wef-blpcuq" aria-hidden="true">
+			<main class="mission-main">
+				<div class="mission-spacer" a-hidden="true"></div>
+				<transition name="fade" mode="out-in">
+					<section :key="activeSection.id">
+						<h2 class="mission-heading chakra-heading q">
+							{{ activeSection.title }}
+						</h2>
+						<div class="mission-content p">
+							<p v-if="activeSection.lead" class="mission-lead" v-html="activeSection.lead"></p>
+							<p
+								v-for="(paragraph, index) in activeSection.paragraphs"
+								:key="`${activeSection.id}-${index}`"
+								v-html="paragraph"
+							></p>
+						</div>
+					</section>
+				</transition>
+				<div class="mission-back-top" v-if="showBackTop">
+					<button type="button" class="mission-top-btn chakra-button r" @click="scrollToTop" aria-label="Back to top">
+						<svg viewBox="-1 1 22 22" focusable="false" class="chakra-icon" aria-hidden="true">
 							<path fill-rule="evenodd" clip-rule="evenodd" d="M16.1364 12.3863C15.7849 12.7378 15.2151 12.7378 14.8636 12.3863L10.5 8.02269L6.13642 12.3863C5.78495 12.7378 5.2151 12.7378 4.86363 12.3863C4.51216 12.0348 4.51216 11.465 4.86363 11.1135L9.86363 6.1135C10.0324 5.94472 10.2613 5.8499 10.5 5.8499C10.7387 5.8499 10.9676 5.94472 11.1364 6.1135L16.1364 11.1135C16.4879 11.465 16.4879 12.0348 16.1364 12.3863Z" fill="#0065F2" />
 						</svg>
 					</button>
@@ -56,6 +60,7 @@
 
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue';
+import { nextTick, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const sections = [
@@ -125,6 +130,8 @@ const route = useRoute();
 const router = useRouter();
 
 const activeId = ref(sections[0].id);
+const pageRoot = ref(null)
+const showBackTop = ref(false)
 
 const activeSection = computed(() => sections.find((section) => section.id === activeId.value) ?? sections[0]);
 
@@ -150,6 +157,40 @@ onMounted(() => {
 	if (route.hash) {
 		syncFromHash(route.hash);
 	}
+	// determine initial visibility and install observers
+	const updateVisibility = () => {
+		try {
+			const el = pageRoot.value || document.querySelector('.mission-page')
+			if (!el) return
+			showBackTop.value = (el.scrollHeight || el.offsetHeight) > (window.innerHeight || document.documentElement.clientHeight)
+		} catch (e) {
+			// defensive
+		}
+	}
+
+	// ResizeObserver for content changes
+	let ro = null
+	try {
+		ro = new ResizeObserver(() => updateVisibility())
+		if (pageRoot.value) ro.observe(pageRoot.value)
+		else {
+			const el = document.querySelector('.mission-page')
+			if (el) ro.observe(el)
+		}
+	} catch (e) {
+		ro = null
+	}
+
+	// window resize should also update
+	window.addEventListener('resize', updateVisibility)
+
+	// update after mount and whenever activeSection changes (transition)
+	nextTick(() => updateVisibility())
+
+	onUnmounted(() => {
+		if (ro && pageRoot.value) ro.unobserve(pageRoot.value)
+		window.removeEventListener('resize', updateVisibility)
+	})
 });
 
 watch(
@@ -159,6 +200,18 @@ watch(
 		syncFromHash(hash);
 	}
 );
+
+// When the active section changes, wait for the DOM update (transition will run)
+watch(activeSection, async () => {
+	await nextTick()
+	// allow the transition a frame to update layout, then recompute visibility
+	try {
+		const el = pageRoot.value || document.querySelector('.mission-page')
+		if (el) showBackTop.value = (el.scrollHeight || el.offsetHeight) > (window.innerHeight || document.documentElement.clientHeight)
+	} catch (e) {
+		// ignore
+	}
+})
 
 function scrollToTop() {
 	if (typeof window === 'undefined') return;
@@ -224,36 +277,38 @@ function scrollToTop() {
 .mission-link {
 	background: transparent;
 	border: 0;
-	padding: 12px 0 12px 20px;
+	padding: 12px 0 12px 18px;
 	text-align: left;
 	font-size: 0.98rem;
 	font-weight: 600;
 	color: #1d2b50;
 	border-left: 3px solid transparent;
 	cursor: pointer;
-	transition: color 0.2s ease, border-color 0.2s ease;
-}
-
-.mission-link.is-active {
-	color: #0065f2;
-	border-color: #0065f2;
+	transition: all 0.18s ease;
 }
 
 .mission-link:hover,
 .mission-link:focus-visible {
-	color: #0065f2;
-	border-color: rgba(0, 101, 242, 0.4);
+	color: var(--active-color);
+	border-color: var(--active-color);
+	opacity: 0.72;
 }
 
+.mission-link.is-active {
+	color: #0063FA;
+	border-color: #0063FA;
+	opacity: 1;
+	padding-left: 36px;
+}
 
 .mission-related {
 	margin-top: 32px;
 	font-size: 0.9rem;
-	color: #405078;
+	color: var(--token-text-dark);
 }
 
 .mission-related-link {
-	color: #0065f2;
+	color: var(--token-text-dark);
 	text-decoration: none;
 	font-weight: 500;
 }
@@ -266,7 +321,7 @@ function scrollToTop() {
 .mission-main {
 	flex: 1;
 	padding-left: 56px;
-	border-left: 1px solid #dfe5f0;
+	border-left: 1px solid var(--token-off-white, #f3f3f3);
 }
 
 .mission-heading {
@@ -301,31 +356,31 @@ function scrollToTop() {
 }
 
 .mission-back-top {
-	margin-top: 48px;
+	margin: 36px auto;
 	display: flex;
-	justify-content: flex-end;
+	justify-content: center;
 }
 
 .mission-top-btn {
-	background: var(--token-off-white);
-	border: 1px solid var(--token-muted);
+	background: var(--token-white);
+	border: 1px solid var(--token-off-white, #f3f3f3);
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06);
 	border-radius: 0;
 	width: 54px;
 	height: 54px;
-	
 	border-radius: 50%;
-	display: inline-flex;
+	display: grid;
 	align-items: center;
 	justify-content: center;
 	cursor: pointer;
-	transition: background 0.2s ease, transform 0.2s ease;
+	transition: background 0.216s ease, transform 0.216s ease;
 }
 
-/* Make the SVG/icon inside the button larger (requested 36x36) */
+/* Make the SVG/icon inside the button slightly larger (requested 40x40) */
 .mission-top-btn svg,
 .mission-top-btn .chakra-icon {
-    width: 36px;
-    height: 36px;
+	width: 36px;
+	height: 36px;
 }
 
 .mission-top-btn:hover,
@@ -354,15 +409,18 @@ function scrollToTop() {
 		flex-wrap: wrap;
 	}
 	.mission-link {
-		padding: 10px 16px;
+		padding: 6px 18px;
 		border-left: 0;
 		border-left: 3px solid transparent;
 	}
 	.mission-link.is-active {
-		border-left-color: #0065f2;
+		border-left-color: var(--active-color);
 	}
 	.mission-related {
 		display: none;
+	}
+	.mission-eyebrow {
+		margin-left: 18px;
 	}
 }
 
@@ -376,5 +434,19 @@ function scrollToTop() {
 	.mission-back-top {
 		justify-content: center;
 	}
+}
+
+/* Fade transition for mission main content (0.216s ease) */
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 216ms cubic-bezier(.4,0,.2,1);
+}
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+.fade-enter-to,
+.fade-leave-from {
+    opacity: 1;
 }
 </style>

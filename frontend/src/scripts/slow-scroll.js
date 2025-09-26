@@ -71,30 +71,54 @@
         if (detail && typeof detail.hash === 'string' && detail.hash.length) {
           // normalize hash to id without leading '#'
           const id = detail.hash.charAt(0) === '#' ? detail.hash.slice(1) : detail.hash
-          // Poll briefly for the element to appear (useful when navigating
-          // from a different route). Retry for up to ~500ms (10 * 50ms).
-          const maxAttempts = 10
-          const interval = 50
-          let attempts = 0
-          const tryFind = () => {
-            attempts += 1
-            const targetEl = document.getElementById(id)
+
+          // Use MutationObserver to wait for the element to be added to the DOM.
+          // This implementation intentionally does NOT use any timeouts — it
+          // resolves only when the element actually appears. If the element
+          // never appears, the Promise will not resolve (caller requested no
+          // timeout behavior).
+          function waitForElement(selectorFn) {
+            return new Promise((resolve) => {
+              // check immediately
+              try {
+                const el = selectorFn()
+                if (el) return resolve(el)
+              } catch (e) {
+                // ignore and continue to observe
+              }
+
+              const observer = new MutationObserver((mutations, obs) => {
+                try {
+                  const el = selectorFn()
+                  if (el) {
+                    obs.disconnect()
+                    return resolve(el)
+                  }
+                } catch (e) {
+                  // defensive: keep observing
+                }
+              })
+
+              // observe the whole document for additions
+              observer.observe(document.documentElement || document, { childList: true, subtree: true })
+            })
+          }
+
+          // Start waiting immediately (no short tick/timeouts). The
+          // MutationObserver will catch the element when it is inserted.
+          waitForElement(() => document.getElementById(id)).then((targetEl) => {
             if (targetEl) {
               const rect = targetEl.getBoundingClientRect()
               const targetY = (window.scrollY || window.pageYOffset) + rect.top
               animateScroll(targetY, 420)
-              return
-            }
-            if (attempts < maxAttempts) {
-              setTimeout(tryFind, interval)
             } else {
-              // fallback to top or provided numeric top
+              // note: with no timeout this branch should never run; kept for
+              // defensive parity with previous API in case implementations
+              // change to resolve(null) in the future.
               const top = typeof detail.top === 'number' ? detail.top : 0
               animateScroll(top, 420)
             }
-          }
-          // start after a short tick so Vue has a chance to begin mounting
-          setTimeout(tryFind, 18)
+          })
           return
         }
 

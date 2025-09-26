@@ -41,7 +41,16 @@ router.afterEach((to) => {
 				// Dispatch as CustomEvent on window so scripts can listen.
 				const ev = new CustomEvent('wequo:navigate', { detail });
 				window.dispatchEvent(ev);
-			}, 40);
+			}, 108);
+		} catch (e) {
+			// defensive: ignore if CustomEvent or window not available
+		}
+	} else {
+		// If no hash, dispatch event with empty hash to reset any state.
+		try {
+			const detail = { hash: '' };
+			const ev = new CustomEvent('wequo:navigate', { detail });
+			window.dispatchEvent(ev);
 		} catch (e) {
 			// defensive: ignore if CustomEvent or window not available
 		}
