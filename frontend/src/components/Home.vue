@@ -238,8 +238,8 @@ async function submitForm() {
 }
 .partner-logo {
 	width: 100%;
-	max-width: 154px;
-	max-height: 154px;
+	max-width: 216px;
+	max-height: 216px;
 	object-fit: contain;
 	background: var(--token-bg-light);
 	padding: 12px;
@@ -247,11 +247,6 @@ async function submitForm() {
 }
 .partner-logo:hover {
     transform: scale(1.18);
-}
-.partner-name {
-	margin-top: 8px;
-	font-size: 13px;
-	text-align: center;
 }
 
 @media (max-width: 1200px) {
@@ -261,10 +256,13 @@ async function submitForm() {
 	.partners .section-flex { position: sticky; top: var(--nav-height, 72px); }
 }
 
-@media (max-width: 777px) {
+@media (max-width: 808px) {
+    .section-grid { flex-direction: column; }
+	.section-flex { position: sticky; top: var(--nav-height, 72px); }
     .logo-grid { grid-template-columns: repeat(2, 1fr); }
     .publications .card-container { height: 40vh; top: var(--pub-sticky-top, 72px); }
 	.publications .card-body { padding: 18px; }
+    .companies { grid-template-columns: repeat(2, 1fr);}
 }
 
 .publications .cards {
@@ -278,7 +276,6 @@ async function submitForm() {
 	top: 72px;
 	width: 100%;
 	height: 50vh;
-	z-index: 1;
 	margin: 0;
 }
 
@@ -325,7 +322,6 @@ async function submitForm() {
 	position: absolute;
 	inset: 0;
 	background: linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,.6) 75%, rgba(0,0,0,.85) 100%);
-	z-index: 1;
 	pointer-events: none;
 }
 
