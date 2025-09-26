@@ -10,11 +10,11 @@
           </button>
         </div>
         <div class="nav-center-logo">
-          <a class="logo logo-wrap" href="./">
+          <RouterLink class="logo logo-wrap" to="/" @click="$emit('update:modelValue', false)">
             <div class="logo-wrap">
               <img :src="logo" alt="WEQ logo" />
             </div>
-          </a>
+          </RouterLink>
         </div>
       </div>
     </nav>
@@ -23,6 +23,7 @@
 
 <script setup>
 import { defineProps } from 'vue';
+import { RouterLink } from 'vue-router';
 const props = defineProps({ modelValue: Boolean });
 import logo from '../assets/logo.png';
 </script>

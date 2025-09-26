@@ -189,7 +189,7 @@ textarea{ min-height:100px }
 .sent{ color:green }
 .error{ color:red }
 
-button:focus{ outline:2px solid rgba(0,0,0,0.1); outline-offset:2px }
+button:focus{ outline:0px solid rgba(0,0,0,0); outline-offset:0px }
 
 .nav-center{ display:flex; align-items:center; justify-content:center }
 .nav-items-row{ display:flex; gap:18px; align-items:center }

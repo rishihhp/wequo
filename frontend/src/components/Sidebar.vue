@@ -9,10 +9,11 @@
         </svg>
       </button>
       <nav class="sidebar-nav">
-        <a class="sidebar-link" href="#mission" @click="close">Mission</a>
-        <a class="sidebar-link" href="#publications" @click="close">Publications</a>
-        <a class="sidebar-link" href="#partners" @click="close">Partners</a>
-        <a class="sidebar-link" href="#contact" @click="close">Contact Us</a>
+        <RouterLink class="sidebar-link" to="/" @click="close">Home</RouterLink>
+        <RouterLink class="sidebar-link" to="/mission" @click="close">Mission</RouterLink>
+        <RouterLink class="sidebar-link" :to="{ path: '/', hash: '#publications' }" @click="close">Publications</RouterLink>
+        <RouterLink class="sidebar-link" :to="{ path: '/', hash: '#partners' }" @click="close">Partners</RouterLink>
+        <RouterLink class="sidebar-link" :to="{ path: '/', hash: '#contact' }" @click="close">Contact Us</RouterLink>
       </nav>
     </aside>
   </div>
@@ -20,6 +21,7 @@
 
 <script setup>
 import { defineEmits, defineProps, watch, onBeforeUnmount } from 'vue'
+import { RouterLink } from 'vue-router'
 
 const props = defineProps({
   modelValue: { type: Boolean, default: false }
