@@ -22,11 +22,6 @@
 					<p>We unite innovators, leaders, and communities to coordinate practical solutions to the world's most pressing issues.</p>
 				</div>
 				<div class="left">
-					<div class="filters">
-						<button class="filter active">What</button>
-						<button class="filter">Why</button>
-						<button class="filter">How</button>
-					</div>
 					<h3 class="lead">A global, non-profit platform for decentralized collaboration that aligns stakeholders, restores trust, and turns coordination into impact.</h3>
 				</div>
 			</div>
@@ -249,20 +244,29 @@ async function submitForm() {
     transform: scale(1.18);
 }
 
-@media (max-width: 1200px) {
+.publications .card-container {
+    position: sticky;
+    top: 72px;
+    width: 100%;
+    height: 50vh;
+    margin: 0;
+}
+
+@media (max-width: 1260px) {
     .contact .section-grid { padding: 18px; flex-direction: column; margin: auto; }
     .contact .section-grid .right { width: 100%; max-width: 666px; margin: auto; }
     .partners .section-grid { flex-direction: column; }
 	.partners .section-flex { position: sticky; top: var(--nav-height, 72px); }
+    .publications .card-container { height: 40vh; top: var(--pub-sticky-top, 72px); }
 }
 
 @media (max-width: 808px) {
     .section-grid { flex-direction: column; }
 	.section-flex { position: sticky; top: var(--nav-height, 72px); }
+    .publications .card-body { padding: 0px; }
     .logo-grid { grid-template-columns: repeat(2, 1fr); }
-    .publications .card-container { height: 40vh; top: var(--pub-sticky-top, 72px); }
-	.publications .card-body { padding: 18px; }
     .companies { grid-template-columns: repeat(2, 1fr);}
+    .cards { padding: 0px; }
 }
 
 .publications .cards {
@@ -270,15 +274,6 @@ async function submitForm() {
 	flex-direction: column;
 	gap: 0;
 }
-
-.publications .card-container {
-	position: sticky;
-	top: 72px;
-	width: 100%;
-	height: 50vh;
-	margin: 0;
-}
-
 
 .publications .card {
 	display: block;
