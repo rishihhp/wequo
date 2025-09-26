@@ -52,7 +52,6 @@ jobs:
 
       - name: Run daily data pipeline
         run: |
-          cd wequo
           python scripts/run_weekly.py
 
       - name: Check pipeline output
