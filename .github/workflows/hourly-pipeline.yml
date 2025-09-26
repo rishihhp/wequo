@@ -56,7 +56,7 @@ jobs:
 
       - name: Check pipeline output
         run: |
-          cd wequo
+          
           ls -la data/output/
           # Get today's date in YYYY-MM-DD format
           TODAY=$(date +%Y-%m-%d)
@@ -86,7 +86,7 @@ jobs:
       - name: Generate summary
         if: success()
         run: |
-          cd wequo
+          
           TODAY=$(date +%Y-%m-%d)
           if [ -f "data/output/$TODAY/package_summary.json" ]; then
             echo "## 📊 WeQuo Daily Pipeline Summary - $TODAY" >> $GITHUB_STEP_SUMMARY
