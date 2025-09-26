@@ -65,9 +65,46 @@
     })
 
     window.addEventListener('wequo:navigate', (ev) => {
-      // allow callers to pass { top: number } in detail, default to 0
-      const top = ev && ev.detail && typeof ev.detail.top === 'number' ? ev.detail.top : 0
-      setTimeout(() => animateScroll(top, 420), 33)
+      // allow callers to pass { hash: '#id' } or { top: number } in detail
+      try {
+        const detail = ev && ev.detail ? ev.detail : {}
+        if (detail && typeof detail.hash === 'string' && detail.hash.length) {
+          // normalize hash to id without leading '#'
+          const id = detail.hash.charAt(0) === '#' ? detail.hash.slice(1) : detail.hash
+          // Poll briefly for the element to appear (useful when navigating
+          // from a different route). Retry for up to ~500ms (10 * 50ms).
+          const maxAttempts = 10
+          const interval = 50
+          let attempts = 0
+          const tryFind = () => {
+            attempts += 1
+            const targetEl = document.getElementById(id)
+            if (targetEl) {
+              const rect = targetEl.getBoundingClientRect()
+              const targetY = (window.scrollY || window.pageYOffset) + rect.top
+              animateScroll(targetY, 420)
+              return
+            }
+            if (attempts < maxAttempts) {
+              setTimeout(tryFind, interval)
+            } else {
+              // fallback to top or provided numeric top
+              const top = typeof detail.top === 'number' ? detail.top : 0
+              animateScroll(top, 420)
+            }
+          }
+          // start after a short tick so Vue has a chance to begin mounting
+          setTimeout(tryFind, 18)
+          return
+        }
+
+        // fallback: allow callers to pass { top: number } in detail, default to 0
+        const top = typeof detail.top === 'number' ? detail.top : 0
+        setTimeout(() => animateScroll(top, 420), 33)
+      } catch (e) {
+        // defensive: fallback to simple scroll-to-top
+        setTimeout(() => animateScroll(0, 420), 33)
+      }
     })
   }
 
@@ -212,6 +249,19 @@
         const cl = clamp(y)
         window.scrollTo(0, Math.round(cl))
         current = target = cl
+      },
+      // lightweight setter that updates the internal wheel-smoothing state
+      // without cancelling motion. This is used by programmatic animations
+      // to keep the physics integrator aligned with the scroll position.
+      // setPosition differs from jumpTo in that it does NOT cancel RAF or
+      // reset velocity; it simply sets the internal "current" and "target"
+      // to a new value so subsequent wheel input continues smoothly.
+      setPosition(y) {
+        const cl = clamp(y)
+        current = cl
+        target = cl
+        // write to window scroll immediately as well
+        window.scrollTo(0, Math.round(cl))
       }
     })
   }
@@ -223,28 +273,61 @@
   if (typeof animateScroll === 'function') {
     const _originalAnimate = animateScroll
     animateScroll = function (targetY, duration = DEFAULT_DURATION) {
+      // Best-effort: if wheel smoothing is active, use the lightweight
+      // setPosition to keep the internal integrator aligned during the
+      // programmatic animation. Do NOT cancel motion here; instead we
+      // drive the internal state each frame so wheel physics stays in sync.
+      let setPos = null
       try {
-        // If wheel smoothing is enabled and running, cancel and sync to current browser position
-        if (typeof cancelMotion === 'function') cancelMotion()
-      } catch (e) {
-        // defensive
-      }
-      // Read the runtime scroll position and initialise the wheel-smoothing state
-      try {
-        const startY = window.scrollY || window.pageYOffset
-        // If the wheel smoothing closure created `current`/`target`, set them if available
-        if (typeof window.__wequo_slow_scroll !== 'undefined') {
-          // attempt best-effort sync via exposed jumpTo if available
-          if (window.__wequo_slow_scroll && typeof window.__wequo_slow_scroll.jumpTo === 'function') {
-            // jumpTo cancels motion and sets internal current/target
-            window.__wequo_slow_scroll.jumpTo(startY)
-          }
+        if (window.__wequo_slow_scroll && typeof window.__wequo_slow_scroll.setPosition === 'function') {
+          setPos = window.__wequo_slow_scroll.setPosition
         }
-      } catch (err) {
+      } catch (e) {
         // ignore
       }
 
-      // Run the original animate; when it finishes, sync any remaining smoothing state
+      // If we don't have access to setPosition, fallback to cancelling and
+      // using jumpTo to avoid inconsistencies.
+      if (!setPos) {
+        try {
+          if (typeof cancelMotion === 'function') cancelMotion()
+        } catch (e) { /* defensive */ }
+      }
+
+      // We'll wrap the original animate to call setPos each frame if available.
+      if (setPos) {
+        const startY = window.scrollY || window.pageYOffset
+        const maxScroll = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight) - window.innerHeight
+        const clampedTarget = Math.max(0, Math.min(maxScroll, targetY))
+        if (Math.abs(clampedTarget - startY) < 1) {
+          // still ensure we sync the state quickly
+          setPos(startY)
+          return Promise.resolve()
+        }
+
+        return new Promise((resolve) => {
+          const start = performance.now()
+          function frame(now) {
+            const elapsed = now - start
+            const t = Math.min(1, elapsed / duration)
+            const eased = easeOutCubic(t)
+            const y = Math.round(startY + (clampedTarget - startY) * eased)
+            // update window scroll and wheel-smoothing internal state
+            window.scrollTo(0, y)
+            try { setPos(y) } catch (e) { /* ignore */ }
+            if (t < 1) requestAnimationFrame(frame)
+            else resolve()
+          }
+          requestAnimationFrame(frame)
+        }).then(() => {
+          try {
+            const clamped = Math.max(0, Math.min(Math.max(document.documentElement.scrollHeight, document.body.scrollHeight) - window.innerHeight, window.scrollY || window.pageYOffset))
+            try { setPos(clamped) } catch (e) { /* ignore */ }
+          } catch (e) { /* ignore */ }
+        })
+      }
+
+      // fallback: call original implementation which may cancel motion first
       return _originalAnimate(targetY, duration).then(() => {
         try {
           const clamped = Math.max(0, Math.min(Math.max(document.documentElement.scrollHeight, document.body.scrollHeight) - window.innerHeight, window.scrollY || window.pageYOffset))

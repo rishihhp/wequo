@@ -39,23 +39,18 @@ These origins remain the compass of the Quorum: a reminder that every member, re
 
 
 # Leadership and Governance
-The World Economic Quorum strives to model a new standard of decentralized-yet-structured governance, where values and contributions carry as much weight as formal rules. Legitimacy, accountability, transparency, and collective action are the guiding principles of the Quorum. 
+The World Economic Quorum models a new standard of decentralized-yet-structured governance, where legitimacy, accountability, transparency, and collective action are the guiding principles. Rather than concentrating power, stewardship is distributed across layered councils and assemblies, ensuring both agility and resilience in decision-making.
 
-Ultimate stewardship of the Quorum rests with two principal governors: Xavier Ruiz, an ex-CIA analyst and former Special Access Program operator for the NSA, and Elon Musk, a pioneering technologist and industrialist. Each holds one-third of the Quorum’s voting power. The remaining third is distributed among partners, collaborators, and supporters who sustain the ecosystem. This triadic balance ensures both strategic direction and collective accountability.
+The Quorum is guided by two Principal Governors, who provide strategic direction and act as custodians of mission and values. Surrounding them are tiered councils that balance leadership with accountability. The Council of 13—comprised of the highest contributors—serves as guardians of the Quorum’s integrity and long-term vision, with members competing cooperatively to secure their place through demonstrated impact and contribution.
 
-Council of 13
-The Quorum is safeguarded by the Council of 13, comprised of its highest contributors. Membership is not granted but earned, requiring continuous cooperative competition to secure a seat. These individuals act as guardians of the Quorum’s mission and values, steering its evolution while serving as exemplars of global responsibility.
+The Council of 33 functions as the executive body of the Quorum, coordinating initiatives, setting priorities, and translating collective ambition into actionable outcomes. In parallel, the Committee of 300 draws on deep domain expertise across regions and disciplines, channeling specialized knowledge to ensure decisions are informed, adaptive, and forward-looking.
 
-Council of 33
-Supporting the Council of 13 is the Council of 33, drawn from the next largest contributors across domains. This council functions as the executive body of the Quorum, ensuring that all initiatives remain aligned with its mission. It represents the Quorum externally, facilitates global partnerships, and bears collective executive responsibility.
+Beyond these councils, the Quorum’s governance extends to its Executive Assembly of 144,000 open seats, reserved for the most dedicated contributors across the community. This Assembly serves as the participatory backbone of the Quorum, where members propose initiatives, share input, and cast votes. This model ensures governance remains both representative and merit-based.
 
-Committee of 300
-The Committee of 300 advances the work of the Quorum across Commons, Assemblies, and specialized initiatives. Each member brings domain expertise and influence, applying their resources and knowledge across projects, sectors, and geographies to amplify impact and accelerate execution.
+At the broadest tier, the Quorum is powered by an open global assembly of contributors, whose collaborative intelligence drives innovation and whose collective actions shape the trajectory of civilization. In this layered design, authority is not imposed but earned, ranked according to contribution, and continuously renewed through open participation.
 
-The 144,000
-At the broadest tier, the Quorum is powered by the 144,000—open positions for the most dedicated contributors from the global community. These individuals, ranked according to their works, may submit proposals, share insights, and cast votes within the Quorum. This vast assembly ensures that governance remains participatory, distributed, and dynamically representative of humanity at large.
+Together, this living governance structure ensures that the Quorum remains transparent, accountable, and oriented toward advancing humanity through trust, cooperation, and collective purpose.
 
-Together, this layered governance structure enables the Quorum to remain both principled and adaptive—anchored by leadership, driven by contribution, and open to the voices of all who step forward to shape the future.
 
 
 # Code of Conduct

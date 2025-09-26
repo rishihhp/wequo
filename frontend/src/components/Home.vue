@@ -217,6 +217,8 @@ async function submitForm() {
 <!-- styles moved to TopNav.vue -->
 
 <style scoped>
+.logos { margin: auto; 
+}
 .logo-grid {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);

@@ -66,7 +66,7 @@ const sections = [
 		paragraphs: [
 			'In a world fragmented by systemic failures, the World Economic Quorum unites innovators, entrepreneurs, communities, and leaders from all sectors to shape agile, inclusive, and forward-looking agendas. Founded as a response to the limitations of traditional institutions, it operates independently, free from centralized control or special interests, and upholds the highest standards of transparency and integrity.',
 			'At the core of our mission to advance civilization lies a belief in the power of human ingenuity, decentralized innovation, and collaborative systems. We champion a quorum where diverse perspectives converge through open, respectful dialogue, ensuring every voice is amplified and collective intelligence thrives.',
-			'This mission is powered by our global community of stakeholders, who unite to identify opportunities and execute solutions for transformative impact. Together, we strive for a thriving world, where trust, innovation, and collective action chart the path to enduring progress.'
+			'This mission is powered by our global community of stakeholders, who unite to identify opportunities and execute solutions for transformative impact. Together, we strive for a thriving world, where trust, innovation, and collective action chart the path to enduring progress. The World Economic Quorum aims to provide a clear way forward for our evolving civilization, redefining global coordination beyond the constraints of traditional institutions.',
 		]
 	},
 	{
@@ -74,7 +74,11 @@ const sections = [
 		title: 'Operating Framework',
 		lead: 'The World Economic Quorum convenes innovators, communities, builders, and leaders across all domains to co-create global, regional, and sectoral strategies. It is decentralized, impartial, free from centralized capture, and upholds the highest standards of transparency, integrity, and collective accountability.',
 		paragraphs: [
-			'The Quorum’s infrastructure is natively global, leveraging open protocols and interoperable systems to enable borderless participation and coordination. Programs are organized around Digital Commons, Assemblies, and Congresses that translate consensus into executable roadmaps and measurable outcomes.'
+			"Unlike legacy institutions bound by geography, the Quorum exists as a distributed digital network with nodes across the world. Its infrastructure is natively global, leveraging open protocols and interoperable systems to enable borderless participation, collaboration, and trust.",
+			"Founded as a response to the shortcomings of hierarchical governance, the Quorum operates as a living ecosystem—continuously evolving to meet the demands of an interconnected, rapidly changing world. It engages stakeholders through open dialogue, decentralized governance, and binding commitments to action, enabling societies to become more adaptive, resilient, inclusive, and future-ready.",
+			"<strong>Digital Commons</strong><br> The Quorum’s work is accelerated by Digital Commons and open systems where communities of purpose align with ambitious goals through competitive cooperation. We architect systems and incentives necessary to address planetary-scale challenges, coordinating resources and collective intelligence. Guided by community consensus, we transform ambition into executable action through transparent roadmaps, iterative projects, and open knowledge generation.",
+			"<strong>Assemblies and Congresses</strong><br> The work of the Commons is amplified through Assemblies and Congresses where stakeholders convene to deliberate, decide, and commit to shared objectives. These gatherings are designed to foster inclusive dialogue, harness collective intelligence, and catalyze coordinated action. Assemblies focus on specific themes or sectors, while Congresses bring together a broader spectrum of voices to address overarching challenges and opportunities.",
+			"<strong>Impact</strong><br> We build trust through transparency, empower decision making through open data and analytics, and accelerate execution through decentralized coordination. Our efforts include trust pacts forged between historically opposed communities, open intelligence reports mapping systemic risks and opportunities, and hundreds of distributed initiatives designed to elevate human prosperity, restore ecological balance, foster diplomacy beyond borders, and steward the governance of transformative technologies."
 		]
 	},
 	{
@@ -97,10 +101,13 @@ const sections = [
 	{
 		id: 'governance',
 		title: 'Leadership & Governance',
-		lead: 'The Quorum models a new standard of decentralized-yet-structured governance where legitimacy, accountability, transparency, and collective action are the guiding principles.',
+		lead: 'The World Economic Quorum models a new standard of decentralized-yet-structured governance, where legitimacy, accountability, transparency, and collective action are the guiding principles. Rather than concentrating power, stewardship is distributed across layered councils and assemblies, ensuring both agility and resilience in decision-making.',
 		paragraphs: [
-			'Ultimate stewardship rests with two principal governors who provide strategic direction while a broader distribution of seats ensures collective accountability. Layered bodies such as the Council of 13, the Council of 33, and the Committee of 300 provide guidance, executive coordination, and domain expertise.',
-			'At the broadest tier, the Quorum is powered by an open assembly of contributors who may submit proposals, cast votes, and help steward initiatives—ensuring governance remains participatory and representative.'
+			'The Quorum is guided by two Principal Governors, who provide strategic direction and act as custodians of mission and values. Surrounding them are tiered councils that balance leadership with accountability. The Council of 13—comprised of the highest contributors—serves as guardians of the Quorum’s integrity and long-term vision, with members earning their place through demonstrable impact and contribution.',
+			'The Council of 33 functions as the Quorum’s executive body, coordinating initiatives, setting priorities, and translating collective ambition into actionable outcomes. In parallel, the Committee of 300 draws on deep domain expertise across regions and disciplines, channeling specialized knowledge to ensure decisions are informed, adaptive, and forward-looking.',
+			'Beyond these councils, governance extends to an Executive Assembly of 144,000 open seats, reserved for the most dedicated contributors across the community. This Assembly is the participatory backbone of the Quorum—members propose initiatives, share input, and cast binding votes, ensuring governance remains representative and merit-based.',
+			'At the broadest tier, the Quorum is powered by an open global assembly of contributors whose collaborative intelligence drives innovation and whose collective actions shape the trajectory of civilization. Authority is earned, ranked by contribution, and continuously renewed through open participation.',
+			'Together, this living governance structure ensures the Quorum remains transparent, accountable, and oriented toward advancing humanity through trust, cooperation, and collective purpose.'
 		]
 	},
 	{
@@ -167,10 +174,9 @@ function scrollToTop() {
 <style scoped>
 .mission-page {
 	background: #ffffff;
-	padding: 108px 0 0 0;
+	padding: 108px 0;
 	color: var(--token-text-dark, #111);
-    overflow: auto;
-    min-height: calc(100vh - 72px);
+    min-height: calc(100vh);
 }
 
 .mission-layout {
@@ -183,9 +189,15 @@ function scrollToTop() {
 }
 
 .mission-sidebar {
+	/* Keep sidebar in a stable stacking context and ensure sticky works */
 	position: sticky;
+	top: 108px;
+	z-index: 5;
 	align-self: flex-start;
 	flex: 0 0 280px;
+	/* Prevent the sidebar from becoming affected by overflow on ancestor elements */
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
 }
 
 .mission-card {
@@ -295,11 +307,13 @@ function scrollToTop() {
 }
 
 .mission-top-btn {
-	background: #f5f8ff;
-	border: 1px solid #d6deeb;
+	background: var(--token-off-white);
+	border: 1px solid var(--token-muted);
 	border-radius: 0;
-	width: 56px;
-	height: 56px;
+	width: 54px;
+	height: 54px;
+	
+	border-radius: 50%;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -307,54 +321,57 @@ function scrollToTop() {
 	transition: background 0.2s ease, transform 0.2s ease;
 }
 
+/* Make the SVG/icon inside the button larger (requested 36x36) */
+.mission-top-btn svg,
+.mission-top-btn .chakra-icon {
+    width: 36px;
+    height: 36px;
+}
+
 .mission-top-btn:hover,
 .mission-top-btn:focus-visible {
-	background: #e9f1ff;
+	background: var(--token-off-white);
 	transform: translateY(-3px);
 }
 
 @media (max-width: 1100px) {
 	.mission-layout {
 		flex-direction: column;
-		gap: 40px;
-		padding: 0 28px;
+		gap: 36px;
+		padding: 0 18px;
 	}
 	.mission-sidebar {
 		position: static;
 		flex: none;
+		width: -webkit-fill-available;
 	}
 	.mission-main {
 		padding-left: 0;
 		border-left: 0;
 	}
 	.mission-nav-primary {
-		flex-direction: row;
+		flex-direction: column;
 		flex-wrap: wrap;
-		gap: 12px;
 	}
 	.mission-link {
 		padding: 10px 16px;
 		border-left: 0;
-		border-bottom: 2px solid transparent;
+		border-left: 3px solid transparent;
 	}
 	.mission-link.is-active {
-		border-bottom-color: #0065f2;
+		border-left-color: #0065f2;
 	}
 	.mission-related {
 		display: none;
 	}
 }
 
-@media (max-width: 680px) {
+@media (max-width: 690px) {
 	.mission-layout {
-		padding: 0 20px;
+		padding: 0 18px;
 	}
 	.mission-heading {
 		font-size: 1.8rem;
-	}
-	.mission-top-btn {
-		width: 48px;
-		height: 48px;
 	}
 	.mission-back-top {
 		justify-content: center;
