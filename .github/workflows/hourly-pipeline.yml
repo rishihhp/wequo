@@ -1,9 +1,9 @@
-name: WeQuo Daily Pipeline
+name: WeQuo Hourly Pipeline
 
 on:
   schedule:
-    # Run daily at 6:00 AM UTC
-    - cron: "0 6 * * *"
+    # Run every hour
+    - cron: "0 * * * *"
   workflow_dispatch: # Allow manual trigger
     inputs:
       force_run:
@@ -52,12 +52,11 @@ jobs:
 
       - name: Run daily data pipeline
         run: |
-          cd wequo
           python scripts/run_weekly.py
 
       - name: Check pipeline output
         run: |
-          cd wequo
+          
           ls -la data/output/
           # Get today's date in YYYY-MM-DD format
           TODAY=$(date +%Y-%m-%d)
@@ -70,7 +69,7 @@ jobs:
           fi
 
       - name: Upload pipeline artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: daily-data-package-${{ github.run_number }}
@@ -87,7 +86,7 @@ jobs:
       - name: Generate summary
         if: success()
         run: |
-          cd wequo
+          
           TODAY=$(date +%Y-%m-%d)
           if [ -f "data/output/$TODAY/package_summary.json" ]; then
             echo "## 📊 WeQuo Daily Pipeline Summary - $TODAY" >> $GITHUB_STEP_SUMMARY
