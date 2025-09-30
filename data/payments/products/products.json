@@ -1,0 +1,50 @@
+{
+  "premium": {
+    "id": "prod_T4NeLT4NbDW8yP",
+    "name": "Premium",
+    "description": "Premium WeQuo subscription with full access to analytics and reports",
+    "features": [
+      "Full analytics access",
+      "Automated report generation",
+      "Data export capabilities",
+      "Real-time monitoring"
+    ]
+  },
+  "premium_annual": {
+    "id": "prod_T4NhpXUGjjWz2m",
+    "name": "Premium Annual",
+    "description": "Premium WeQuo subscription - Annual billing",
+    "features": [
+      "Full analytics access",
+      "Automated report generation", 
+      "Data export capabilities",
+      "Real-time monitoring",
+      "Annual discount"
+    ]
+  },
+  "pro": {
+    "id": "prod_T4NfU5fHFqzVEm",
+    "name": "Pro",
+    "description": "Professional WeQuo subscription with advanced features",
+    "features": [
+      "Everything in Premium",
+      "Advanced analytics",
+      "Custom integrations",
+      "Priority support",
+      "Advanced monitoring"
+    ]
+  },
+  "pro_annual": {
+    "id": "prod_T4NiE1XNa2sQVx",
+    "name": "Pro Annual",
+    "description": "Professional WeQuo subscription - Annual billing",
+    "features": [
+      "Everything in Premium",
+      "Advanced analytics",
+      "Custom integrations",
+      "Priority support",
+      "Advanced monitoring",
+      "Annual discount"
+    ]
+  }
+}

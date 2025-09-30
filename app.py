@@ -8,6 +8,9 @@ import os
 import sys
 from pathlib import Path
 from flask import Flask, render_template_string, redirect, url_for, jsonify, render_template, request, send_file
+import stripe
+import hashlib
+import hmac
 
 # Add src to Python path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
@@ -46,6 +49,12 @@ def create_main_app():
     # Configuration
     app.config["OUTPUT_ROOT"] = output_root
     app.config["TEMPLATE_PATH"] = Path(__file__).parent / "docs" / "template.md"
+    
+    # Stripe configuration
+    stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
+    app.config["STRIPE_PUBLISHABLE_KEY"] = os.environ.get("STRIPE_PUBLISHABLE_KEY")
+    app.config["STRIPE_WEBHOOK_SECRET"] = os.environ.get("STRIPE_WEBHOOK_SECRET")
+    payments_data_dir = data_root / "payments"
     
     # Initialize exporter
     brief_exporter = BriefExporter(output_root=output_root)
@@ -536,6 +545,281 @@ def create_main_app():
             traceback.print_exc()
             return jsonify({"error": str(e)}), 500
     
+    # Stripe helper functions
+    def load_json_data(file_path):
+        """Load JSON data from file."""
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            return {}
+    
+    def save_json_data(file_path, data):
+        """Save JSON data to file."""
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=2, default=str)
+    
+    def get_customer_by_email(email):
+        """Get customer data by email."""
+        customers_file = payments_data_dir / "customers" / "customers.json"
+        customers = load_json_data(customers_file)
+        for customer_id, customer_data in customers.items():
+            if customer_data.get('email') == email:
+                return customer_id, customer_data
+        return None, None
+    
+    def save_customer(customer_id, customer_data):
+        """Save customer data."""
+        customers_file = payments_data_dir / "customers" / "customers.json"
+        customers = load_json_data(customers_file)
+        customers[customer_id] = customer_data
+        save_json_data(customers_file, customers)
+    
+    def save_subscription(subscription_id, subscription_data):
+        """Save subscription data."""
+        subscriptions_file = payments_data_dir / "subscriptions" / "subscriptions.json"
+        subscriptions = load_json_data(subscriptions_file)
+        subscriptions[subscription_id] = subscription_data
+        save_json_data(subscriptions_file, subscriptions)
+    
+    def get_subscription_by_customer(customer_id):
+        """Get active subscription for a customer."""
+        subscriptions_file = payments_data_dir / "subscriptions" / "subscriptions.json"
+        subscriptions = load_json_data(subscriptions_file)
+        for sub_id, sub_data in subscriptions.items():
+            if sub_data.get('customer_id') == customer_id and sub_data.get('status') == 'active':
+                return sub_id, sub_data
+        return None, None
+
+    # Stripe routes
+    @app.route('/checkout')
+    def checkout():
+        """Display the checkout page."""
+        return render_template('checkout.html')
+    
+    @app.route('/checkout/create-session', methods=['POST'])
+    def create_checkout_session():
+        """Create a Stripe checkout session."""
+        try:
+            data = request.get_json()
+            price_id = data.get('price_id')
+            plan_type = data.get('plan_type')
+            billing_period = data.get('billing_period')
+            
+            if not price_id:
+                return jsonify({'success': False, 'error': 'Price ID is required'}), 400
+            
+            # Create Stripe checkout session
+            session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=[{
+                    'price': price_id,
+                    'quantity': 1,
+                }],
+                mode='subscription',
+                success_url=request.host_url + 'checkout/success?session_id={CHECKOUT_SESSION_ID}',
+                cancel_url=request.host_url + 'checkout/cancel',
+                metadata={
+                    'plan_type': plan_type,
+                    'billing_period': billing_period
+                }
+            )
+            
+            return jsonify({
+                'success': True,
+                'checkout_url': session.url,
+                'session_id': session.id
+            })
+            
+        except stripe.error.StripeError as e:
+            return jsonify({'success': False, 'error': str(e)}), 400
+        except Exception as e:
+            return jsonify({'success': False, 'error': 'Internal server error'}), 500
+    
+    @app.route('/checkout/success')
+    def checkout_success():
+        """Handle successful checkout."""
+        session_id = request.args.get('session_id')
+        
+        if session_id:
+            try:
+                # Retrieve the checkout session
+                session = stripe.checkout.Session.retrieve(session_id)
+                
+                return render_template_string("""
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Payment Successful - WeQuo</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+                        .success { color: #28a745; }
+                        .btn { background: #007bff; color: white; padding: 10px 20px; 
+                               text-decoration: none; border-radius: 5px; }
+                    </style>
+                </head>
+                <body>
+                    <h1 class="success">Payment Successful!</h1>
+                    <p>Thank you for subscribing to WeQuo. Your subscription is now active.</p>
+                    <a href="/" class="btn">Go to Dashboard</a>
+                </body>
+                </html>
+                """)
+            except stripe.error.StripeError:
+                pass
+        
+        return redirect('/')
+    
+    @app.route('/checkout/cancel')
+    def checkout_cancel():
+        """Handle cancelled checkout."""
+        return render_template_string("""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Payment Cancelled - WeQuo</title>
+            <style>
+                body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+                .cancel { color: #dc3545; }
+                .btn { background: #007bff; color: white; padding: 10px 20px; 
+                       text-decoration: none; border-radius: 5px; }
+            </style>
+        </head>
+        <body>
+            <h1 class="cancel">Payment Cancelled</h1>
+            <p>Your payment was cancelled. You can try again anytime.</p>
+            <a href="/checkout" class="btn">Try Again</a>
+            <a href="/" class="btn">Go to Dashboard</a>
+        </body>
+        </html>
+        """)
+    
+    @app.route('/webhook/stripe', methods=['POST'])
+    def stripe_webhook():
+        """Handle Stripe webhooks."""
+        payload = request.get_data(as_text=True)
+        sig_header = request.headers.get('Stripe-Signature')
+        
+        try:
+            # Verify webhook signature
+            if app.config["STRIPE_WEBHOOK_SECRET"]:
+                event = stripe.Webhook.construct_event(
+                    payload, sig_header, app.config["STRIPE_WEBHOOK_SECRET"]
+                )
+            else:
+                event = stripe.Event.construct_from(
+                    json.loads(payload), stripe.api_key
+                )
+        except ValueError:
+            return "Invalid payload", 400
+        except stripe.error.SignatureVerificationError:
+            return "Invalid signature", 400
+        
+        # Handle the event
+        if event['type'] == 'customer.subscription.created':
+            subscription = event['data']['object']
+            handle_subscription_created(subscription)
+        elif event['type'] == 'customer.subscription.updated':
+            subscription = event['data']['object']
+            handle_subscription_updated(subscription)
+        elif event['type'] == 'customer.subscription.deleted':
+            subscription = event['data']['object']
+            handle_subscription_cancelled(subscription)
+        elif event['type'] == 'checkout.session.completed':
+            session = event['data']['object']
+            handle_checkout_completed(session)
+        
+        return "Success", 200
+    
+    def handle_subscription_created(subscription):
+        """Handle subscription creation."""
+        customer_id = subscription['customer']
+        
+        # Get customer details from Stripe
+        try:
+            customer = stripe.Customer.retrieve(customer_id)
+            
+            # Save customer data
+            customer_data = {
+                'id': customer_id,
+                'email': customer.email,
+                'name': customer.name or customer.email,
+                'created': datetime.now().isoformat(),
+                'stripe_customer_id': customer_id
+            }
+            save_customer(customer_id, customer_data)
+            
+            # Save subscription data
+            subscription_data = {
+                'id': subscription['id'],
+                'customer_id': customer_id,
+                'status': subscription['status'],
+                'plan_id': subscription['items']['data'][0]['price']['id'],
+                'current_period_start': datetime.fromtimestamp(subscription['current_period_start']).isoformat(),
+                'current_period_end': datetime.fromtimestamp(subscription['current_period_end']).isoformat(),
+                'created': datetime.now().isoformat(),
+                'updated': datetime.now().isoformat()
+            }
+            save_subscription(subscription['id'], subscription_data)
+            
+        except stripe.error.StripeError as e:
+            print(f"Error handling subscription created: {e}")
+    
+    def handle_subscription_updated(subscription):
+        """Handle subscription updates."""
+        subscription_data = {
+            'id': subscription['id'],
+            'customer_id': subscription['customer'],
+            'status': subscription['status'],
+            'plan_id': subscription['items']['data'][0]['price']['id'],
+            'current_period_start': datetime.fromtimestamp(subscription['current_period_start']).isoformat(),
+            'current_period_end': datetime.fromtimestamp(subscription['current_period_end']).isoformat(),
+            'updated': datetime.now().isoformat()
+        }
+        
+        # Load existing subscription and update
+        subscriptions_file = payments_data_dir / "subscriptions" / "subscriptions.json"
+        subscriptions = load_json_data(subscriptions_file)
+        if subscription['id'] in subscriptions:
+            subscriptions[subscription['id']].update(subscription_data)
+        else:
+            subscriptions[subscription['id']] = subscription_data
+        
+        save_json_data(subscriptions_file, subscriptions)
+    
+    def handle_subscription_cancelled(subscription):
+        """Handle subscription cancellation."""
+        subscription_data = {
+            'status': 'cancelled',
+            'cancelled_at': datetime.now().isoformat(),
+            'updated': datetime.now().isoformat()
+        }
+        
+        # Load existing subscription and update
+        subscriptions_file = payments_data_dir / "subscriptions" / "subscriptions.json"
+        subscriptions = load_json_data(subscriptions_file)
+        if subscription['id'] in subscriptions:
+            subscriptions[subscription['id']].update(subscription_data)
+            save_json_data(subscriptions_file, subscriptions)
+    
+    def handle_checkout_completed(session):
+        """Handle completed checkout session."""
+        if session['mode'] == 'subscription':
+            # The subscription will be handled by subscription.created webhook
+            pass
+    
+    @app.route('/api/subscription/status')
+    def get_subscription_status():
+        """Get current user's subscription status."""
+        # For now, return a default status since we don't have user authentication
+        # In a real app, you'd get the current user's email/ID and check their subscription
+        return jsonify({
+            'has_subscription': False,
+            'plan': None,
+            'status': None
+        })
+
     # Health check endpoint
     @app.route('/health')
     def health():
