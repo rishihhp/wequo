@@ -1,6 +1,7 @@
 run:
   output_root: "data/output"
   lookback_days: 7
+  database_path: "data/wequo.db"
   # Production settings
   max_workers: 4
   timeout_seconds: 300

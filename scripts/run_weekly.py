@@ -29,6 +29,7 @@ from wequo.monitoring.core import MonitoringEngine
 from wequo.monitoring.alerts import AlertManager
 from wequo.monitoring.sla import SLATracker
 from wequo.metadata import MetadataTracker, add_metadata_to_dataframe
+from wequo.database import WeQuoDB
 
 
 def main() -> int:
@@ -66,6 +67,11 @@ def main() -> int:
         print(f"Output directory: {outdir}")
         print(f"Date range: {start} to {end}")
         
+        # Initialize database
+        db_path = cfg["run"].get("database_path", "data/wequo.db")
+        db = WeQuoDB(db_path)
+        print(f"Database initialized at: {db_path}")
+        
     except Exception as e:
         print(f"Error during initialization: {e}")
         return 1
@@ -81,16 +87,20 @@ def main() -> int:
             alert_manager = AlertManager(monitoring_config, monitoring_engine.monitoring_dir)
             sla_tracker = SLATracker(monitoring_engine, monitoring_config)
             
-            # Start pipeline run monitoring
+            # Start pipeline run monitoring (both in DB and monitoring system)
             connectors_to_run = [name for name, config in cfg["connectors"].items() if config.get("enabled", False)]
-            run_id = monitoring_engine.start_pipeline_run(connectors_to_run)
+            run_id = db.start_pipeline_run(connectors_to_run)
+            monitoring_engine.start_pipeline_run(connectors_to_run)
+            print(f"Pipeline run started: {run_id}")
             print(f"Monitoring directory created at: {monitoring_engine.monitoring_dir}")
         else:
             print("Monitoring is disabled in configuration")
             monitoring_engine = None
             alert_manager = None
             sla_tracker = None
-            run_id = None
+            connectors_to_run = [name for name, config in cfg["connectors"].items() if config.get("enabled", False)]
+            run_id = db.start_pipeline_run(connectors_to_run)
+            print(f"Pipeline run started: {run_id}")
     except Exception as e:
         print(f"Warning: Monitoring initialization failed: {e}")
         print("Continuing without monitoring...")
@@ -98,7 +108,9 @@ def main() -> int:
         monitoring_engine = None
         alert_manager = None
         sla_tracker = None
-        run_id = None
+        connectors_to_run = [name for name, config in cfg["connectors"].items() if config.get("enabled", False)]
+        run_id = db.start_pipeline_run(connectors_to_run)
+        print(f"Pipeline run started: {run_id}")
     
     frames: dict[str, pd.DataFrame] = {}
     connectors_succeeded = []
@@ -138,7 +150,14 @@ def main() -> int:
                         metadata.pipeline_run_id = run_id
             
             frames["fred"] = fdf_with_metadata
+            
+            # Insert data into database
+            inserted = db.insert_data_points(fdf_with_metadata, pipeline_run_id=run_id)
+            print(f"Inserted {inserted} FRED data points into database")
+            
+            # Also write CSV for backward compatibility
             write_df_csv(outdir / "fred.csv", fdf_with_metadata)
+            
             connectors_succeeded.append("fred")
             total_data_points += len(fdf_with_metadata)
         except Exception as e:
@@ -159,6 +178,11 @@ def main() -> int:
             )
             cdf = commodities.normalize(commodities.fetch())
             frames["commodities"] = cdf
+            
+            # Insert data into database
+            inserted = db.insert_data_points(cdf, pipeline_run_id=run_id)
+            print(f"Inserted {inserted} commodities data points into database")
+            
             write_df_csv(outdir / "commodities.csv", cdf)
             connectors_succeeded.append("commodities")
             total_data_points += len(cdf)
@@ -177,6 +201,11 @@ def main() -> int:
             )
             crdf = crypto.normalize(crypto.fetch())
             frames["crypto"] = crdf
+            
+            # Insert data into database
+            inserted = db.insert_data_points(crdf, pipeline_run_id=run_id)
+            print(f"Inserted {inserted} crypto data points into database")
+            
             write_df_csv(outdir / "crypto.csv", crdf)
             connectors_succeeded.append("crypto")
             total_data_points += len(crdf)
@@ -234,6 +263,11 @@ def main() -> int:
             )
             edf = economic.normalize(economic.fetch())
             frames["economic"] = edf
+            
+            # Insert data into database
+            inserted = db.insert_data_points(edf, pipeline_run_id=run_id)
+            print(f"Inserted {inserted} economic data points into database")
+            
             write_df_csv(outdir / "economic.csv", edf)
             connectors_succeeded.append("economic")
             total_data_points += len(edf)
@@ -295,6 +329,11 @@ def main() -> int:
             )
             ndf = noaa.normalize(noaa.fetch())
             frames["noaa"] = ndf
+            
+            # Insert data into database
+            inserted = db.insert_data_points(ndf, pipeline_run_id=run_id)
+            print(f"Inserted {inserted} NOAA data points into database")
+            
             write_df_csv(outdir / "noaa.csv", ndf)
             connectors_succeeded.append("noaa")
             total_data_points += len(ndf)
@@ -371,6 +410,31 @@ def main() -> int:
         agg = Aggregator(outdir, analytics_enabled=analytics_enabled, metadata_tracker=metadata_tracker)
         summary = agg.summarize(frames, metadata_tracker=metadata_tracker)
         agg.write_prefill(summary)
+        
+        # Store analytics results in database
+        if analytics_enabled and "analytics" in summary:
+            analytics = summary["analytics"]
+            
+            # Store anomalies
+            if "anomalies" in analytics and analytics["anomalies"]:
+                db.insert_anomalies(analytics["anomalies"], pipeline_run_id=run_id)
+                print(f"Stored {len(analytics['anomalies'])} anomalies in database")
+            
+            # Store trends
+            if "trends" in analytics and analytics["trends"]:
+                db.insert_trends(analytics["trends"], pipeline_run_id=run_id)
+                print(f"Stored {len(analytics['trends'])} trends in database")
+            
+            # Store correlations
+            if "correlations" in analytics and analytics["correlations"]:
+                db.insert_correlations(analytics["correlations"], pipeline_run_id=run_id)
+                print(f"Stored {len(analytics['correlations'])} correlations in database")
+            
+            # Store changepoints
+            if "changepoints" in analytics and analytics["changepoints"]:
+                db.insert_changepoints(analytics["changepoints"], pipeline_run_id=run_id)
+                print(f"Stored {len(analytics['changepoints'])} changepoints in database")
+        
         print("Analytics and aggregation completed successfully")
     except Exception as e:
         print(f"Warning: Analytics failed: {e}")
@@ -396,10 +460,25 @@ def main() -> int:
     print(f"Summary: {len(connectors_succeeded)} successful, {len(connectors_failed)} failed connectors")
     print(f"Total data points collected: {total_data_points}")
     
+    # Complete pipeline run in database
+    try:
+        status = "success" if not connectors_failed else "partial_failure" if connectors_succeeded else "failure"
+        db.finish_pipeline_run(
+            run_id=run_id,
+            status=status,
+            connectors_succeeded=connectors_succeeded,
+            connectors_failed=connectors_failed,
+            data_points=total_data_points,
+            errors=errors,
+            output_dir=str(outdir)
+        )
+        print(f"Pipeline run {run_id} completed with status: {status}")
+    except Exception as e:
+        print(f"Warning: Failed to update pipeline run in database: {e}")
+    
     # Complete pipeline run monitoring
     if monitoring_enabled and monitoring_engine:
         try:
-            status = "success" if not connectors_failed else "partial_failure" if connectors_succeeded else "failure"
             pipeline_run = monitoring_engine.finish_pipeline_run(
                 run_id=run_id,
                 status=status,
@@ -427,6 +506,9 @@ def main() -> int:
             print(f"Warning: Monitoring failed: {e}")
     else:
         print("Monitoring was disabled, skipping monitoring completion")
+    
+    # Close database connection
+    db.close()
     
     return 0
 

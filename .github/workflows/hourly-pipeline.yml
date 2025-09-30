@@ -2,8 +2,8 @@ name: WeQuo Hourly Pipeline
 
 on:
   schedule:
-    # Run every hour
-    - cron: "0 * * * *"
+    # Run every 6 hours
+    - cron: "0 */6 * * *"
   workflow_dispatch: # Allow manual trigger
     inputs:
       force_run:
@@ -23,6 +23,26 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      # ⭐ Download previous database artifact
+      - name: Download previous database
+        uses: dawidd6/action-download-artifact@v3
+        continue-on-error: true
+        with:
+          name: wequo-database
+          path: data/
+          workflow: hourly-pipeline.yml
+          if_no_artifact_found: ignore
+
+      - name: Check for existing database
+        run: |
+          if [ -f "data/wequo.db" ]; then
+            echo "✅ Found existing database"
+            ls -lh data/wequo.db
+            du -h data/wequo.db
+          else
+            echo "ℹ️ No existing database found - will create new one"
+          fi
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -50,13 +70,12 @@ jobs:
           echo "UNCOMTRADE_API_KEY=${{ secrets.UNCOMTRADE_API_KEY }}" >> $GITHUB_ENV
           echo "MARINETRAFFIC_API_KEY=${{ secrets.MARINETRAFFIC_API_KEY }}" >> $GITHUB_ENV
 
-      - name: Run daily data pipeline
+      - name: Run hourly data pipeline
         run: |
           python scripts/run_weekly.py
 
       - name: Check pipeline output
         run: |
-          
           ls -la data/output/
           # Get today's date in YYYY-MM-DD format
           TODAY=$(date +%Y-%m-%d)
@@ -68,28 +87,51 @@ jobs:
             exit 1
           fi
 
+      - name: Check database after pipeline
+        run: |
+          if [ -f "data/wequo.db" ]; then
+            echo "✅ Database updated"
+            ls -lh data/wequo.db
+            du -h data/wequo.db
+            # Show database stats
+            python scripts/db_query.py stats || true
+          else
+            echo "❌ Database not found after pipeline run"
+            exit 1
+          fi
+
+      # ⭐ Upload database for next run (overwrites previous)
+      - name: Upload database artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: wequo-database
+          path: data/wequo.db
+          retention-days: 90
+          overwrite: true
+
+      # Upload daily data package (keeps history)
       - name: Upload pipeline artifacts
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: daily-data-package-${{ github.run_number }}
           path: |
-            wequo/data/output/
-            !wequo/data/output/**/*.pyc
+            data/output/
+            !data/output/**/*.pyc
           retention-days: 90
 
       - name: Notify on failure
         if: failure()
         run: |
-          echo "::error::WeQuo daily pipeline failed. Check logs and data sources."
+          echo "::error::WeQuo hourly pipeline failed. Check logs and data sources."
 
       - name: Generate summary
         if: success()
         run: |
-          
           TODAY=$(date +%Y-%m-%d)
           if [ -f "data/output/$TODAY/package_summary.json" ]; then
-            echo "## 📊 WeQuo Daily Pipeline Summary - $TODAY" >> $GITHUB_STEP_SUMMARY
+            echo "## 📊 WeQuo Hourly Pipeline Summary - $TODAY" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             cat > temp_summary.py << 'EOF'
           import json
@@ -111,6 +153,14 @@ jobs:
             python temp_summary.py >> $GITHUB_STEP_SUMMARY
             rm temp_summary.py
           fi
+          
+          # Add database stats to summary
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🗄️ Database Statistics" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          python scripts/db_query.py stats >> $GITHUB_STEP_SUMMARY || echo "Stats unavailable" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
 
   health-check:
     runs-on: ubuntu-latest
@@ -121,8 +171,8 @@ jobs:
       - name: Check pipeline health
         run: |
           if [ "${{ needs.run-pipeline.result }}" == "success" ]; then
-            echo "✅ Daily pipeline completed successfully"
+            echo "✅ Hourly pipeline completed successfully"
           else
-            echo "❌ Daily pipeline failed or was cancelled"
-            echo "::error::Daily pipeline health check failed"
+            echo "❌ Hourly pipeline failed or was cancelled"
+            echo "::error::Hourly pipeline health check failed"
           fi
